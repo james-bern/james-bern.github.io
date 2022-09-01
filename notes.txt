@@ -1,0 +1,8 @@
+: C/C++, 🐄, 🐌
+: matrices, vectors, points, rays, triangles, interpolation
+// compile the code & interest survey
+// speed test cube & bootleg MS Paint
+// intersections & bezier curve editor
+// 2D robotic arm & 3D airplane
+// mini world (challenging)
+// TRS transform widget
