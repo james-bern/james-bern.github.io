@@ -1,0 +1,161 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title>CSCI-371</title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-height:150;   display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 1px;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="https://james-bern.github.io/csci-371"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+
+<div style="font-family:sans-serif"><center><b>hw0 (100 + 1 pts)</b>
+
+upload to <a href="https://glow.williams.edu/courses/3490435">glow</a> hw.pdf (math), hw.cpp* (code), and a comment</center>
+<i>*your code should build and run as is; i should not have to make any edits to your code to verify it solves the assignment</i>
+
+<hr>
+<b>intended learning outcomes</b>
+
+- get familiar with math pre-fundamentals
+
+- get acquainted with the external resource and collaboration policies (e.g., it is recommended you check final answers with friends)
+
+- get set up building and running the codebase on your computer of choice
+
+- get familiar with code pre-fundamentals
+
+- get practice submitting an assignment
+
+- challenge yourself
+
+</div><hr>
+<div style="font-family:serif"><b>math reading</b>
+
+- I use regular weight font to denote a scalar, e.g. real number $r$ and integer $N$.
+
+- I use bold lowercase to denote a points and vectors, e.g. point $\mathbf{p}$ and vector $\mathbf{v}$.
+
+- I use bold uppercase to denote a matrix, e.g. matrix $\mathbf{M}$.
+
+
+
+<img src="fig0.PNG">
+
+<img src="fig1.PNG">
+
+- Pythagorean Theorem: $a^2 + o^2 = h^2$.
+
+- soh cah toa: $sin(\theta) = o / h$, $cos(\theta) = a / h$, $tan(\theta) = o / a$
+
+
+
+- A vector with $n$ entries is called an $n$-vector.
+
+- The transpose of vector $\mathbf{v}$ is denoted $\mathbf{v}^T$.
+
+- We can write a 3-vector in components as $$\mathbf{v} = \begin{bmatrix}v_x\\v_y\\v_z\end{bmatrix} = (v_x, v_y, v_z)^T,$$ i.e. as "a column vector" or as "the transpose of a row vector."
+
+- The cross product of two 3D vectors $$\mathbf{a}\times \mathbf{b}=(a_y b_z-a_zb_y,a_zb_x-a_xb_z,a_xb_y-a_yb_x)^T.$$
+
+- The dot product of two, e.g. 3D, vectors $$\mathbf{a}\cdot \mathbf{b}=\mathbf{a}^T\mathbf{b}=(a_xb_x,a_yb_y,a_zb_z)^T.$$
+
+
+- $\mathbf{M}_{ij}$ denotes the entry in $\mathbf{M}$'s $i$-th row and $j$-th column. In math, we will typically index starting at 1. In code, we will typically index starting at 0. An exception is MATLAB, which must be trying to be some sort of matrix laboratory.
+
+- An $R \times C$-matrix ("$R$ by $C$ matrix") has $R$ rows and $C$ columns.
+
+- An $R\times 1$ matrix is an $R$-vector.
+
+- Multiplying an $R\times K$-matrix by a $K\times C$-matrix yields an $R\times C$-matrix. In (my personal) shorthand, $$[R\times K][K\times C]=[R\times C]$$.
+
+- Matrix multuiplication $$(\mathbf{F}\mathbf{G})_{ij} = \sum_{k} \mathbf{F}_{ik} \mathbf{G}_{kj}.$$ It is understood $k\in\{1,...,N\},$ where $N$ is the number of columns in $\mathbf{F}$ (or, equivalently, the number of rows in $\mathbf{G}$).
+
+<hr>
+<b>math hw</b>
+
+<b>1. (5 pts)</b> what is $cos(-\theta)$ in terms of $cos(\theta)$?
+
+<b>2. (5 pts)</b> what is $sin(-\theta)$ in terms of $sin(\theta)$?
+
+<b>3. (5 pts)</b> prove $sin^2(\theta) + cos^2(\theta) = 1$. <b>hint:</b> draw a right triangle with hypotenuse of unit length (length equal to one)
+
+<b>4. (5 pts)</b> what is the result of rotating point $\mathbf{p} = (x, 0)^T$ counter-clockwise by $\theta$ about the origin?
+
+<b>5. (5 pts)</b> what is the result of rotating point $\mathbf{p} = (0, y)^T$ counter-clockwise by $\theta$ about the origin?
+
+<b>6. (5 pts)</b> call $\mathbf{v}$ the vector pointing from point $\mathbf{p}$ to point $\mathbf{q}$. what is $\mathbf{v}$ in terms of $\mathbf{p}$ and $\mathbf{q}$?
+
+<b>7. (5 pts)</b> calculate $\begin{bmatrix} 1  \\ 0 \\ 0\end{bmatrix} \times \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$
+
+<b>8. (5 pts)</b> calculate $\begin{bmatrix} 1  \\ 0\\0\end{bmatrix} \cdot \begin{bmatrix} 0 \\ 1\\0 \end{bmatrix}$
+
+<b>9. (5 pts)</b> calculate $\begin{bmatrix} 1&2  \\ 3&4 \end{bmatrix}\begin{bmatrix} 5 & 6 \\ 7 & 8 \end{bmatrix}$
+
+<b>10. (5 pts)</b> calculate $\begin{bmatrix} 1&0  \\ 0&1 \end{bmatrix}\begin{bmatrix} 5 \\ 7 \end{bmatrix}$
+
+</div><hr>
+<b>code reading</b>
+
+- there is documentation in <code>hw.cpp</code>.
+
+- the syntax for a basic C++ for loop is:
+<code>
+for (int i = 0; i < N; ++i) {
+    // do stuff              
+}                            
+</code>
+
+<hr>
+<b><a href = "https://github.com/james-bern/CSCI-371">code hw</a></b>
+
+<b>a. (25 pts)</b> <code>hw0()</code> currently draws the outline of a white triangle. make it instead draw the outline of a red square, centered at the origin, with side length 3.
+
+<b>b. (25 pts)</b> make <code>hw0()</code> also draw the outline of a green circle circumscribing the red square. <b>hint:</b> use another call to <code>gl_begin(LINE_LOOP);</code>.
+
+<b>⭐. (1 pt extra credit)</b> draw a 6 step <a href="https://en.wikipedia.org/wiki/Sierpi%C5%84ski_carpet">Sierpiński carpet</a> inside of the red sqaure using exactly one additional call to <code>gl_begin(...);</code> and <code>gl_end();</code> (plus as many calls to <code>gl_vertex(x, y);</code> as you want).
+
+
+<hr><center>
+
+<div class="video-container"><iframe src="https://www.youtube.com/embed/KPaG3RVM8Q8?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+
+<div class="video-container"><iframe src="https://www.youtube.com/embed/U_Zq2t9fvOU?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+</center>
+<i>to fullscreen videos press <code>f</code> after pressing play</i>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<center>🐄</center>
+
+</div></body></html>
