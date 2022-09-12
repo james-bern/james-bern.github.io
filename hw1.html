@@ -1,0 +1,201 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title>hw1</title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-height:150;   display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 0px;
+  font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="https://james-bern.github.io/csci-371"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+
+<div style="font-family:sans-serif"><center><b>hw1 (100 + 7 pts)</b>
+  upload <!-- hw.pdf (math),--> hw.cpp* to <a href="https://glow.williams.edu/courses/3490435">glow</a></center>
+<a href = "https://github.com/james-bern/CSCI-371">codebase & Github Issues</a> (get homework help, report bugs, ask questions about lecture, etc.)
+
+<a href="https://www.youtube.com/embed/0Z_gD5VdDkc?rel=0">video of a perfect solution to the main part of the assignment (no extra credit)</a>
+for full credit, your submission should produce the same or very similar output
+
+<hr>
+<b>ilo's</b>
+- get reacquainted with <code>malloc(...)</code>
+- get acquainted with <code>basic_draw(...)</code>, <code>imgui_slider(...)</code>, and <code>input</code>
+- get acquainted with data-oriented design
+- challenge yourself 
+
+<hr>
+<b>code reading</b>
+
+a stretchy buffer, aka a dynamic array, is a useful data struture. it holds a pointer to an array (the internal array), and has a function to push back (append) new elements. as new elements are pushed back, the internal array automatically grows (stretches). a reasonable implementation might allocate an internal array of length 16 on the first push back, and then double the length of the internal array as needed. <code>std::vector</code> is one implementation of a stretchy buffer. here is another: <a href="http://nothings.org/stb_ds/">http://nothings.org/stb_ds/</a>
+- the <i>capacity</i> is the length of the internal array (the total number of slots elements *could* fill)
+- the <i>length</i> (aka <i>size</i>) of the stretchy buffer is the number of elements that are currently stored in the internal array (the number of slots that are actually filled)
+- ✅ the capacity of a stretchy buffer is always greater than or equal its length
+
+</div><hr>
+<b>code hw</b>
+
+<span style='color:blue'><b>note:</b> a single build and run of your submission should demonstrate the functionality for all parts of the code hw (including any extra credit). please write your hw.cpp such that i can verify everything works without making edits to hw.cpp or having to build and run multiple times 🙂👍</span>
+
+<span style='color:blue'><b>note:</b> i will sometimes give you the length of my solution to the problem as a hint. fewer lines is not necessarily better!</span>
+
+
+<code>/* alright let's get crack-a-lackin'. to start, please clone a fresh copy of the current codebase. each week there will be updates and bugfixes to <code>cow.cpp</code> and <code>snail.cpp</code>, as well as an updated <code>hw.cpp</code> with this week's documentation and starter code */</code>
+
+
+<b>a. (20 pts) revisit hw0</b>
+
+spec
+
+- draw the same red square outline from hw0a, only this time make it so you can also drag the vertices around
+
+<details><summary>hint</summary> - see the documentation for <code>widget_drag(...)</code>
+ - the vertex positions will need to persist across frames. assuming you will store them in a fixed-size array (a fine choice, since there are only four vec2's to be stored), you can accomplish this either by declaring the array before the while loop, or by declaring the array to be static (locally-persistent) inside the while loop. as long as you understand what you're doing, either way is fine by me :)
+ - it may be easier to draw the red squre outline with <code>basic_draw(...)</code> than with <code>gl_begin(...)</code>, <code>gl_end()</code>
+</details>
+- draw the same green circle outline from hw0b, only this time provide a slider to change N, where N is the number of vertices used to approximate the circular outline as a line loop
+  - N should start at 16
+  - N should range from 0 to 32
+
+<details><summary>hint</summary> - see the documentation for <code>imgui_slider(...)</code>
+ - it may be easier to draw the green circle outline with <code>gl_begin(...)</code>, <code>gl_end()</code> than with <code>basic_draw(...)</code>
+</details>
+
+<b>b. (60 pts) bouncing balls++:</b> video explanation: <a href="https://www.youtube.com/embed/nutJzrWlno0?rel=0">https://www.youtube.com/embed/nutJzrWlno0?rel=0</a>
+
+spec (summary of the video explanation):
+- app draws the 3D double unit box (x, y, z all go from [-1, 1]) in 3D wireframe
+- app should simulate at least 100,000 vertices
+  - vertices were initialized at random positions in the double unit box
+  - vertices were initialized with random initial velocities (not too fast please 😬)
+  - vertices were initialized with random colors
+  - vertices move following the update rule "position <- position + velocity"
+  - vertices bounce off all six walls of the cube in a way that makes sense
+    - (assume zero gravity and perfectly elastic collisions)
+- a single call to <code>basic_draw(primitive, ...)</code> draws first N vertices with color specified per-vertex in a given size (size is the same for all primitives)
+  - provide a slider to scrub through which primitive we're using to draw the data
+    - <code>POINTS, LINES, LINE_STRIP, LINE_LOOP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, QUADS, TRIANGLE_MESH, QUAD_MESH</code>
+    - hotkeys J and K to decrement and increment the primitive respectively
+    - slider should loop when using hotkeys (see documentation)
+  - provide a slider to scrub the number of vertices we're drawing
+    - (all the vertices will still "exist", but we will only draw the first N)
+    - the slider for N should range from 4 to 100,000
+    - when the app first starts, N is 12. (so i can see collision-handling is correct)
+  - provide a slider to scrub the size of the primitives from 0.0 to 50.0
+    - (no effect on TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, or QUADS) 
+- pause (optional; ungraded)
+  - pressing the P key should pause and unpause the simulation (you must still draw the simulation when paused)
+  - pressing the . key (period) while paused should step forward one frame
+- the app runs at ~60fps in the Ward Lab while drawing all 100,000 vertices (this is just a sanity check on your implementation; makes sure you're not e.g. calling malloc every frame)
+
+<details><summary>hints</summary> - my solution is ~50 lines long and doesn't actually use anything from snail (you are more than welcome to use snail in your solution)
+ - to handle collisions, first think about the problem in 1D
+ - you definitely don't have to, but it is possible to draw the wireframe double unit box with a single somewhat bizarre call to <code>basic_draw(LINE_STRIP, ...)</code>
+</details>
+
+<b>c. (10 pts) bootleg <code>std::vector</code>:</b> implement a very basic stretchy buffer API that makes the usage code currently commented out in <code>hw1b()</code> work
+
+spec (enforced by ASSERT's)
+- the stretchy buffer capacity (length of the internal array) should...
+  - start at 0
+  - be 16 after the first push_back
+  - double as needed
+- freeing the stretchy buffer should...
+  - free the internal array
+  - set the pointer to the internal array to NULL
+  - set the length of the stretchy buffer to 0
+  - set the capacity to 0
+
+<i><b>note:</b> workarounds that don't actually implement a working stretchy buffer will not score points</i>
+
+<details><summary>hints</summary> - my solution is ~20 lines long
+ - i implement
+   - <code>struct StretchyBuffer { ... };</code>
+   - <code>void sbuff_push_back(StretchyBuffer *buffer, vec2 point) { ... }</code>
+   - <code>void sbuff_free(StretchyBuffer *buffer) { ... }</code>
+   - i use <code>malloc</code>, <code>realloc</code>, and <code>free</code>
+</details>
+
+<b>d. (10 pts) bootleg annotation tool:</b> use the stretchy buffer of your choice* to implement a basic annotation / pen tool
+
+<i>*probably not a bad idea to just use <code>std::vector</code> unless you've already done the stretchy buffer refactor extra credit; if you're feeling bold, use stb_ds 🚀</i>
+
+spec:
+- left mouse click to start drawing stroke
+- left mouse hold to continue drawing stroke
+- left mouse release to finish drawing stroke
+- press the C key on the keyboard to clear all strokes
+- don't leak memory
+
+<details><summary>hints</summary> - my solution is ~20 lines long
+ - a <code>std::vector&lt;std::vector&lt;vec2&gt;&gt;</code> may be convenient
+ - calling <code>basic_draw(...)</code> once per stroke per frame is A OK
+</details>
+
+<hr>
+<b>🤙. (1 pt) stretchy buffer refactor:</b> templatize your stretchy buffer API so that you can create, e.g., a <code>StretchyBuffer&lt;vec2&gt;</code> or a <code>StretchyBuffer&lt;vec3&gt;</code>. additionally, implement the method <code>T &operator [](int index) { ... }</code> so you can access a stretchy buffer like you would a regular array; e.g., <code>buffer[3] += buffer[4] * 2;</code>. if you like, you may also add a <code>push_back(...)</code> method. congratulations, you have created a not-particularly-featureful replacement for <code>std::vector</code> that you can actually inspect in a debugger 🎉 <b>note: </b>to score points for this question you must have usage code. i recommend writing the usage code first.
+
+<b>✏. (1 pt) annotation tool refactor:</b> refactor your solution to <code>hw1d()</code> into a function <code>void widget_annotate(mat4 PV, vec3 color = monokai.blue) { ... }</code> that you can call in the while loop of any app to annotate that app. call it in <code>hw1a()</code> to prove it works
+
+video of correct behavior: <a href="https://www.youtube.com/embed/XV30COToGDM?rel=0">https://www.youtube.com/embed/XV30COToGDM?rel=0</a>
+
+for full credit
+- <code>widget_annotate(...)</code> must always draw over everything (besides maybe the gui)
+- it must play nicely with <code>widget_drag(...)</code>
+  - "you must not annotate if dragging, and not drag if you are annotating"
+  - this involves the global variable <code>widget_active_widget_ID</code> 
+    - you may start drawing a new stroke if and only if it is 0
+    - when you start drawing a stroke, you must set it to WIDGET_ID_ANNOTATE
+    - you may continue drawing a stroke if and only if it is WIDGET_ID_ANNOTATE
+    - you may finish drawing a stroke if and only if it is WIDGET_ID_ANNOTATE
+    - when you finish drawing a stroke, you must set it back to 0
+
+<b>❄️. (up to 3 pts) bootleg let it snow X fruit ninja particle system:</b> [drops wed]
+
+<b>🧁. (up to 2 pts) vaporwave terrain flyover:</b> [drops wed]
+
+<hr><center>
+
+<!--
+<div class="video-container"><iframe src="https://www.youtube.com/embed/KPaG3RVM8Q8?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+
+<div class="video-container"><iframe src="https://www.youtube.com/embed/U_Zq2t9fvOU?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+</center>
+<i>to fullscreen videos press <code>f</code> after pressing play</i>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<center>🐄</center>
+
+</div></body></html>
