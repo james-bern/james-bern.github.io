@@ -136,6 +136,8 @@ spec:
 </details>
 
 <hr>
+❗❗❗ <b><span style='color:darkred'>please grab an updated copy of cow.cpp from the Github before attempting the extra credit (it has bugfixes that you'll need)</span></b>
+
 <b>🤙. (1 pt) stretchy buffer refactor:</b> templatize your stretchy buffer API so that you can create, e.g., a <code>StretchyBuffer&lt;vec2&gt;</code> or a <code>StretchyBuffer&lt;vec3&gt;</code>. additionally, implement the method <code>T &operator [](int index) { ... }</code> so you can access a stretchy buffer like you would a regular array; e.g., <code>buffer[3] += buffer[4] * 2;</code>. if you like, you may also add a <code>push_back(...)</code> method. congratulations, you have created a not-particularly-featureful replacement for <code>std::vector</code> that you can actually inspect in a debugger 🎉 <b>note: </b>to score points for this question you must have usage code. i recommend writing the usage code first.
 
 <b>✏. (1 pt) annotation tool refactor:</b> refactor your solution to <code>hw1d()</code> into a function <code>void widget_annotate(mat4 PV, vec3 color = monokai.blue) { ... }</code> that you can call in the while loop of any app to annotate that app. call it in <code>hw1a()</code> to prove it works
@@ -155,12 +157,12 @@ for full credit
 
 example usage code: <code>if (input.key_toggle['z']) { widget_annotate(); }</code>
 
-
-❗❗❗ <b><span style='color:darkred'>please grab an updated copy of cow.cpp from the Github before attempting these next two (it has bugfixes that you'll need)</span></b>
-
 <b>❄️. (up to 3 pts) bootleg let it snow X fruit ninja particle system:</b> [drops wed]
 
-<b>🧁. (up to 2 pts) vaporwave terrain flyover:</b> [drops wed]
+<b>🧁. (up to 2 pts) vaporwave terrain flyover:</b> using what we learned this week, make something like this <a href=""></a>
+
+the line <code>imgui_readout("camera", &camera);</code> may help you line up your camera.
+
 
 <hr><center>
 
