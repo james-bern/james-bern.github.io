@@ -30,7 +30,7 @@ for full credit, your submission should produce the same or very similar output
 <hr>
 <b>code reading</b>
 
-a stretchy buffer, aka a dynamic array, is a useful data struture. it holds a pointer to an array (the internal array), and has a function to push back (append) new elements. as new elements are pushed back, the internal array automatically grows (stretches). a reasonable implementation might allocate an internal array of length 16 on the first push back, and then double the length of the internal array as needed. <code>std::vector</code> is one implementation of a stretchy buffer. here is another: <a href="http://nothings.org/stb_ds/">http://nothings.org/stb_ds/</a>
+a stretchy buffer, aka a dynamic array, is a useful data struture. it holds a pointer to a heap-allocated array (the internal array), and has a function to push back (append) new elements. as new elements are pushed back, the internal array automatically grows (stretches). a reasonable implementation might allocate an internal array of length 16 on the first push back, and then double the length of the internal array as needed. <code>std::vector</code> is one implementation of a stretchy buffer. here is another: <a href="http://nothings.org/stb_ds/">http://nothings.org/stb_ds/</a>
 - the <i>capacity</i> is the length of the internal array (the total number of slots elements *could* fill)
 - the <i>length</i> (aka <i>size</i>) of the stretchy buffer is the number of elements that are currently stored in the internal array (the number of slots that are actually filled)
 - ✅ the capacity of a stretchy buffer is always greater than or equal its length
