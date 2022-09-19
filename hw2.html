@@ -34,7 +34,7 @@ $LERP(.5, a, b)$ is the average of $a$ and $b$.
 We can define a clamp as $CLAMP(t, a, b) = MIN(MAX(t, a), b)$. This function "clamps $c$ to the inveral $[a, b]$."
 To do a "clamped lerp" (which does not extrapolate"outside of the interval $[a, b]$) we can use $LERP(CLAMP(t, 0, 1), \mathbf{a}, \mathbf{b})$.
 
-To smoothly bounce back and forth between $\mathbf{a}$ and $\mathbf{b}$, we can use $LERP(.5 - .5cos(t\pi), \mathbf{a}, \mathbf{b})$.
+To smoothly bounce back and forth between $\mathbf{a}$ and $\mathbf{b}$, we can use $LERP(.5 - .5cos(t\pi), \mathbf{a}, \mathbf{b})$, which we could perhaps call "cosine linear interpolation".
 
 The length of a vector is $|\mathbf{v}| = \sqrt{\sum_iv_i^2}$.
 In 3D, $|\mathbf{v}| = \sqrt{v_x^2 + v_y^2 + v_z^2}$.
