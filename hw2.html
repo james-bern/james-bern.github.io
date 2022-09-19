@@ -1,0 +1,122 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title>hw2</title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-height:150;   display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:serif,Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 0px;
+  font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="https://james-bern.github.io/csci-371"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+
+<div><center><b>hw2 (100 + 6 pts)</b>
+  upload <!-- hw.pdf (math),--> hw.cpp* to <a href="https://glow.williams.edu/courses/3490435">glow</a></center>
+<a href = "https://github.com/james-bern/CSCI-371">codebase & Github Issues</a> (get homework help, report bugs, ask questions about lecture, etc.)
+
+<a href="https://www.youtube.com/embed/spmpZTkkOOM?rel=0">video of a perfect solution to the main hw (no extra credit)</a>
+for full credit, your submission should produce the same or very similar output
+
+<span style='color:blue'><b>note:</b> please write your hw.cpp such that i can verify everything works without making any edits to hw.cpp or having to build and run multiple times 🙂👍</span>
+
+<hr>
+<span style='color:black'><b>note:</b> this is a somewhat lighter hw. if you feel like you only sort of understood the last hw, i recommend using this week to fill in any gaps before things blast off again 🚀</span>
+
+</div><hr>
+We can define linear interpolation as $LERP(t, \mathbf{a}, \mathbf{b}) = (1-t)\mathbf{a} + t\mathbf{b}$.
+$LERP(0, a, b)$ is $a$.
+$LERP(1, a, b)$ is $b$.
+$LERP(.5, a, b)$ is the average of $a$ and $b$.
+
+We can define a clamp as $CLAMP(t, a, b) = MIN(MAX(t, a), b)$. This function "clamps $c$ to the inveral $[a, b]$."
+To do a "clamped lerp" (which does not extrapolate"outside of the interval $[a, b]$) we can use $LERP(CLAMP(t, 0, 1), \mathbf{a}, \mathbf{b})$.
+
+To smoothly bounce back and forth between $\mathbf{a}$ and $\mathbf{b}$, we can use $LERP(.5 - .5cos(t\pi), \mathbf{a}, \mathbf{b})$.
+
+The length of a vector is $|\mathbf{v}| = \sqrt{\sum_iv_i^2}$.
+In 3D, $|\mathbf{v}| = \sqrt{v_x^2 + v_y^2 + v_z^2}$.
+<b>Exercise: </b> Recover the formula for the distance between two points. <details><summary>HINT </summary> The distance between points $\mathbf{p}$ and $\mathbf{q}$ is the length of the vector pointing from $\mathbf{p}$ to $\mathbf{q}$.</details>
+
+Matrix multiplication is associative, i.e., $(\mathbf{A}\mathbf{B})\mathbf{C} = \mathbf{A}(\mathbf{B}\mathbf{C})$.
+Matrix multiplication is not, in general, commutative, i.e., $\mathbf{A}\mathbf{B}$ may or may not be equal to $\mathbf{B}\mathbf{A}$.
+
+$\mathbf{I}$ is the identity matrix, which is a square matrix with $1$'s on the diagonal and $0$'s everywhere else.
+$\mathbf{I}\mathbf{M} = \mathbf{M}\mathbf{I} = \mathbf{M}$.
+$\mathbf{I}\mathbf{v} = \mathbf{v}$.
+
+The inverse of a square matrix $\mathbf{A}$ is $\mathbf{A}^{-1}$.
+$\mathbf{A}^{-1}\mathbf{A} = \mathbf{A}\mathbf{A}^{-1} = \mathbf{I}$.
+<b>Exercise: </b> Prove $(\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}$. <details><summary>HINT </summary> $\mathbf{I} = \mathbf{A}\mathbf{B}\mathbf{B}^{-1}\mathbf{A}^{-1}$</details>
+
+$\mathbf{A}\mathbf{x} = \mathbf{b}$ is a linear system of equations written as a matrix equation.
+E.g., the general 3D linear system of equations $$\begin{cases}A_{11}x_1 + A_{12}x_2 + A_{13}x_3 = b_1\\A_{21}x_1+A_{22}x_2+ A_{23}x_3 = b_2\\A_{31}x_1 + A_{32}x_2 + A_{33}x_3 = b_3\end{cases}$$can be written as the matrix equation $$\begin{bmatrix}A_{11}&A_{12}& A_{13}\\A_{21}&A_{22}& A_{23}\\A_{31}&A_{32}& A_{33}\end{bmatrix}\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix} = \begin{bmatrix}b_1\\b_2\\b_3\end{bmatrix},$$which we summarize as $\mathbf{A}\mathbf{x} = \mathbf{b}.$
+If $\mathbf{A}$ is invertible, then the solution to the system is $\mathbf{x} = \mathbf{A}^{-1}\mathbf{b}$.
+This is powerful!
+This also raises the question: "Why did we spend so many hours of our finite lives solving linear systems by hand?"
+
+<hr>
+<b>a. (20 pts) hello linear system</b>
+Write the following linear system as a matrix equation, and solve it using the snail function <code>inverse(mat3 M)</code>.
+Print your answer using using snails pretty printing function <code>pprint(...)</code>.
+$$\begin{cases}3x=z\\x-y=-1\\z-y=1\end{cases}$$If we call the solution to the system point $\mathbf{p}=(x, y, z)^T$, what is distance from $\mathbf{p}$ to $\mathbf{q} = (-0.282550, 3.282550, 5.565100)^T$?
+<code>printf("%lf\n", ...);</code> your answer.
+<details><summary>HINT </summary> rewrite the system in the form $$\begin{cases}A_{11}x+A_{12}y+A_{13}z=b_1\\A_{21}x+A_{22}y+A_{23}z=b_2\\A_{31}x+A_{32}y+A_{33}z=b_3\end{cases}$$</details>
+<b>b. (5 pts) point in circle</b>
+Complete the app by setting the boolean <code>inside</code> to indicate whether the test point is inside the circle.
+
+<b>c. (25 pts) points in circle</b>
+Extend <code>hw2a()</code> into <code>hw2b()</code>, which should do the same thing, but now with 4096 points. All points should still be draggable.
+
+<b>d. (10 pts) contrived problem to make you learn how to use a debugger</b>
+Please find the first frame that local variable <code>k</code> ends in the digits 47 (<code>printf</code> _not_ allowed), and set variable <code>the_first_frame_that_k_ends_in_47</code> to match. if you are successful, the screen should turn William's purple (don't be fooled by a slightly darker decoy purple).
+<details><summary>premium bonus HINT </summary> debuggers are powerful! you can actually type expressions into the watch window. for example, <code>k % 100 == 47</code></details>
+<b>e. (10 pts) fun with lerp</b>
+Draw three dots with x-coordinate interpolated between <code>a</code> and <code>b</code> according to time <code>t</code>. A green dot should use (vanilla, unclamped) linear interpolation; a red dot should use clamped linear interpolation; and a purple dot should use "cosine linear interpolation."
+<b>🔺. (+ 1 pt extra credit)</b> Add a white dot that uses <a href="https://en.wikipedia.org/wiki/Triangle_wave">triangle wave</a> linear interpolation. Up until time 1, it should behave exactly like vanilla or clamped lerp. Then it will look like the ball is bouncing off the vertical lines, a la hw1. No workarounds allowed (though also no pressure to write a macro).
+
+<b>f. (10 pts) fun with barycentric coordinates</b> 
+Consider a 2D triangle with vertices $\mathbf{a}$, $\mathbf{b}$, $\mathbf{c}$.
+Consider a point $\mathbf{p}$ with barycentric coordinates $(\alpha, \beta, \gamma)^T$.
+I.e. $\mathbf{p} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}$, where $\alpha + \beta + \gamma = 1$.
+Solve for $\alpha, \beta, \gamma$ using the snail function <code>inverse(mat3 M)</code>.<details><summary>HINT </summary>$$\begin{cases}a_x\alpha+b_x\beta+c_x\gamma=p_x\\a_y\alpha+b_y\beta+c_y\gamma=p_y\\\alpha+\beta+\gamma=1\end{cases}$$</details>
+<b>g. (20 pts + up to 3 pts extra credit) creative coding take 0</b> Using no fewer than 3 calls to <code>LERP</code> (or <code>CLAMPED_LERP</code>, <code>COS_LERP</code>), make an animation evocative of the topic "Changing Seasons" that you find visually pleasing.
+You may use <code>basic_draw(...)</code> and <code>gl_*</code>.
+You are encouraged to interpolate position, color, size...
+<b>note:</b> You will get full credit (but no extra credit) for meeting the bare minimum of this spec.
+
+<hr>
+<b>👩‍🔬. (0 pts + 2 pts extra credit) </b>[drops wed]
+
+<hr><center>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<center>🐄</center>
+
+</div></body></html>
