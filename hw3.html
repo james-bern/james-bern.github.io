@@ -1,0 +1,147 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-width:780; display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:serif,Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 0px;
+  font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="https://james-bern.github.io/csci-371"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+
+
+<center><b>hw3 (100 + 10 pts)</b>
+  upload hw.cpp to <a href="https://glow.williams.edu/courses/3490435">glow</a>
+<a href = "https://github.com/james-bern/CSCI-371">codebase</a>   <a href="https://www.youtube.com/embed/d7XKl-xL9Uk?rel=0">reference solution</a>
+</center>
+<hr>
+A <b>triangle soup mesh</b> has
+$\begin{cases}
+\text{vertex positions} = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5, ... ).
+\end{cases}$
+Its zeroth triangle is $\mathbf{T}_0 = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2)$; its first triangle is $\mathbf{T}_1 = (\mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5),$ and so on.
+
+An <b>indexed triangle mesh</b> has
+$\begin{cases}
+\text{triangle indices} = (i_0, i_1, i_2, ...),\\
+\text{vertex positions} = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5, ... ).
+\end{cases}$
+Its zeroth triangle is $\mathbf{T}_0 = (\mathbf{p}_{i_0}, \mathbf{p}_{i_1}, \mathbf{p}_{i_2})$; its first triangle $\mathbf{T}_1 = (\mathbf{p}_{i_3}, \mathbf{p}_{i_4}, \mathbf{p}_{i_5}),$ and so on.
+
+Pseudocode for calculating the center and length of a 1D bounding box:<code>
+ left  =  HUGE
+ right = -HUGE
+ for point in points;
+     left  = MIN(left,  point);
+     right = MAX(right, point);
+ center = (left + right) / 2
+ length = right - left</code>
+
+Pseudocode for calculating area-weighted normals for an indexed triangle mesh:<code>
+ normals = [ V3(0, 0, 0) for _ in range(num_vertices) ]
+ for tri in triangle_indices:
+     area   = calculate_triangle_area(...)
+     normal = calculate_triangle_unit_normal(...)
+     for i in tri
+         normals[i] += area * normal
+ for normal in normals:
+     normal = normalized(normal)</code>
+
+<hr>
+🟢 questions tend to be easier; I will give extensive hints (e.g. pseudocode, pointing out exactly where your bug is).
+🟦 questions tend to be harder; I will give only minor hints (e.g. high-level approach, pointing out generally where your bug is).
+🏴 questions tend to be hardest; I will only answer clarifying questions (e.g. what does this word mean?)
+
+NOTE: 🟢 questions may still be quite challenging; different students may find different questions challenging.
+
+<hr>
+<b>a. (40 pts) Mesh Data</b>
+
+Complete the following functions.
+
+- (8 pts) 🟢 <code>load_basic_mesh(...)</code>
+                   A green box should show up.
+
+- (8 pts) 🟢 <code>fancy2basic(...)</code>
+                   A 2nd, lighter colored, bunny should show up.
+
+- (8 pts) 🟢 <code>mesh_transform_vertex_positions_to_double_unit_box(...)</code>
+                   The bunnies and teapots should have the correct size and position.
+
+- (8 pts) 🟢 <code>fancy_mesh_alloc_compute_and_store_area_weighted_vertex_normals(...)</code>
+                   The 1st bunny should be properly lit.
+                   The teapots should be lit but with seams.
+                   NOTE: Small errors in your normal calculation code won't change the output much. Let's not stress on this.
+
+- (8 pts) 🟦 <code>fancy_mesh_merge_duplicated_vertices(...)</code>
+                   The 2nd teapot should have no seams.
+                   NOTE: This function merges "duplicated" vertices, i.e., vertices with the same position.
+                   (We say <code>p_i</code>, <code>p_j</code> duplicated if <code>IS_ZERO(squaredNorm(p_i - p_j)</code>.)
+
+NOTE In code, I refer to soup as a "basic mesh" and an indexed triangle mesh as a "fancy mesh."
+This is non-standard terminology.
+
+<b>b. (40 pts) L-Block</b>
+
+Consider the white tetris piece shown in the figure below.
+It is two units wide and three units tall.
+Its lower left corner is at the origin.
+
+Your job is to transform it into the other pieces, using the functions <code>Translation(double t_x, double t_y)</code>, <code>Rotation(double theta)</code>, and <code>Scaling(double s_x, double s_y)</code>.
+
+- (4 pts) 🟢 <code>M[0]</code> yellow
+- (4 pts) 🟢 <code>M[1]</code> purple
+- (4 pts) 🟢 <code>M[2]</code> orange
+- (4 pts) 🟢 <code>M[3]</code> lightblue
+- (4 pts) 🟢 <code>M[4]</code> red
+- (4 pts) 🟢 <code>M[5]</code> buff (tan)
+- (4 pts) 🟢 <code>M[6]</code> gray
+- (4 pts) 🟦 <code>M[7]</code> green
+- (4 pts) 🟦 <code>M[8]</code> purplishpink
+- (4 pts) 🏴 <code>M[9]</code> blue
+
+<img src="tetris.PNG">
+NOTE: All touching pieces touch "perfectly."
+NOTE: The green piece and the black silohuette it is touching are exactly the same size.
+NOTE: The purplishpink piece is the exact same shape as the gray piece, rotated 135 degrees counter-clockwise.
+
+<b>c. (20 pts + up to 10 pts extra credit) 🟢 #CreativeCoding -- Bouncy Castle</b>
+
+Using at least 10 total copies of the meshes included in hw3 (plus, optionally, whatever you can manage to load) make an animation evoactive of the topic "Bouncy Castle" that you find visually pleasing. Extra credit will be awarded sparingly for particularly technical, innovative, and creative submissions.
+
+NOTE: You will get full credit (but no extra credit) for making something that an unbiased third party would recognize as a castle sitting cleanly on the ground.
+
+<hr><center>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<center>🐄</center>
+
+</div></body></html>
