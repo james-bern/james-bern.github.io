@@ -41,7 +41,7 @@ Pseudocode for calculating the center and length of the bounding box for <b>1D</
  center = (left + right) / 2
  length = right - left</code>
 
-Pseudocode for calculating area-weighted normals for an indexed triangle mesh:<code>
+Pseudocode for calculating area-weighted vertex normals for an indexed triangle mesh:<code>
  normals = [ V3(0, 0, 0) for _ in range(num_vertices) ]
  for tri in triangle_indices:
      area   = calculate_triangle_area(...)
