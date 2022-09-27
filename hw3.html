@@ -32,12 +32,12 @@ $\begin{cases}
 \end{cases}$
 Its zeroth triangle is $\mathbf{T}_0 = (\mathbf{p}_{i_0}, \mathbf{p}_{i_1}, \mathbf{p}_{i_2})$; its first triangle $\mathbf{T}_1 = (\mathbf{p}_{i_3}, \mathbf{p}_{i_4}, \mathbf{p}_{i_5}),$ and so on.
 
-Pseudocode for calculating the center and length of a 1D bounding box:<code>
+Pseudocode for calculating the center and length of the bounding box for <b>1D</b> vertex positions. You will need something similar, but in 3D, to complete <code>mesh_transform_vertex_positions_to_double_unit_box(...)</code>.<code>
  left  =  HUGE
  right = -HUGE
- for point in points;
-     left  = MIN(left,  point);
-     right = MAX(right, point);
+ for x in vertex_positions_1D;
+     left  = MIN(left,  p);
+     right = MAX(right, p);
  center = (left + right) / 2
  length = right - left</code>
 
