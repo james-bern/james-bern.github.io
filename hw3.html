@@ -27,8 +27,8 @@ Its zeroth triangle is $\mathbf{T}_0 = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2
 
 An <b>indexed triangle mesh</b> has
 $\begin{cases}
-\text{triangle indices} = (i_0, i_1, i_2, ...),\\
 \text{vertex positions} = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5, ... ).
+\text{triangle indices} = (i_0, i_1, i_2, ...),\\
 \end{cases}$
 Its zeroth triangle is $\mathbf{T}_0 = (\mathbf{p}_{i_0}, \mathbf{p}_{i_1}, \mathbf{p}_{i_2})$; its first triangle $\mathbf{T}_1 = (\mathbf{p}_{i_3}, \mathbf{p}_{i_4}, \mathbf{p}_{i_5}),$ and so on.
 
@@ -50,6 +50,28 @@ Pseudocode for calculating area-weighted vertex normals for an indexed triangle 
          normals[i] += area * normal
  for normal in normals:
      normal = normalized(normal)</code>
+
+<code>
+// // // documentation
+
+// // soup mesh                
+//                             
+// struct BasicTriangleMesh3D {
+//     int num_vertices;       
+//     vec3 *vertex_positions; 
+// };                          
+
+// // indexed mesh                      
+//                                      
+// struct FancyTriangleMesh3D {         
+//     int num_vertices;                
+//     int num_triangles;               
+//     vec3 *vertex_positions;          
+//     int3 *triangle_indices;          
+//     vec3 *vertex_normals;            
+// };                                   
+</code>
+
 
 <hr>
 🟢 questions tend to be easier; I will give extensive hints (e.g. pseudocode, pointing out exactly where your bug is).
