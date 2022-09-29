@@ -41,27 +41,27 @@ Note that in the code, for both basic and fancy meshes, <code>num_vertices</code
 
 
 Pseudocode for calculating the center and length of the bounding box for 1D vertex positions.
- left  =  HUGE
- right = -HUGE
- for x in vertex_positions_1D;
-     left  = MIN(left,  p);
-     right = MAX(right, p);
- center = (left + right) / 2
- length = right - left</code>
+<code>left  =  HUGE
+right = -HUGE
+for x in vertex_positions_1D;
+    left  = MIN(left,  p);
+    right = MAX(right, p);
+center = (left + right) / 2
+length = right - left</code>
 
 
 
-Pseudocode for calculating area-weighted vertex normals for an indexed triangle mesh:<code>
- # start with a zero vector for every vertex
- # e.g. use calloc(num_vertices, sizeof(vec3))
- normals = [ V3(0, 0, 0) for _ in range(num_vertices) ]
- for tri in triangle_indices:
-     area   = calculate_triangle_area(...)
-     normal = calculate_triangle_unit_normal(...)
-     for vertex_index in tri
-         normals[vertex_index] += area * normal
- for normal in normals:
-     normal = normalized(normal)</code>
+Pseudocode for calculating area-weighted vertex normals for an indexed triangle mesh:
+<code># start with a zero vector for every vertex
+# e.g. use calloc(num_vertices, sizeof(vec3))
+normals = [ V3(0, 0, 0) for _ in range(num_vertices) ]
+for tri in triangle_indices:
+    area   = calculate_triangle_area(...)
+    normal = calculate_triangle_unit_normal(...)
+    for vertex_index in tri
+        normals[vertex_index] += area * normal
+for normal in normals:
+    normal = normalized(normal)</code>
 
 NOTE: For each vertex, this calculates the "area-weighted average of the normals of all triangles of which that vertex is a part."
 
