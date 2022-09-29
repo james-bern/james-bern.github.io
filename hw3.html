@@ -60,6 +60,12 @@ Pseudocode for calculating area-weighted vertex normals for an indexed triangle 
  for normal in normals:
      normal = normalized(normal)</code>
 
+NOTE: For each vertex, we are calculating the "area-weighted average of the normals of all triangles that vertex is part of."
+
+HINT: snail has functions
+<code>vec3 cross(vec3 a, vec3 b);</code>
+<code>vec3 normalized(vec3 n);</code>
+
 <hr>
 
 <code>
