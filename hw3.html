@@ -144,13 +144,6 @@ Its lower left corner is at the origin.
 
 Your job is to transform it into the other pieces, using the functions <code>Translation(double t_x, double t_y)</code>, <code>Rotation(double theta)</code>, and <code>Scaling(double s_x, double s_y)</code>.
 
-HINT: Recall that reflection (flipping over an axis) can be seen as a special case of scaling.
-
-HINT: Recall that we write chained transforms from right to left.
-E.g., a rotation of 90 degrees (counter-clockwise about the origin) <b>followed by</b> a translation of one unit to the right is
-is <code>Translation(1, 0) * Rotation(RAD(90))</code> in code
-and $\mathbf{T}^{\text{2D}}_{\begin{bmatrix}1\\0\end{bmatrix}}\mathbf{R}^{\text{2D}}_{\frac{\pi}{2}}$ in our notation from class.
-
 - (4 pts) 🟢 <code>M[0]</code> yellow
 - (4 pts) 🟢 <code>M[1]</code> purple
 - (4 pts) 🟢 <code>M[2]</code> orange
@@ -161,6 +154,14 @@ and $\mathbf{T}^{\text{2D}}_{\begin{bmatrix}1\\0\end{bmatrix}}\mathbf{R}^{\text{
 - (4 pts) 🟦 <code>M[7]</code> green
 - (4 pts) 🟦 <code>M[8]</code> purplishpink
 - (4 pts) 🏴 <code>M[9]</code> blue
+
+HINT: Recall that reflection (flipping over an axis) can be seen as a special case of scaling.
+
+✨ HINT: Recall that we write chained transforms from right to left.
+E.g., a rotation of 90 degrees (counter-clockwise about the origin) <b>followed by</b> a translation of one unit to the right is
+is <code>Translation(1, 0) * Rotation(RAD(90))</code> in code
+and $\mathbf{T}^{\text{2D}}_{\begin{bmatrix}1\\0\end{bmatrix}}\mathbf{R}^{\text{2D}}_{\frac{\pi}{2}}$ in our notation from class.
+
 
 <img src="tetris.PNG">
 NOTE: All touching pieces touch "perfectly."
