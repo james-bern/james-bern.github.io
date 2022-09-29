@@ -55,8 +55,8 @@ Pseudocode for calculating area-weighted vertex normals for an indexed triangle 
  for tri in triangle_indices:
      area   = calculate_triangle_area(...)
      normal = calculate_triangle_unit_normal(...)
-     for i in tri
-         normals[i] += area * normal
+     for vertex_index in tri
+         normals[vertex_index] += area * normal
  for normal in normals:
      normal = normalized(normal)</code>
 
