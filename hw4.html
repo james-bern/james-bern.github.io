@@ -41,6 +41,14 @@ So, given a camera with camera matrix $\mathbf{C}=\begin{bmatrix}\hat{\mathbf{x}
 
 <code>vec3 cameraForwardInWorldCoordinates = transformVector(C, V3(0, 0, -1));</code>
 
+The code that sets up the scene is in <code>hw4b()</code> and included below if you are interested. Note that all angles are written in radians, the orbit camera's distance is positive, and the tracking camera's target is a pointer to the human's position.
+<code>
+OrbitCamera orbit = { 200, RAD(75), RAD(15), RAD(-30) };
+FPSCamera human = { V3(0, 10, -20), RAD(60), RAD(180), 0 };
+TrackingCamera track = { V3(-50, 50, 50), RAD(45), &human.origin };
+ArbitraryCamera plane = { V3(0, 100, -500), RAD(45), RotationY(RAD(180)) };
+</code>
+
 - (8 pts) 🟢 complete <code>orbit_camera_get_C(...)</code>
    NOTE: my answer to this question is one line.
    NOTE: 🚨 there was a typo in the documentation! E.g., <code>mat4 RotationX(double angle_in_randians);</code> is correct (function takes a single double and returns a mat4).
