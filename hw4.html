@@ -41,7 +41,7 @@ So, given a camera with camera matrix $\mathbf{C}=\begin{bmatrix}\hat{\mathbf{x}
 
 <code>vec3 cameraForwardInWorldCoordinates = transformVector(C, V3(0, 0, -1));</code>
 
-The code that sets up the scene is in <code>hw4b()</code> and included below if you are interested. Note that all angles are written in radians; the orbit camera's distance is positive; the tracking camera's target is a pointer to the human's position; the human is 10 units tall.
+The code that sets up the scene is in <code>hw4b()</code> and included below if you are interested. Note that all angles are written in radians; the orbit camera's distance is positive; the tracking camera's target is a pointer to the human's origin; the human is 10 units tall.
 <code>
 OrbitCamera orbit = { 200, RAD(75), RAD(15), RAD(-30) };
 FPSCamera human = { V3(0, 10, -20), RAD(60), RAD(180), 0 };
