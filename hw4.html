@@ -34,6 +34,11 @@ I recommend working on extra credit creative coding only after attempting all pr
 More instructions, and a diagram are in the code. There will be a right triangle involved 🙂👍
 
 <b>b. (80 pts) Mini World</b>
+
+A camera "looks along" its $-\hat{\mathbf{z}}$ axis.
+I.e., for a camera (with a right-handed coordinate system) the vector $\begin{bmatrix}0\\0\\-1\end{bmatrix}$ <i>in that coordinate system</i> points <u>forward</u>.
+So, if a camera has camera matrix is $\mathbf{C}=\begin{bmatrix}\hat{\mathbf{x}} & \hat{\mathbf{y}} & \hat{\mathbf{z}} & {\mathbf{o}} \\ 0 & 0 & 0 & 1 \end{bmatrix}$, we can transform the camera's forward vector into world coordinates using the code <code>transformVector(C, V3(0, 0, -1));</code>
+
 - (8 pts) 🟢 complete <code>orbit_camera_get_C(...)</code>
 - (8 pts) 🟢 complete <code>fps_camera_get_C(...)</code>
 - (8 pts) 🟢 complete <code>tracking_camera_get_C(...)</code>
