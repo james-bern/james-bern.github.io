@@ -37,7 +37,9 @@ More instructions, and a diagram are in the code. There will be a right triangle
 
 A camera "looks along" its $-\hat{\mathbf{z}}$ axis.
 I.e., for a camera (with a right-handed coordinate system) the vector $\begin{bmatrix}0\\0\\-1\end{bmatrix}$ <i>in that coordinate system</i> points <u>forward</u>.
-So, if a camera has camera matrix is $\mathbf{C}=\begin{bmatrix}\hat{\mathbf{x}} & \hat{\mathbf{y}} & \hat{\mathbf{z}} & {\mathbf{o}} \\ 0 & 0 & 0 & 1 \end{bmatrix}$, we can transform the camera's forward vector into world coordinates using the code <code>transformVector(C, V3(0, 0, -1));</code>
+So, given a camera with camera matrix $\mathbf{C}=\begin{bmatrix}\hat{\mathbf{x}} & \hat{\mathbf{y}} & \hat{\mathbf{z}} & {\mathbf{o}} \\ 0 & 0 & 0 & 1 \end{bmatrix}$, we can transform the camera's forward vector <i>into</i> world coordinates using the code
+
+<code>vec3 cameraForwardInWorldCoordinates = transformVector(C, V3(0, 0, -1));</code>
 
 - (8 pts) 🟢 complete <code>orbit_camera_get_C(...)</code>
 - (8 pts) 🟢 complete <code>fps_camera_get_C(...)</code>
