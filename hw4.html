@@ -48,6 +48,7 @@ FPSCamera human = { V3(0, 10, -20), RAD(60), RAD(180), 0 };
 TrackingCamera track = { V3(-50, 50, 50), RAD(45), &human.origin };
 ArbitraryCamera plane = { V3(0, 100, -500), RAD(45), RotationY(RAD(180)) };
 </code>
+HINT: <code>double CLAMP(double a, double L, double R);</code> returns a if a is less than L, r if a is greater than R, and otherwise a; i.e. it returns a clamped to the internal [L, R].
 
 - (8 pts) 🟢 complete <code>orbit_camera_get_C(...)</code>
    NOTE: my answer to this question is one line.
@@ -60,10 +61,9 @@ ArbitraryCamera plane = { V3(0, 100, -500), RAD(45), RotationY(RAD(180)) };
    NOTE: the answer to this question is _very_ simple, and the theta involved is _not_ the theta from hw4a.  do _not_ use atan, tan, oribt->distance etc. :)
 - (8 pts) 🟢 complete <code>fps_camera_move(...)</code>
    NOTE: pressing W should move you in the direction you are facing; 
-   <details><summary>HINT</summary>
-    <code>vec3 humansForwardVectorInWorldCoordinates = transformVector(RotationY(human->theta), V3(0, 0, -1));</code>
+   <details><summary>HINT</summary><code>vec3 humansForwardVectorInWorldCoordinates = transformVector(RotationY(human->theta), V3(0, 0, -1));</code>
    </details><details><summary>HINT</summary>
-    <code>human->origin += .01 * humansForwardVectorInWorldCoordinates;</code></details>
+<code>human->origin += .01 * humansForwardVectorInWorldCoordinates;</code></details>
 - (8 pts) 🟢 complete <code>arbitrary_camera_move(...)</code>
    NOTE: you should move in the direction you are facing
 - (8 pts) 🟢 complete <code>draw_basic_box_with_fake_shadows(...)</code>
