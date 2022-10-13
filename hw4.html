@@ -62,8 +62,9 @@ HINT: <code>double CLAMP(double a, double L, double R);</code> returns a if a is
 - (8 pts) 🟢 complete <code>fps_camera_move(...)</code>
    NOTE: pressing W should move you in the direction you are facing; 
    <details><summary>HINT</summary><code>vec3 humansForwardVectorInWorldCoordinates = transformVector(RotationY(human->theta), V3(0, 0, -1));</code>
-   </details><details><summary>HINT</summary>
+   </details>
    NOTE: "strafing" means moving left/right in your coordinate system (i.e., side stepping)
+   <details><summary>HINT</summary>
 <code>human->origin += .01 * humansForwardVectorInWorldCoordinates;</code></details>
 - (8 pts) 🟢 complete <code>arbitrary_camera_move(...)</code>
    NOTE: you should move in the direction you are facing
