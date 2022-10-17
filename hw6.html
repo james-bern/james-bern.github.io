@@ -35,7 +35,7 @@ Let's break down line 7.
 
 - a GLSL <code>vec3</code> is three floats (very similar to snail's <code>vec3</code>)
 - <code>0.5</code> is being added to a <code>vec3</code>, so here it translates to <code>V3(0.5, 0.5, 0.5)</code> in snail
-- for some <code>vec3 a;</code>, <code>cos(a)</code> is the same as <code>cos(a.x, a.y, a.z)</code>
+- for some GLSL <code>vec3 a;</code>, <code>cos(a)</code> is the same as <code>cos(a.x, a.y, a.z)</code>
 - <code>iTime</code> is the current time (i've already set up a time variable <code>t </code> for you); note that <code>iTime</code> is being added to a <code>vec3</code>, so in this case it translates to <code>V3(t, t, t)</code> in snail
 - <code>uv.xyx</code> is an example of <i>swizzling</i> and translates to <code>V3(uv.x, uv.y, uv.x)</code> in snail</details>
 
