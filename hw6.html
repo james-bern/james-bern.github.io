@@ -31,7 +31,7 @@
 GLSL syntax is delightfully flexible, if also somewhat intimidating.
 Let's break down line 7.
 
-<code>vec3 col = .5 + .5 * cos(iTime + uv.xyx + vec3(0., 2., 4.));</code>
+<code>vec3 col = 0.5 + 0.5 * cos(iTime + uv.xyx + vec3(0.0, 2.0, 4.0));</code>
 
 - a GLSL <code>vec3</code> is three floats (very similar to snail's <code>vec3</code>)
 - <code>0.5</code> is being added to a <code>vec3</code>, so here it translates to <code>V3(0.5, 0.5, 0.5)</code> in snail
