@@ -1,0 +1,91 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-width:780; display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:serif,Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 0px;
+  font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+
+
+<center><b>hw5 (100 pts)</b>
+  upload hw.cpp to <a href="https://glow.williams.edu/courses/3490435">glow</a>
+  <a href = "https://github.com/james-bern/CSCI-371">codebase</a>   <a href="" style='color:gray'>reference solution</a>
+</center>
+<hr>🟢 questions tend to be easier; I will give extensive hints (e.g. pseudocode, pointing out exactly where your bug is).
+🟦 questions tend to be harder; I will give only minor hints (e.g. high-level approach, pointing out generally where your bug is).
+🏴 questions tend to be hardest; I am happy to work with you on a board
+<hr>
+<b>a. (10 pts) 🟢 Make a texture, and then update its data (very slowly on the CPU) to match the <a href="https://www.shadertoy.com/new">shadertoy starter code</a></b>
+<i>NOTE: I will code this live in class.</i>
+
+<b>b. (40 pts) 🟢 Put a skybox on the fps camera's head. Add some islands and an ocean surface (Creative Coding)</b>
+
+<b>c. (50 pts) Implement a software rasterizer.</b>
+
+<b>Ignore the <code>clip2</code> and <code>clip1</code> examples to start...</b>
+
+- (20 pts) 🟢 draw the triangles in a single solid color (e.g., blue)
+              NOTE: the <code>cycle</code> and <code>tilt</code> examples should show up on the film plane
+              <details><summary>✨ HINT</summary> 
+               TODO: add pseudocode
+              </details>
+-  (5 pts) 🟢 incorrect color interpolation (interpolate with NDC barycentric weights)
+              NOTE: you should see that the <code>cycle</code> example has incorrect overlap
+-  (5 pts) 🟢 set the fallback color to be <code>V3(.5, .5, .5) + .5 * normal</code>
+              NOTE: the bunny should look fairly fabulous
+- (10 pts) 🟦 implement a working z bufffer
+              NOTE: you may need the pdf that i shipped with the codebase (but can probably get away without using it)
+              NOTE: you should see that the <code>cycle</code> example has correct overlap
+-  (5 pts) 🟦 implement clip planes
+              NOTE: you will likely need the pdf that i shipped with the codebase
+              NOTE: you should check that scrubbing <code>renderer_f</code> and <code>renderer_n</code> clips properly
+-  (5 pts) 🟦 perspective-correct color interpolation
+              NOTE: you will _definitely_ need the pdf that i shipped with the codebase
+              NOTE: the tilt example should look correct (the difference is a bit subtle)
+
+Now, assuming all that was done perfectly...
+
+-  (? pts) 🏴  clip triangles to the near plane
+              NOTE: the <code>clip2</code> and <code>clip1</code> examples should no longer be broken
+              HINT: the triangle in <code>clip2</code> will become 1 (different) triangle after clipping
+              HINT: the triangle in <code>clip1</code> will become 2 (different) triangles after clipping
+              HINT: <a href="http://simonstechblog.blogspot.com/2012/04/software-rasterizer-part-1.html">simon yeung's writeup</a>
+
+<hr><center>
+
+
+
+
+
+
+
+
+
+
+
+
+<i>Thanks to learnopengl.com for making such a nice skybox available :)</i>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<center>🐄</center>
+
+</div></body></html>
