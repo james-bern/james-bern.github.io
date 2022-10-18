@@ -55,6 +55,11 @@ NOTE: Ignore the <code>clip2</code> and <code>clip1</code> examples to start...
 -  (5 pts) 🟢 NDC color interpolation (perspective-_incorrect_ interpolation; interpolate with NDC barycentric weights)
               NOTE: you should see the <code>cycle</code> example triangles in the correct colors but with _incorrect overlap_
               NOTE: you should see that the <code>tilt</code> example looks decent (but slightly wrong)
+
+<details><summary>✨ HINT</summary>
+ barycentrically interpolating a quantity works like this (recall that homework where you dragged the colorful dot around inside the boundary of a triangle)
+ <code> alpha * color_a + beta * color_b + gamma * color_c</details>
+
 -  (5 pts) 🟢 set the fallback color to be <code>V3(.5, .5, .5) + .5 * normal</code>
               NOTE: the bunny should look fairly fabulous
 - (10 pts) 🟦 implement a working z bufffer
