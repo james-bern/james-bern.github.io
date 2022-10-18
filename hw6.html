@@ -84,6 +84,8 @@ well, we projected triangle (a, b, c) into NDC, and discovered that p_NDC is ins
 in particular, we found that its NDC barycentric weights alpha_NDC, beta_NDC, gamma_NDC are all greater than 0
 (i.e., it passed the inside-triange test we briefly went over earlier in the course)
 
+<img src="fig2.PNG">
+
 now, in addition to being the pixel position in NDC, p_NDC also corresponds to a point p _on the triangle_ (not a vertex, just a point p on the triangle)
 in principle, we could write this point in camera coordinates as p_camera (to cross-reference the pdf, p_camera is the point C = (X_t, Z_t))
 note that we do not have p_camera :(
@@ -92,8 +94,10 @@ but no p_camera 😥
 
 wait, but why do we care about p_camera at all?
 well, what we really care about is p_camera.z (which i'll notate p_camera_Z)
-this is the z-component of the point on the triangle we are currently drawing *in camera coordinates*); in the pdf, p_camera_z is Z_t
-and p_camera_z would enable us to cleanly do depth buffering and clip planes, and also enable perspective-correct color interpolation
+this is the z-component of the point on the triangle we are currently drawing *in camera coordinates*);
+in the pdf, p_camera_z is Z_t
+
+p_camera_z would enable us to cleanly do depth buffering and clip planes, and also enable perspective-correct color interpolation
 
 the first punchline of the pdf is Equation 12, which says that <b>we can compute p_camera.z, *using the NDC barycentric weights*</b>
 in words, we barycentrically interpolate the _reciprocal_ of z_camera, and then take the reciprocal of that
