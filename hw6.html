@@ -57,6 +57,7 @@ NOTE: Ignore the <code>clip2</code> and <code>clip1</code> examples to start...
 -  (5 pts) 🟢 NDC color interpolation (perspective-_incorrect_ interpolation; interpolate with NDC barycentric weights)
               NOTE: you should see the <code>cycle</code> example triangles in the correct colors but with _incorrect overlap_
               NOTE: you should see that the <code>tilt</code> example looks decent (but slightly wrong)
+              NOTE: you don't need the pdf yet
 
 <details><summary>✨ HINT</summary>
 barycentrically interpolating a per-vertex quantity like color works like this (recall that homework where you dragged the colorful dot around inside the boundary of a triangle)
@@ -66,6 +67,7 @@ barycentrically interpolating a per-vertex quantity like color works like this (
               NOTE: the bunny should look fairly fabulous
 - (10 pts) 🟦 implement a working z bufffer
               NOTE: you may need the pdf that i shipped with the codebase (but can probably get away without using it)
+              NOTE!!: in the pdf, when he uses linear interpolation between two points, you can substitute barycentric interpolation (between three points)
               NOTE: you should see that the <code>cycle</code> example has correct overlap
 -  (5 pts) 🟦 implement clip planes
               NOTE: you will likely need the pdf that i shipped with the codebase
