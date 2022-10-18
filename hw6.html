@@ -82,7 +82,7 @@ this pixel has position p_NDC in NDC (from the whole "double(i) / (S - 1) * 2 - 
 how did we get here?
 well, we projected triangle (a, b, c) into NDC, and discovered that p_NDC is inside of triangle (a_NDC, b_NDC, c_NDC)
 in particular, we found that its NDC barycentric weights alpha_NDC, beta_NDC, gamma_NDC are all greater than 0
-(i.e., the inside-triange test from earlier in the course)
+(i.e., it passed the inside-triange test we briefly went over earlier in the course)
 
 now, in addition to being the pixel position in NDC, p_NDC also corresponds to a point p _on the triangle_ (not a vertex, just a point p on the triangle)
 in principle, we could write this point in camera coordinates as p_camera (to cross-reference the pdf, p_camera is the point C = (X_t, Z_t))
