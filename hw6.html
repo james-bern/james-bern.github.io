@@ -45,11 +45,14 @@ Let's break down line 7.
 
 <b>c. (50 pts) Implement a software rasterizer.</b>
 
+I have broken the development down into a (suggested) series of steps.
+You will be graded on how far you got (e.g. if you have NDC color interpolation, you also score points for the single solid color version (regardless of whether you actually implemented it)).
+
 NOTE: Ignore the <code>clip2</code> and <code>clip1</code> examples to start...
 
 - (20 pts) 🟢 draw the triangles in a single solid color (e.g., blue)
               NOTE: the <code>cycle</code> and <code>tilt</code> examples should show up on the film plane
--  (5 pts) 🟢 NDC color interpolation (interpolate with NDC barycentric weights)
+-  (5 pts) 🟢 NDC color interpolation (perspective-_incorrect_ interpolation; interpolate with NDC barycentric weights)
               NOTE: you should see the <code>cycle</code> example triangles in the correct colors but with _incorrect overlap_
               NOTE: you should see that the <code>tilt</code> example looks decent (but slightly wrong)
 -  (5 pts) 🟢 set the fallback color to be <code>V3(.5, .5, .5) + .5 * normal</code>
