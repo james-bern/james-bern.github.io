@@ -19,8 +19,8 @@
   <a href = "https://github.com/james-bern/CSCI-371">codebase</a>   <a href="" style='color:gray'>reference solution</a>
 </center>
 <hr>🟢 questions tend to be easier; I will give extensive hints (e.g. pseudocode, pointing out exactly where your bug is).
-🟦 questions tend to be harder; I will give only minor hints (e.g. high-level approach, pointing out generally where your bug is).
-🏴 questions tend to be hardest; I am happy to help :)
+🟦 questions tend to be harder; I will give somewhat less extensive hints in person
+🏴 questions tend to be hardest
 <hr>
 <b>a. (10 pts) 🟢 Make a texture, and then update its data (very slowly on the CPU) to match the <a href="https://www.shadertoy.com/new">shadertoy starter code</a></b>
 <i>NOTE: I will code some of this live in class.</i>
@@ -60,25 +60,70 @@ NOTE: Ignore the <code>clip2</code> and <code>clip1</code> examples to start...
               NOTE: you don't need the pdf yet
 
 <details><summary>✨ HINT</summary>
-barycentrically interpolating a per-vertex quantity like color works like this (recall that homework where you dragged the colorful dot around inside the boundary of a triangle)
-<code> alpha * color_a + beta * color_b + gamma * color_c</code></details>
-
--  (5 pts) 🟢 set the fallback color to be <code>V3(.5, .5, .5) + .5 * normal</code>
+NDC (perspective-_incorrect_ color interpolation) would works like this (recall that homework where you dragged the colorful dot around inside the boundary of a triangle)
+<code>perspective_incorrect_color = alpha_NDC * color_a + beta_NDC * color_b + gamma_NDC * color_c</code></details>
+-  (5 pts) 🟢 (aside) set the fallback color to be <code>V3(.5, .5, .5) + .5 * face_normal</code>
               NOTE: the bunny should look fairly fabulous
 - (10 pts) 🟦 implement a working z bufffer
               NOTE: you may need the pdf that i shipped with the codebase (but can probably get away without using it)
-              NOTE!!: in the pdf, when he uses linear interpolation between two points, you can substitute barycentric interpolation (between three points)
               NOTE: you should see that the <code>cycle</code> example has correct overlap
+
+<hr>
+<b>💡 let's talk about that pdf real quick</b>
+<i>note: the pdf uses a different convention (z-axis points forward instead of -z-axis)
+         this doesn't change the result of the derivation</i>
+
+<u>tl;dr: when the pdf author uses linear interpolation between two points, you can substitute barycentric interpolation</u>
+
+<details><summary>✨✨✨ EXPLANATION OF EQUATION 12 IN THE PDF</summary>
+say we want to color pixel (i, j).
+this pixel has position p_NDC in NDC (from the whole "double(i) / (S - 1) * 2 - 1" thing)
+
+how did we get here?
+well, we projected triangle (a, b, c) into NDC, and discovered that p_NDC is inside of triangle (a_NDC, b_NDC, c_NDC)
+in particular, we found that its NDC barycentric weights alpha_NDC, beta_NDC, gamma_NDC are all greater than 0
+(i.e., the inside-triange test from earlier in the course)
+
+now, in addition to being the pixel position in NDC, p_NDC also corresponds to a point p _on the triangle_ (not a vertex, just a point p on the triangle)
+in principle, we could write this point in camera coordinates as p_camera (to cross-reference the pdf, p_camera is the point C = (X_t, Z_t))
+note that we do not have p_camera :(
+we have a_camera, b_camera, c_camera, as well as a_NDC, b_NDC, c_NDC...
+but no p_camera 😥
+
+wait, but why do we care about p_camera at all?
+well, what we really care about is p_camera.z (which i'll notate p_camera_Z)
+this is the z-component of the point on the triangle we are currently drawing *in camera coordinates*); in the pdf, p_camera_z is Z_t
+and p_camera_z would enable us to cleanly do depth buffering and clip planes, and also enable perspective-correct color interpolation
+
+the first punchline of the pdf is Equation 12, which says that <b>we can compute p_camera.z, *using the NDC barycentric weights*</b>
+in words, we barycentrically interpolate the _reciprocal_ of z_camera, and then take the reciprocal of that
+in pseudocode, we compute p_camera_z = 1. / (alpha_NDC * (1 / a_camera.z) + beta_NDC * (1 / b_camera.z) + gamma_NDC * (1 / c_camera.z))
+
+assuming Equation 12 is in fact true, we have recovered p_camera_z! 🎉
+
+bonus: implementing clip planes is now a one liner 🎉
+
+but we didn't come here to talk about clip planes; we came to this exceptionally long, drawn out hint to talk about depth buffering
+
+let's assume p_camera_z is between our clip planes, i.e. in the range [renderer_f, renderer_n]
+note that renderer_f, renderer_n are NEGATIVE in our convention
+
+we want to map p_camera_z to "depth," which for us will should range from 0 to 255
+(recall that depth_buffer.data is an array of unsigned char's)
+we can use the contents of depth_buffer.data to do depth testing</details>
+<hr>
 -  (5 pts) 🟦 implement clip planes
               NOTE: you will likely need the pdf that i shipped with the codebase
               NOTE: you should check that scrubbing <code>renderer_f</code> and <code>renderer_n</code> clips properly
 -  (5 pts) 🟦 perspective-correct color interpolation
               NOTE: you will _definitely_ need the pdf that i shipped with the codebase
               NOTE: the tilt example should look correct (the difference is a bit subtle)
+              HINT: see Equation 16 of the pdf
+
 
 NOTE: Now, assuming all that was done perfectly...
 
--  (? pts) 🏴🏴?  clip triangles to the near plane
+-  (? pts) 🏴? (but with hints)  clip triangles to the near plane
               NOTE: you may have to rewrite and refactor large parts of the app
               NOTE: the <code>clip2</code> and <code>clip1</code> examples should no longer be broken
               HINT: the triangle in <code>clip2</code> will become 1 (different) triangle after clipping
