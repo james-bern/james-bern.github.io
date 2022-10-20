@@ -64,6 +64,7 @@ NDC (perspective-_incorrect_ color interpolation) would works like this (recall 
 <code>perspective_incorrect_color = alpha_NDC * color_a + beta_NDC * color_b + gamma_NDC * color_c</code></details>
 -  (5 pts) 🟢 (aside) set the fallback color to be <code>V3(.5, .5, .5) + .5 * face_normal</code>
               NOTE: the bunny should look fairly fabulous
+              NOTE: <code>face_normal</code> here refers to triangle (a, b, c)'s unit normal vector (i happened to compute it in world coordinates)
               HINT: run this in release mode (--release) to make it a bit faster
 - (10 pts) 🟦 implement a working z bufffer
               NOTE: you may need the pdf that i shipped with the codebase (but can probably get away without using it)
