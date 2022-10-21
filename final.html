@@ -1,0 +1,27 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-width:780; display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:serif,Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 0px;
+  font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+
+
+<center><b>practice final questions</b></center>
+<div class="content">
+1. Consider a camera with near clip plane at $n = -1$ and far clip plane at $f = -100$. Assume a linear 8-bit depth buffer, i.e. $$\text{depth} = \left\lfloor\frac{z_{\text{camera}} - n}{f - n}\right\rfloor * 255,$$ and a "less than or equal to" depth test (i.e. a fragment passes the depth test iff its depth is less than or equal to what is already in the depth buffer). The camera uses a typical perspective projection with angle of view of $90\deg$.
+
+NOTE: $\lfloor\cdot\rfloor$ is the floor operator.
+
+<b>Consider rasterizing a blue triangle and an orange triangle. Say the (face) normal vectors of both triangles are parallel to each other, and also parallel to the camera's $\hat{\mathbf{z}}$-axis. Neglecting issues of floating point precision, what is the smallest distance between the two triangles that will guarantee no z-fighting? (I.e. what is the smallest distance in camera coordinates that will prevent the two triangles from writing identical values to the depth buffer?)
+
+</div>
+</body>
+</html>
