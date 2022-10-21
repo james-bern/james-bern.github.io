@@ -1,0 +1,81 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-width:780; display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:serif,Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 0px;
+  font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+<div class="content">
+
+
+<center><b>🐌</b>
+note: vecX is e.g. a vec2 or a vec3</center>
+"constructors"
+<code>
+vec2 V2(double x, double y);
+vec3 V3(double x, double y, double z);
+vec4 V4(double x, double y, double z, double w);
+vec4 V4(vec3 xyz, double w);
+
+mat2 M2(double m00, double m01,
+        double m10, double m11);
+mat3 M3(double m00, double m01, double m02,
+        double m10, double m11, double m12,
+        double m20, double m21, double m22);
+mat4 M4(double m00, double m01, double m02, double m03,
+        double m10, double m11, double m12, double m13,
+        double m20, double m21, double m22, double m23,
+        double m30, double m31, double m32, double m33);
+</code>
+operators
+<code>
+double dot(vecX u, vecX, v); // u dot v
+vec3 cross(vec3 u, vec3 v);  // u cross v
+double squaredNorm(vecX v);  // |v|^2
+double norm(vecX v);         // |v|
+vecX normalized(v);          // v / |v|
+
+vecX cwiseAbs(vecX v);
+vecX cwiseMin(vecX v);
+vecX cwiseMax(vecX v);
+vecX cwiseProduct(vecX u, vecX v);
+
+double determinant(matX M);
+matX inverse(matX M);
+matX transpose(matX M);
+</code>
+4x4 transforms
+<code>
+mat4 Translation(double x, double y, double z = 0);
+mat4 Translation(vec2 xy);
+mat4 Translation(vec3 xyz);
+mat4 Scaling(double x, double y, double z = 1);
+mat4 Scaling(vec2 xy);
+mat4 Scaling(vec3 xyz);
+mat4 RotationX(double theta);
+mat4 RotationY(double theta);
+mat4 RotationZ(double theta);
+mat4 Rotation(vec3 axis, double angle);
+
+vecX transformPoint (mat4 M, vecX p); // M * [p, 1]
+vecX transformVector(mat4 M, vecX v); // M * [v, 0]
+vecX transformNormal(mat4 M, vecX n); // inverse(transpose(M)) * [n, 0]
+</code>
+utility
+<code>
+mat4 xyzo2mat4(vec3 x, vec3 y, vec3 z, vec3 o); // [ x y z o ]
+                                                // [ 0 0 0 1 ]
+void pprint(vecX v);
+void pprint(matX v);
+
+</code>
+</div>
+</body>
+</html>
