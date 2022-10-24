@@ -116,6 +116,9 @@ note that renderer_f, renderer_n are NEGATIVE in our convention
 
 we want to map p_camera_z to "depth," which for us will should range from 0 to 255
 (recall that depth_buffer.data is an array of unsigned char's)
+
+the specific map we want is [f, n] -> [255, 0] (since we initialize the depth buffer to full red)
+
 we can use the contents of depth_buffer.data to do depth testing</details>
 <hr>
 -  (5 pts) 🟦 implement clip planes
