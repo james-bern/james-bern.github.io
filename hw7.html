@@ -33,7 +33,9 @@ It is written to be clear for helping you learn the concepts. It's not necessari
 In this problem I give you a square mesh (two triangles).
 
 🟢 (20 pts) Complete the fragment (pixel) shader to draw the Mandelbrot set (it should match roughly the bare bones reference solution linked at the top of the hw).
-HINT: <a href="https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set#Optimized_escape_time_algorithms">pseudocode</a>
+NOTE: I recommend not thinking about color yet; instead implement some basic (one line) map from <code>iteration</code> to a shade of gray.
+✨ NOTE: if <code>iteration == max_iteration</code>, then you should probably color it black.
+HINT: <a href="https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set">pseudocode</a>
 NOTE: <a href="https://docs.gl/sl4/normalize">GLSL documentation</a>
 
 🟦 (10 pts) Color it to match (as close as you can) the extra bits reference solution
