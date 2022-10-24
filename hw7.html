@@ -1,0 +1,108 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-width:780; display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:serif,Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 0px;
+  font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+
+
+<center><b>hw7</b>
+upload hw.cpp to <a href="https://glow.williams.edu/courses/3490435">glow</a>
+<a href = "https://github.com/james-bern/CSCI-371">codebase</a>
+
+<a href = "https://youtube.com/embed/hOitzxWtbAo?rel=0">bare bones reference solution</a> | <a href = "https://youtube.com/embed/z2ka2rAIqXM?rel=0">✨ extra bits</a>
+</center>
+<hr>
+I recommend doing all the green questions first; I will help debug any of the questions this week.
+
+NOTE: Moreso than any other week, our code this week does _not_ represent good practice for writing fast graphics code.
+It is written to be clear for helping you learn the concepts. It's not necessarily terrible, but it's also not great.
+
+<hr>
+
+<b>a. (30 pts) mandelbrodt</b>
+
+In this problem I give you a square mesh (two triangles).
+
+🟢 (20 pts) Complete the fragment (pixel) shader to draw the Mandelbrot set (it should match roughly the bare bones reference solution linked at the top of the hw).
+HINT: <a href="https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set#Optimized_escape_time_algorithms">pseudocode</a>
+NOTE: <a href="https://docs.gl/sl4/normalize">GLSL documentation</a>
+
+🟦 (10 pts) Color it to match (as close as you can) the extra bits reference solution
+HINT: You will need a <a href="https://www.shadertoy.com/view/WlfXRN">color map</a>
+HINT: You will need to introduce a uniform variable for time
+           - declare it before the hw7a while loop as <code>double time = 0;</code>
+           - update it inside of the <code>if (playing) { ... }</code> block
+           - pass it to the shader program as <code>shader_set_uniform_double(shader_program, "time", time);</code>
+           - declare a <code>uniform float time;</code> at the top of the fragment shader
+           - ^ all of this is actually already done in hw7c, so you can look there if you get stuck
+NOTE: Once you're done with the problem, here is <a href="https://www.shadertoy.com/view/4df3Rn">iq's beautiful shadertoy solution</a> for reference; "by Inigo Quilez, @iquilezles and iquilezles.org"
+
+
+<b>b. (20 pts) do or dough nut</b>
+
+In this problem, I give you a grid mesh (2*S*S triangles).
+
+🟢 (15 pts) Complete the vertex shader to fold the mesh into a doughnut.
+HINT: <a href="https://en.wikipedia.org/wiki/Torus#Geometry">parametric equation</a>
+
+🟦 (5 pts) Modify the vertex shader to match (as close as you can) the extra bits reference solution.
+HINT: you will need to introduce a uniform variable for time (see above)
+HINT: you will need to make a variety of changes to the code
+
+
+🟢 <b>c. (20 pts) blinn-phong shading</b>
+
+Complete the fragment shader to implement world space Blinn-Phong point lights.
+HINT: <a href="https://learnopengl.com/Lighting/Basic-Lighting">Phong shading</a>
+HINT: <a href="https://learnopengl.com/Advanced-Lighting/Advanced-Lighting">Blinn's modification</a>
+
+<b>d. (20 pts) creative coding</b>
+
+🟢 Copy your solution to hw7c into hw7d. Modify the vertex and/or fragment shaders to do something *cool*.
+E.g., in the extra bits refernce solution you can see I added a twist.
+You could also, e.g., implement toon shading.
+
+
+<hr><center>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<center>🐄</center>
+
+</div></body></html>
+
+<!--
+              <details><summary>✨ HINT</summary> 
+               TODO: add pseudocode
+              </details>
+-->
