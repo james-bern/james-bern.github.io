@@ -37,9 +37,9 @@ NOTE: I recommend not thinking about color yet; instead implement some basic map
 ✨ NOTE: to start, i would color like so:
          - if <code>iteration == max_iteration</code> (i.e., the point is _in_ the mandelbrodt set), color the point black
          - else color the point white
-         - ⚠  NOTE: use <code>col += ...</code> _not_ <code>code = ...</code>
+         - ⚠  NOTE: use <code>col += ...</code> _not_ <code>code = ...</code> (otherwise, e.g., your white will appear dark gray)
    Then look into more fancy approaches to coloring
-⚠  NOTE: please ignore <code>AA</code>, <code>m</code>, <code>n</code> for now; just assume that p0 = (x0, y0) is the pixel position from the wikipedia article (if you're interested, AA, m, n are used to do sub-pixel sampling for anti-aliasing; we'll cover this in class at some point 🙂)
+⚠  NOTE: please ignore <code>AA</code>, <code>m</code>, <code>n</code> for now; just assume that p0 = (x0, y0) is the pixel position from the wikipedia article (if you're interested, AA, m, n are used to do sub-pixel sampling for anti-aliasing (i.e. for each pixels we do the calculation n*m times, add up the resulting colors and divide the result by (m*n); we'll cover this in class at some point 🙂)
 ⚠  NOTE: use <code>col += ...</code> _not_ <code>code = ...</code>
 HINT: <a href="https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set">pseudocode</a>
 NOTE: <a href="https://docs.gl/sl4/normalize">GLSL documentation</a>
