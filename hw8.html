@@ -20,19 +20,30 @@ upload hw.cpp to <a href="https://glow.williams.edu/courses/3490435">glow</a>
 </center>
 NOTE: You will be working entirely in world coordinates 👍
 
+NOTE: The position along the ray is <code>vec3 p = o + t * dir;</code>
+- <code>vec3 o;</code> is the ray origin (aka camera/renderer origin)
+- <code>double t;</code> is the distance along the ray
+- <code>vec3 dir;</code> is the direction of the ray
+
 <b>a. (80 pts) software ray tracer</b>
-Implement a software ray tracer with some bare bones lighting.
-Your solution must get overlap correct, and should have shadows.
-A perfect solution will include Phong lighting (or something vaguely similar).
+Implement a software ray tracer.
+- A bare bones solution will draw the triangles in the right place.
+- A better solution will draw them in the right color (not considering shadows or lighting).
+- A solid solution will get overlap correct.
+- A wonderful solution will have basic shadows.
+- A wow solution will include Phong lighting (or something vaguely similar).
+
+NOTE: Your grade will be based on how many of these features you include; A bare bones solution will score most of the points.
 
 Recommended development trajectory:
 - (math and code in class) set up the rays--origin and direction--properly
 - (math in class) intersect the ray with a triangle by solving a 4x4-matrix-vector equation; color pixel appropriate color if inside
 - use a for loop to intersect with all the triangles
--
+- get overlap correct by setting the color based on the closest hit
+- implement shadows (i moved the inner loop out into a function called <code>cast_ray(...)</code> that i reused for casting shadow rays)
+- implement lighting
 
-<b>sample code for iterating over the mesh</b><code>
-// NOTE if you change num_triangles to 1 then you will just go over 1 triangle
+<details><summary>✨ HINT (iterating over the mesh)</summary><code>
 int num_triangles = mesh->num_vertices / 3;
 for (int triangle_i = 0; triangle_i < num_triangles; ++triangle_i) {
     // (a, b, c) -- triangle vertex positions in world coordinates
@@ -59,8 +70,31 @@ for (int triangle_i = 0; triangle_i < num_triangles; ++triangle_i) {
             color_c = fallback_color;
         }
     }
-}
-</code>
+}</code></details>
+<details><summary>✨ HINT (closest hit)</summary><code>
+foreach (pixel (i, j)) {
+    bool hit_at_least_one_triangle = false;
+    double min_t = INFINITY;
+    vec3 color = {};
+    {
+        foreach (triangle) {
+            ...
+            bool hit = ...;
+            if (hit) {
+                hit_at_least_one_triangle = true;
+                t = ...;
+                if (t < min_t) {
+                    min_t = t;
+                    color = ...;
+                }
+            }
+        }
+    }
+
+    if (hit_at_least_one_triangle) {
+        hw8a_set_pixel(i, j, color);
+    }
+}</code></details>
 
 <b>b. (20 pts) ray marching distance shaders</b> (Creative Coding; to be released soon.)
 <a>https://iquilezles.org/articles/distfunctions/</a>
