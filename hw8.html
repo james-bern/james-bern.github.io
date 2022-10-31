@@ -84,7 +84,7 @@ First, we can write down the definition of a ray $$ \begin{cases} \mathbf{p} = \
 
 Second, we can write down the definition barycentric coordinates $$ \begin{cases} \mathbf{p} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1 \end{cases} $$ where we can also write the condition for $\mathbf{p}$ being inside the triangle $$ \begin{cases} \alpha,\beta,\gamma > 0 \end{cases} $$
 
-Equating the different expressions for $\mathbf{p}$ gives us the following <i>system of equations</i>
+Equating the different equations for $\mathbf{p}$ gives us the following <i>system of equations</i>
 $$ \begin{cases} \mathbf{o} + t * \mathbf{dir} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1 \end{cases} $$
 Taking on both conditions (in front of camera; inside of triangle) gives us the <i>condition for a "hit"</i>
 $$ \begin{cases} \alpha,\beta,\gamma,t > 0 \end{cases} $$
