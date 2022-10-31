@@ -72,6 +72,71 @@ for (int triangle_i = 0; triangle_i < num_triangles; ++triangle_i) {
         }
     }
 }</code></details>
+<details><summary>✨ HINT (ray-triangle intersection)</summary>
+Consider ray with origin $\mathbf{o}$ and direction $\mathbf{dir}$.
+Let's intersect the ray with some triangle $(\mathbf{a}, \mathbf{b}, \mathbf{c})$.
+Get pumped.
+
+A neat way to do this is to express $\mathbf{p}$ two ways.
+
+First, using the definition of a ray, where we can also include the condition for the $\mathbf{p}$ being <i>in front of the camera</i> (not behind it).
+$$
+\begin{cases}
+\mathbf{p} = \mathbf{o} + t * \mathbf{dir}\\
+t > 0
+\end{cases}
+$$
+Second, using the barycentric coordinates, where we can also include the condition for $\mathbf{p}$ being inside the triangle.
+$$
+\begin{cases}
+\mathbf{p} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\
+\alpha + \beta + \gamma = 1\\
+\alpha,\beta,\gamma > 0
+\end{cases}
+$$
+Equating the different expressions for $\mathbf{p}$ and taking on all the conditions gives us the following <i>system of equations</i>
+$$
+\begin{cases}
+\mathbf{o} + t * \mathbf{dir} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\
+\alpha + \beta + \gamma = 1\\
+\end{cases}
+$$
+and <i>condition for a "hit".</i>
+$$
+\begin{cases}
+\alpha,\beta,\gamma,t > 0
+\end{cases}
+$$
+You can solve the system any way you like, but since we're not so concerned with speed, let's just bash it with a matrix solve.
+Let's do some algebra.
+$$
+\begin{cases}
+\alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c} - t * \mathbf{dir} = \mathbf{o}\\
+\alpha + \beta + \gamma = 1\\
+\end{cases}
+$$
+You are the One, Neo.
+$$
+\begin{cases}
+\begin{bmatrix}
+\mathbf{a} & \mathbf{b} & \mathbf{c} & \mathbf{dir} \\
+1 & 1 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+\alpha \\ \beta \\ \gamma \\ -t
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mathbf{o} \\ 1
+\end{bmatrix} \\ 
+\end{cases}
+$$
+Solving that system of equations gives us $\alpha,\beta,\gamma,t$.
+If all of those numbers are greater than zero (i.e. they pass the condition for a hit, then, well, we have a hit.
+In the case of a hit, we can finally compute $\mathbf{p}$ in world coordinates, for example, as $\mathbf{p} = \mathbf{o} + t * \mathbf{dir}$.
+That's the point on the triangle that the ray hit.
+Wow.
+</details>
 <details><summary>✨ HINT (closest hit)</summary><code>
 foreach (pixel (i, j)) {
     bool hit_at_least_one_triangle = false;
