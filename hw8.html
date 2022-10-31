@@ -27,11 +27,12 @@ NOTE: The position along the ray is <code>vec3 p = o + t * dir;</code>
 
 <b>a. (80 pts) software ray tracer</b>
 Implement a software ray tracer.
-- A bare bones solution will draw the triangles in the right place.
-- A better solution will draw them in the right color (not considering shadows or lighting).
-- A solid solution will get overlap correct.
-- A wonderful solution will have basic shadows.
-- A wow solution will include Phong lighting (or something vaguely similar).
+- An attempt will set up the rays properly (pressing 'z' on the keyboard will show them).
+- A bare bones solution will also draw the triangles in the right place (say, in blue).
+- A better solution will also draw them in the right color (not considering shadows or lighting).
+- A solid solution will also get overlap correct.
+- A wonderful solution will also have basic shadows.
+- A wow solution will also include Phong lighting (or something vaguely similar).
 
 NOTE: Your grade will be based on how many of these features you include; A bare bones solution will score most of the points.
 
@@ -40,8 +41,8 @@ Recommended development trajectory:
 - (math in class) intersect the ray with a triangle by solving a 4x4-matrix-vector equation; color pixel appropriate color if inside
 - use a for loop to intersect with all the triangles
 - get overlap correct by setting the color based on the closest hit
-- implement shadows (i moved the inner loop out into a function called <code>cast_ray(...)</code> that i reused for casting shadow rays)
-- implement lighting
+- implement shadows (i moved some code out into a function called <code>cast_ray(...)</code>, which i also used to cast shadow rays)
+- implement lighting (this actually isn't too bad once you've got the rest)
 
 <details><summary>✨ HINT (iterating over the mesh)</summary><code>
 int num_triangles = mesh->num_vertices / 3;
