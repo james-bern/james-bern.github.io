@@ -80,9 +80,9 @@ Call the (possible) intersection point $\mathbf{p}$ and get pumped.
 
 Our approach will be to express $\mathbf{p}$ in two different ways and set them equal.
 
-First, using the definition of a ray $$ \begin{cases} \mathbf{p} = \mathbf{o} + t * \mathbf{dir} \end{cases} $$ where we can also write the condition for the $\mathbf{p}$ being <i>in front of the camera</i> (not behind it) $$ \begin{cases} t > 0 \end{cases} $$
+First, we can write down the definition of a ray $$ \begin{cases} \mathbf{p} = \mathbf{o} + t * \mathbf{dir} \end{cases} $$ where we can also write the condition for the $\mathbf{p}$ being <i>in front of the camera</i> (not behind it) $$ \begin{cases} t > 0 \end{cases} $$
 
-Second, using the barycentric coordinates $$ \begin{cases} \mathbf{p} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1 \end{cases} $$ where we can also write the condition for $\mathbf{p}$ being inside the triangle $$ \begin{cases} \alpha,\beta,\gamma > 0 \end{cases} $$
+Second, we can write down the definition barycentric coordinates $$ \begin{cases} \mathbf{p} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1 \end{cases} $$ where we can also write the condition for $\mathbf{p}$ being inside the triangle $$ \begin{cases} \alpha,\beta,\gamma > 0 \end{cases} $$
 
 Equating the different expressions for $\mathbf{p}$ gives us the following <i>system of equations</i>
 $$ \begin{cases} \mathbf{o} + t * \mathbf{dir} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1 \end{cases} $$
@@ -127,12 +127,6 @@ foreach (pixel (i, j)) {
 }</code></details>
 
 <b>b. (20 pts) ray marching distance shaders</b> (Creative Coding; to be released soon.)
-<a>https://iquilezles.org/articles/distfunctions/</a>
-
-<hr><center>
-
-
-<b>b. (20 pts) ray marching distance shaders</b> (To be released soon.)
 <a>https://iquilezles.org/articles/distfunctions/</a>
 
 <hr><center>
