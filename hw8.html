@@ -13,74 +13,63 @@
 
 <a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
 
-
-<center><b>hw7</b>
+<center><b>hw8</b>
 upload hw.cpp to <a href="https://glow.williams.edu/courses/3490435">glow</a>
 <a href = "https://github.com/james-bern/CSCI-371">codebase</a>
-
-<a href = "https://youtube.com/embed/hOitzxWtbAo?rel=0">bare bones reference solution</a> | <a href = "https://youtube.com/embed/z2ka2rAIqXM?rel=0">✨ extra bits</a>
+<!--<a href = "https://youtube.com/embed/hOitzxWtbAo?rel=0">bare bones reference solution</a> | <a href = "https://youtube.com/embed/z2ka2rAIqXM?rel=0">✨ extra bits</a>-->
 </center>
-<hr>
-I recommend doing all the green questions first; I will help debug any of the questions this week.
+NOTE: You will be working entirely in world coordinates 👍
 
-NOTE: Moreso than any other week, our code this week does _not_ represent good practice for writing fast graphics code.
-It is written to be clear for helping you learn the concepts. It's not necessarily terrible, but it's also not great.
+<b>a. (80 pts) software ray tracer</b>
+Implement a software ray tracer with some bare bones lighting.
+Your solution must get overlap correct, and should have shadows.
+A perfect solution will include Phong lighting (or something vaguely similar).
 
-<hr>
+Recommended development trajectory:
+- (math and code in class) set up the rays--origin and direction--properly
+- (math in class) intersect the ray with a triangle by solving a 4x4-matrix-vector equation; color pixel appropriate color if inside
+- use a for loop to intersect with all the triangles
+-
 
-<b>a. (30 pts) mandelbrodt</b>
+<b>sample code for iterating over the mesh</b><code>
+// NOTE if you change num_triangles to 1 then you will just go over 1 triangle
+int num_triangles = mesh->num_vertices / 3;
+for (int triangle_i = 0; triangle_i < num_triangles; ++triangle_i) {
+    // (a, b, c) -- triangle vertex positions in world coordinates
+    // color_*   -- vertex colors
+    // n         -- unit vector normal to triangle
+    vec3 a, b, c;
+    vec3 color_a, color_b, color_c;
+    vec3 n;
+    {
+        a = mesh->vertex_positions[3 * triangle_i + 0];
+        b = mesh->vertex_positions[3 * triangle_i + 1];
+        c = mesh->vertex_positions[3 * triangle_i + 2];
+        if (mesh->vertex_colors != NULL) {
+            color_a = mesh->vertex_colors[3 * triangle_i + 0];
+            color_b = mesh->vertex_colors[3 * triangle_i + 1];
+            color_c = mesh->vertex_colors[3 * triangle_i + 2];
+        } else {
+            vec3 e1 = b - a;
+            vec3 e2 = c - a;
+            n = normalized(cross(e1, e2));
+            vec3 fallback_color = V3(.5, .5, .5) + .5 * n;
+            color_a = fallback_color;
+            color_b = fallback_color;
+            color_c = fallback_color;
+        }
+    }
+}
+</code>
 
-In this problem I give you a square mesh (two triangles).
+<b>b. (20 pts) ray marching distance shaders</b> (Creative Coding; to be released soon.)
+<a>https://iquilezles.org/articles/distfunctions/</a>
 
-🟢 (20 pts) Complete the fragment (pixel) shader to draw the Mandelbrot set (it should match roughly the bare bones reference solution linked at the top of the hw).
-NOTE: I recommend not thinking about color yet; instead implement some basic map from <code>iteration</code> to a shade of gray.
-✨ NOTE: to start, i would color like so:
-         - if <code>iteration == max_iteration</code> (i.e., the point is _in_ the mandelbrodt set), color the point black
-         - else color the point white
-         - ⚠  NOTE: use <code>col += ...</code> _not_ <code>code = ...</code> (otherwise, e.g., your white will appear dark gray)
-   Then look into more fancy approaches to coloring
-⚠  NOTE: please ignore <code>AA</code>, <code>m</code>, <code>n</code> for now; just assume that p0 = (x0, y0) is the pixel position from the wikipedia article (if you're interested, AA, m, n are used to do sub-pixel sampling for anti-aliasing (i.e. for each pixels we do the calculation n*m times, add up the resulting colors and divide the result by (m*n); we'll cover this in class at some point 🙂)
-⚠  NOTE: use <code>col += ...</code> _not_ <code>code = ...</code>
-HINT: <a href="https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set">pseudocode</a>
-NOTE: <a href="https://docs.gl/sl4/normalize">GLSL documentation</a>
-
-🟦 (10 pts) Color it to match (as close as you can) the extra bits reference solution
-HINT: You will need a <a href="https://www.shadertoy.com/view/WlfXRN">color map</a>
-HINT: You will need to introduce a uniform variable for time
-           - declare it before the hw7a while loop as <code>double time = 0;</code>
-           - update it inside of the <code>if (playing) { ... }</code> block
-           - pass it to the shader program as <code>shader_set_uniform_double(shader_program, "time", time);</code>
-           - declare a <code>uniform float time;</code> at the top of the fragment shader
-           - ^ all of this is actually already done in hw7c, so you can look there if you get stuck
-NOTE: Once you're done with the problem, here is <a href="https://www.shadertoy.com/view/4df3Rn">iq's beautiful shadertoy solution</a> for reference; "by Inigo Quilez, @iquilezles and iquilezles.org"
-
-
-<b>b. (20 pts) do or dough nut</b>
-
-In this problem, I give you a grid mesh (2*S*S triangles).
-
-🟢 (15 pts) Complete the vertex shader to fold the mesh into a doughnut.
-README: <a href="https://en.wikipedia.org/wiki/Torus#Geometry">parametric equation</a>
-
-🟦 (5 pts) Modify the vertex shader to match (as close as you can) the extra bits reference solution.
-HINT: you will need to introduce a uniform variable for time (see above)
-HINT: you will need to make a variety of changes to the code
+<hr><center>
 
 
-🟢 <b>c. (20 pts) blinn-phong lighting</b>
-
-Complete the fragment shader to implement world space Blinn-Phong point lights.
-Also add sliders for the ambient, diffuse, specular, and shininess coefficients (you will have to pass these to the shader as uniforms).
-README: <a href="https://learnopengl.com/Lighting/Basic-Lighting">Phong lighting</a>
-README: <a href="https://learnopengl.com/Advanced-Lighting/Advanced-Lighting">Blinn's modification</a>
-NOTE: I've set up the model matrix so if you press the P key the mesh will stretch up and down.
-
-<b>d. (20 pts) creative coding</b>
-
-🟢 Copy your solution to hw7c into hw7d. Modify the vertex and/or fragment shaders to do something *cool*.
-E.g., in the extra bits refernce solution you can see I added a twist.
-You could also, e.g., implement toon shading.
-
+<b>b. (20 pts) ray marching distance shaders</b> (To be released soon.)
+<a>https://iquilezles.org/articles/distfunctions/</a>
 
 <hr><center>
 
