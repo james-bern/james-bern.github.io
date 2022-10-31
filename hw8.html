@@ -86,7 +86,7 @@ Second, using the barycentric coordinates $$ \begin{cases} \mathbf{p} = \alpha\m
 
 Equating the different expressions for $\mathbf{p}$ gives us the following <i>system of equations</i>
 $$ \begin{cases} \mathbf{o} + t * \mathbf{dir} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1 \end{cases} $$
-Taking on all the conditions gives us the <i>condition for a "hit"</i>
+Taking on both conditions (in front of camera; inside of triangle) gives us the <i>condition for a "hit"</i>
 $$ \begin{cases} \alpha,\beta,\gamma,t > 0 \end{cases} $$
 You can solve the system any way you like, but since we're not so concerned with speed, let's just bash it with a matrix solve.
 First, some algebra.
