@@ -44,6 +44,9 @@ Recommended development trajectory:
 - implement shadows (i moved some code out into a function called <code>cast_ray(...)</code>, which i also used to cast shadow rays)
 - implement lighting (this actually isn't too bad once you've got the rest)
 
+✨ NOTE: I shipped the code with a little snippet of <code>gl_*(...)</code> code that draws the rays.
+You can move this around; edit it; etc.  I found it very useful to draw _only the rays that hit_, and to draw them from $\mathbf{o}$ to $\mathbf{p}$.
+
 <details><summary>✨ HINT (iterating over the mesh)</summary><code>
 int num_triangles = mesh->num_vertices / 3;
 for (int triangle_i = 0; triangle_i < num_triangles; ++triangle_i) {
