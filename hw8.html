@@ -109,12 +109,11 @@ foreach (pixel (i, j)) {
     {
         foreach (triangle) {
             ...
+            // calculate alpha, beta, gamma, t
             bool hit = ...;
             if (hit) {
                 hit_at_least_one_triangle = true;
-                t = ...;
                 if (t < min_t) {
-                    min_t = t;
                     color = ...;
                 }
             }
