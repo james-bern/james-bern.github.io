@@ -118,7 +118,7 @@ foreach (pixel (i, j)) {
             if (hit) {
                 hit_at_least_one_triangle = true;
                 if (t < min_t) {
-                    min_t = t;
+                    min_t = t; // * don't forget this
                     color = ...;
                 }
             }
