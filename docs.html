@@ -14,6 +14,31 @@
 <a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
 <div class="content">
 
+<center><b>🐄 (🐌 variants)</b>
+<code>
+// single color
+void basic_draw(
+    int primitive,
+    mat4 transform,
+    int num_vertices,
+    vecX *vertex_positions,
+    vec3 color = V3(1, 1, 1),
+    double size_in_pixels = 0,
+    bool overlay = false,
+    vec3 wireframe_color = V3(1, 1, 1));
+
+
+// per-vertex color
+void basic_draw(
+    int primitive,
+    mat4 transform,
+    int num_vertices,
+    vecX *vertex_positions,
+    vec3 *vertex_colors,
+    double size_in_pixels = 0,
+    bool overlay = false,
+    vec3 wireframe_color = V3(1, 1, 1));
+</code>
 
 <center><b>🐌</b>
 note: vecX is e.g. a vec2 or a vec3</center>
