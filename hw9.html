@@ -1,0 +1,141 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-width:780; display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:serif,Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 0px;
+  font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+
+<center><b>hw9</b>
+upload hw.cpp to <a href="https://glow.williams.edu/courses/3490435">glow</a>
+<a href = "https://github.com/james-bern/CSCI-371">codebase</a>
+<!--<a href = "https://youtube.com/embed/hOitzxWtbAo?rel=0">bare bones reference solution</a> | <a href = "https://youtube.com/embed/z2ka2rAIqXM?rel=0">✨ extra bits</a>-->
+</center>
+
+<b>a. (40 pts) pendulum</b>
+Consider a pendulum with length $L$ and mass $m$ concentrated at the bottom.
+Call the pendulum's angular position $\theta$.
+Let's work in SI units and consider the gravitational acceleration to be $g=-9.81$.
+
+<img src="hw9_pendulum.PNG">
+
+Note that the spatial position of the pendulum's mass (endpoint) is $\mathbf{p} = L\begin{bmatrix}\sin(\theta)\\ -\cos(\theta)\end{bmatrix}.$
+
+<hr>
+
+The pendulum's dynamics are governed Newton's second law (torque form) $$\tau = I\alpha,$$where $\tau$ is the torque about the axis of rotation (origin), $I$ is the moment of inertia, and $\alpha$ is the angular acceleration.
+
+Recall that the gravitational force is $mg$, and note the length of the perpendicular lever arm is $L\sin\theta$.
+Therefore the torque about the axis of rotation is $\tau=mgL\sin\theta$.
+
+Recall (via Google) that the moment of inertia of a point mass distance $L$ from its axis of rotation is $I = mL^2$.
+
+✨ Warmup: Solve the above equations for $\alpha$.
+
+✅ $m$ drops out. What does this *mean*?
+
+<hr>
+Choose the state of our system to $\xi = (\theta, \omega)^T$, where $\theta$ is the pendulum's angular position, and $\omega$ is its angular velocity.
+Recall that $\omega = \dot\theta$ and $\alpha = \dot\omega = \ddot\theta$, where the "dot notation" just denotes the number of time derivatives.
+I.e., $\dot\theta = \frac{d\theta}{dt}$ and $\ddot\theta = \frac{d^2\theta}{dt^2}$.
+
+To simulate, we're going to discretize our physics in time.
+Call $h$ the simulation time step.
+The very useful notation $\xi_k$ means "$\xi$ at time $t_k$"
+
+✅ "If the state of the system at time $t_k$ is $\xi_{k}$, then $\xi_{k+1}$ is the state of the system $h$ seconds later, i.e. the state of the system at time $t_{k+1} = t_k + h$."
+
+<hr>
+Here are three of the simplest approaches for integrating our simulation forward in time.
+
+⭐ Forward Euler is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k}$
+I.e., $
+\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix}
+=
+\begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
++
+h\begin{bmatrix}\dot\theta_{k}\\\dot\omega_{k}\end{bmatrix},
+$ which we can rewrite as $
+\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix}
+=
+\begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
++
+h\begin{bmatrix}\omega_{k}\\\alpha_{k}\end{bmatrix}.
+$
+
+
+⭐Semi-implicit Euler can be written as $
+\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix}
+=
+\begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
++
+h\begin{bmatrix}\omega_{k + 1}\\\alpha_{k}\end{bmatrix}.
+$
+
+
+⭐Implicit Euler can be written as $
+\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix}
+=
+\begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
++
+h\begin{bmatrix}\omega_{k + 1}\\\alpha_{k + 1}\end{bmatrix}.
+$
+Note that for Implicit Euler, $\theta_{k+1},\omega_{k+1}$ will show up on both sides of the equation!
+To simulate using Implicit Euler we need to <b>solve a nonlinear system of equations</b> every timestep.
+We will cover one approach to this (fixed point iteration) in class on Thursday.
+
+<hr>
+Simulate the pendulum.
+- angular acceleration
+- potential energy (just used for plotting) -- $\text{PE} = mgy$ (or, technically speaking, $mg(y-y_0),$ where $y_0$ is any constant)
+- kinetic energy (just used for plotting) -- $\text{KE} = mv^2/2 = m(L\omega)^2/2$
+- explicit euler integration
+- semi-implicit euler integration
+- (harder) implicit euler integration
+  HINT: fixed point iteration is probably the easiest way to do the solve
+
+In your glow comment, explain the general behavior (i.e. what happens to the total energy of the system) of the three methods.
+✅ Feel free to check your work <a href="http://courses.cms.caltech.edu/cs171/assignments/hw6/hw6-notes/notes-hw6.html#NotesSection1.1.2">here</a>. 🚨 Warning: this resource uses a different sign convention for $g$.
+
+
+
+
+<b>b. (40 pts) rigging, skinning, and keyframe animation</b>
+Implement skeletal animation.
+- forward kinematics (skeleton should show up)
+- skinning (skin should show up)
+- (harder) smooth weight selection (press 'k' to switch to smooth mode; should look reasonable -- see reference sol'n)
+
+NOTE Forward kinematics and skinning require very little code.
+However, you will likely need to think a bit and work some stuff out on paper.
+
+🌟 MORE DETAILS, DOCUMENTATION, and HINTS COMING SOON 🌟
+
+
+
+
+<b>c. (20 pts) boids (creative coding)</b>
+Using the <a href="https://team.inria.fr/imagine/files/2014/10/flocks-hers-and-schools.pdf">original 1987 paper</a> (and Google) as inspiration, write an $\mathcal{O}(n^2)$ flocking simulation.
+A bare bones solution might simulate ~100 2D boids and draw them as POINTS.
+
+Possible extensions:
+- Make the boids follow your mouse.
+- Draw the boids as isosceles TRIANLGES, with the tip indicating direction.
+- Simulate 3D boids, and drawn them as tets.
+- Implement a basic spatial data structure to simulate a *bunch* of boids.
+  - E.g., repopulate a naive grid at the start of each frame.
+    Instead of querying every other boid in the world...
+    ...a given boid would just query boids in its grid cell and maybe also the neighboring cells.
+
+
+
+<center>🐄</center>
+
+</div></body></html>
