@@ -165,12 +165,12 @@ Call ${}_j\mathbf{S}_i$ the rest position of the $i$-th node <i>written in the r
 The $j$-th bone has current (absolute) coordinate system $\mathbf{M}_j=\mathbf{T}_{\mathbf{b}_j}\mathbf{R}_{\phi_j}$.
 ✅ Note that this is just the typical "rotation by absolute orientation followed by translation to absolute position."
 
-Linear blend skinning calculates the $i$-th node's current position as $\mathbf{s}_i = \sum_{j=0}^{n}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}.$
+Linear blend skinning calculates the $i$-th node's current position as $\mathbf{s}_i = \sum_{j=0}^{n-1}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}.$
 ✅ Note that $\mathbf{M}_j\ {{}_j\mathbf{S}_i}$ can be thought of as...
        - "gluing" the $i$-th node to the $j$-th bone (when both are in their rest positions)
        - moving the bone around according to $\mathbf{M}_j$
        - measuring where the node ends up.
-✅ $\sum_{j=0}^{n}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}$ repeats the above operation for all $n$ bones and takes the weighted sum of the results.
+✅ $\sum_{j=0}^{n-1}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}$ repeats the above operation for all $n$ bones and takes the weighted sum of the results.
 
 
 <details><summary>✨ HINT (${}_{j}\mathbf{S}_i$)</summary>
