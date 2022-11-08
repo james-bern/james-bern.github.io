@@ -170,7 +170,7 @@ Linear blend skinning calculates the $i$-th node's current position as $\mathbf{
        - "gluing" the $i$-th node to the $j$-th bone (when both are in their rest positions),
        - rotating and translating the bone according to $\mathbf{M}_j$,
        - measuring where the node ends up.
-✅ $\sum_{j=0}^{n-1}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}$ repeats the above operation for all $n$ bones and takes the weighted sum of the results.
+✅ $\sum_{j=0}^{n-1}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}$ repeats the above operation for all $n$ bones and takes the weighted average of the results.
 
 
 <details><summary>✨ HINT (${}_{j}\mathbf{S}_i$)</summary>
