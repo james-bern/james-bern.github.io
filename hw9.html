@@ -106,6 +106,7 @@ Simulate the pendulum.
   HINT: eliminate $\omega_{k+1}$ so you just have an equation of $\theta_{k+1}$.
   HINT: fixed point iteration is probably the easiest way to solve the resulting equation.
         ?HINT: if you would like, you can eliminate $\omega_{k+1}$ from the Implicit Euler rule by substitution.
+        ?HINT: you can also get rid of $\alpha_{k+1}$ by recalling that you have $\alpha(\theta)$, a function for $\alpha$ as a function of $\theta$ (true at all time). choose to evaluate it at $t_{k+1}$ and substitute your equation for $\alpha_{k+1}=\alpha(\theta_{k+1})$ into the equation to eliminate $\alpha$
 
 In your glow comment, explain the general behavior (i.e. what happens to the total energy of the system) of the three methods.
 ✅ Feel free to check your work <a href="http://courses.cms.caltech.edu/cs171/assignments/hw6/hw6-notes/notes-hw6.html#NotesSection1.1">here</a>. 🚨 Warning: this resource uses a different sign convention for $g$.
