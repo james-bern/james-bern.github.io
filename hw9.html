@@ -187,6 +187,9 @@ Implement skeletal animation.
 - (harder) smooth weight selection (press 'k' to switch to smooth mode; should look reasonable -- i.e. skin is smooth, does not self-intersect except at extreme angles, etc.)
   HINT the graph of weights (drawn in the top left of the app) should be nice and continuous. 🚨 i did _not_ use sin or cos.
 
+🌟🌟 To access the weights, use <code>weights[mode][node_i][bone_i]</code>.
+(mode is which approach to skinning we're using (i.e. RIGID or SMOOTH))
+
 ✅ Forward kinematics and skinning require very little code.
 
 
