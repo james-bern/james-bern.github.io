@@ -72,7 +72,7 @@ here are the equivalent entry-wise operations (don't do this):
 
 
 🚨 important! you must guard all modifications to <code>U</code>, <code>U_x</code>, and <code>U_xx</code>
-(the usage of <code>compute_and_add_to</code> allows for them to be NULL)
+(the usage of <code>compute_and_add_to(...)</code> allows for them to be NULL)
 e.g. <code>if (U) { (*U) += ...; }</code>
 e.g. <code>if (U_x) { add(U_x, ...); }</code>
 e.g. <code>if (U_xx) { add(U_xx, ...); }</code>
