@@ -18,13 +18,13 @@ upload hw.cpp to <a href="https://glow.williams.edu/courses/3490435">glow</a>
 <a href = "https://github.com/james-bern/CSCI-371">codebase</a>
 </center>
 
-<span style="color:blue;">// NOTE Your code will run slow for now (on Thursday I will explain & release a patch that makes it fast).</span>
+<span style="color:blue;">// NOTE Your code will run really slow in debug mode (and also pretty slow in release mode) -- on Thursday I will explain & release a patch that makes it fast).</span>
 
 <b>draw the mesh to get acquainted with the data</b>
 
-<code>int sim.num_nodes;</code>
-<code>int sim.num_springs;</code>
-<code>int sim.num_pins;</code>
+<code>int num_nodes;</code>
+<code>int num_springs;</code>
+<code>int num_pins;</code>
 <code>vec2 *X;</code> is the rest position of the mesh.
 <code>vec2 *x;</code> is the current position of the mesh.
 <code>int2 *springs;</code> 
@@ -39,7 +39,7 @@ e.g., the k-th pin is attached to node <code>pins[k]</code>
 
 <b>✨ read this explanation of <code>void compute_and_add_to(...);</code></b>
 
-<code>U</code> is the potential $U$
+<code>U</code> is the "energy" $U$
 <code>U_x</code> is the gradient $\frac{dU}{d\mathbf{x}},$ which is a long row vector
 <code>U_xx</code> is the Hessian $\frac{d^2U}{d\mathbf{x}^2},$ which is a big square matrix (in code we are storing it as a sparse matrix; will discuss Thursday)
 
@@ -50,7 +50,7 @@ we are given a pointer to the energy; don't forget to dereference.
 
 
 instead of adding energy terms to the gradient & Hessian one entry at a time...
-...it can be very convenient to add "segments" (vec2's) to the gradient, and blocks (mat2's) to the Hessian.
+...it can be very convenient to add "segments" (vec2's) to the gradient and blocks (mat2's) to the Hessian.
 
 <code>add(U_x, i, s);</code> adds vec2 $\mathbf{s}$ to $\frac{dU}{d\mathbf{x}_i}$   <span style="color:blue;">// NOTE $\frac{dU}{d\mathbf{x}_i}$ is the $i$-th "2-segment" of the gradient.</span>
 here are the equivalent entry-wise operations:
@@ -58,7 +58,7 @@ here are the equivalent entry-wise operations:
     <code>U_x[2 * i + 1] += s.y;</code>
 
 <code>add(U_xx, i, j, M);</code> adds mat2 $\mathbf{M}$ to $\frac{d^2U}{d\mathbf{x}_id\mathbf{x}_j}$   <span style="color:blue;">// NOTE $\frac{d^2U}{d\mathbf{x}_id\mathbf{x}_j}$ is the $(i, j)$-th 2x2 block of the Hessian.</span>
-here are the equivalent entry-wise operations (ew):
+here are the equivalent entry-wise operations (don't do this):
     <code>sbuff_push_back(&U_xx, { 2 * i + 0, 2 * j + 0, M(0, 0) });</code>
     <code>sbuff_push_back(&U_xx, { 2 * i + 1, 2 * j + 0, M(1, 0) });</code>
     <code>sbuff_push_back(&U_xx, { 2 * i + 1, 2 * j + 1, M(1, 1) });</code>
@@ -84,6 +84,14 @@ its deformation is $\Delta_i = \mathbf{x}_i - \mathbf{X}_i$
 its pin energy contribution is $E^{\text{pin}}_i = k^\text{pin} |\Delta_i|^2 / 2$   <span style="color:blue;">// NOTE use <code>squaredNorm</code></span>
 its pin gradient contribution is $\frac{dE^{\text{pin}}_i}{d\mathbf{x}_i} = k^\text{pin} \Delta_i$
 its pin Hessian contribution is $\frac{d^2E^{\text{pin}}_i}{d\mathbf{x}_i^2} = k^\text{pin} \mathbf{I}$   <span style="color:blue;">// NOTE $\mathbf{I}$ is the 2x2 identity</span>
+
+<b>extend your gravity implementation to support gravity pointing in any direction</b>
+the angle of the gravity vector (from the positive $x$-axis) is <code>tweaks.theta_gravity</code>
+<span style="color:blue;">// NOTE i draw a yellow arrow to visualize $\theta_{\text{gravity}}.$</span>
+<details><summary>✨ HINT</summary>consider a constant external force $\mathbf{f}$ acting on node $i$
+its energy contribution is $E^{\text{force}}_i = -(\mathbf{f} \cdot \mathbf{x}_i)$
+its gradient contribution is $\frac{dE^{\text{force}}_i}{d\mathbf{x}_i} = -\mathbf{f}$
+</details>
 
 
 <center>🐄</center>
