@@ -20,7 +20,10 @@ upload hw.cpp to <a href="https://glow.williams.edu/courses/3490435">glow</a>
 
 <span style="color:blue;">// NOTE Your code will run really slow in debug mode (and also pretty slow in release mode) -- on Thursday I will explain & release a patch that makes it fast).</span>
 
-<b>draw the mesh to get acquainted with the data</b>
+
+let's start by getting acquainted with the data
+
+<b>draw the mesh exactly as indicated by the TODO's in <code>void simulation_draw(...);</code></b>
 
 <code>int num_nodes;</code>
 <code>int num_springs;</code>
@@ -38,6 +41,7 @@ e.g., the k-th pin is attached to node <code>pins[k]</code>
 <hr>
 
 <b>✨ read this explanation of <code>void compute_and_add_to(...);</code></b>
+
 
 <code>U</code> is the "energy" $U$
 <code>U_x</code> is the gradient $\frac{dU}{d\mathbf{x}},$ which is a long row vector
@@ -70,14 +74,14 @@ here are the equivalent entry-wise operations (don't do this):
 <span style="color:blue;">// NOTE to check if your derivatives are correct, play the simulation with check_derivatives turned on -- i.e. press 'a'</span>
 <span style="color:blue;">// NOTE (though it should be pretty obvious just from dragging nodes around etc.)</span>
 
-<b>implement gravity inside of <code>compute_and_add_to(...)</code></b>
+<b>implement gravity where indicated by the TODO in of <code>compute_and_add_to(...)</code></b>
 consider node $i$
 it has current position $\mathbf{x}_i=(x_i^x, x_i^y)$ 
 its gravity energy contribution is $E^{\text{gravity}}_i = mgx_i^y$
 its gravity gradient contribution is $\frac{dE^{\text{gravity}}_i}{d\mathbf{x}_i} = (0, mg)^T$
 it makes no gravity Hessian contribution (since its gravity gradient contribution is constant)
 
-<b>implement pins inside of <code>compute_and_add_to(...)</code></b>
+<b>implement pins where indicated by the TODO in <code>compute_and_add_to(...)</code></b>
 say node $i$ is pinned
 it has current position $\mathbf{x}_i$ and rest position $\mathbf{X}_i$
 its deformation is $\Delta_i = \mathbf{x}_i - \mathbf{X}_i$
