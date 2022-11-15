@@ -71,6 +71,11 @@ here are the equivalent entry-wise operations (don't do this):
     <code>sbuff_push_back(&U_xx, { 2 * i + 0, 2 * j + 1, M(0, 1) });</code>
 
 
+🚨 important! you must guard all modifications to <code>U</code>, <code>U_x</code>, and <code>U_xx</code> (the usage of <code>compute_and_add_to</code> allows for them to be NULL)
+e.g. <code>if (U) { (*U) += ...; }<code>
+e.g. <code>if (U_x) { add(U_x, ...); }<code>
+e.g. <code>if (U_xx) { add(U_xx, ...); }<code>
+
 <hr>
 
 <span style="color:blue;">// NOTE to check if your derivatives are correct, play the simulation with check_derivatives turned on -- i.e. press 'a'</span>
