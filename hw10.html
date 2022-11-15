@@ -87,7 +87,7 @@ consider node $i$
 it has current position $\mathbf{x}_i=(x_i^x, x_i^y)$ 
 its gravity energy contribution is $E^{\text{gravity}}_i = mgx_i^y$
 its gravity gradient contribution is $\frac{dE^{\text{gravity}}_i}{d\mathbf{x}_i} = (0, mg)^T$
-<details><summary>✨ SPOILER</summary><code>if (U_x) { add(U_x, i, m * g); }</code></details>
+<details><summary>✨ SPOILER</summary><code>if (U_x) { add(U_x, i, V2(0, m * g)); }</code></details>
 it makes no gravity Hessian contribution (since its gravity gradient contribution is constant)
 
 <b>implement pins where indicated by the TODO in <code>compute_and_add_to(...)</code></b>
