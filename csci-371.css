@@ -1,0 +1,17 @@
+{ box-sizing: border-box; }
+.content { max-width:780; margin:auto; }
+.content_no_max_width { max-width:1000000000; margin:auto; }
+a {color:blue;}
+p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;}
+img { max-width:780; display: block; margin-left: auto; margin-right: auto;}
+.comment { background-color:black;color:white; }
+body {font-family:serif,Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;}
+math {white-space:normal;font-family:serif;}
+code {
+ color:blue;
+ background-color:aliceblue;
+ padding: 0px;
+ font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
