@@ -6,17 +6,117 @@
 
 <a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
 
+
 <center><b>hw00</b>
 <a href="https://github.com/james-bern/CSCI-371">codebase</a> | <a href="https://github.com/james-bern/CSCI-371/wiki">docs</a> | <a href="https://www.overleaf.com/read/mcyyczwqzbzz">notes</a> | <a href="https://glow.williams.edu/courses/3619655">glow</a>
 </center>
-<b>0. setup</b>
-follow the codebase quickstart guide and verify that <code>eg_kitchen_sink</code> runs
+<hr>
+<b>goals.</b>
 
-<b>1. hello snail</b>
+- set up the codebase
+- learn to use the docs
+- learn to love the snail math library
+- learn to appreciate the cow app library
+- get comfortable with the setup/loop structure of an app
+
+<hr>
+<b>0. setup</b>
+
+follow the codebase quickstart guide and verify that you can build and run
+
+you should see rainbow colors, spinning bunnies, hear music (unless you're on Linux), be able to draw on the screen, etc.
+
+<hr>
+<b>1. hello codebase</b>
+
+let's make a new app together from scratch
+while one could skip straight to the end and finish this problem in about 30 seconds...
+...i recommend spending at least 3-6 hours on it
+
+please make the *exact* changes i make, in the order that i make them
+and please make the changes the slow way (by typing) rather than copy and paste
+- we are trying to build literal muscle memory; trust me we will need it going forward!
+
+for better or for worse, this is the last time i will micromanage your coding style and process
+after this, you will be graded on a "does it work" + "did you make a strong effort" basis
+
+✨ super duper important ✨
+- build and run your code and investigate what it does after *every single step*
+- - experiment!--what *exactly* does the code do? what if i changed this line? got rid of that line?
+- - i will indicate put the bare minimum things you should try as bullets; but try more stuff than just that!
+- rigorously cross-reference the docs as we go (your goal is to understand every single change and every single line)
+
+<details><summary>step 0: the starter code</summary>
+<codex>#include "include.cpp"
+
+int main() {
+    APPS {
+        APP(eg_kitchen_sink);
+    }
+    return 0;
+}</codex>
+let's get a sense of what cow can do!
+- play with the gui controls
+- - (Mac and Windows only) can you turn down the music volume?
+- - what happens when you press <code>SPACE</code>?
+- - how about <code>j</code> and <code>k</code>
+- - when you click?
+- - double click?
+- press <code>?</code> on the keyboard while cow is running
+- - what does <code>=</code> do?
+- - how about <code>~</code>?
+</details>
+<details><summary>step 1: create a new app</summary><code>
+#include "include.cpp"
+
+void hw00() {
+    while (cow_begin_frame()) {
+
+    }
+}
+
+int main() {
+    APPS {
+        APP(eg_kitchen_sink);
+        APP(hw00);
+    }
+    return 0;
+}
+</code>
+</details>
+<details><summary>step X: XXX</summary><code>
+</code>
+</details>
+<details><summary>step X: XXX</summary><code>
+</code>
+</details>
+<details><summary>step X: XXX</summary><code>
+</code>
+</details>
+<details><summary>step X: XXX</summary><code>
+</code>
+</details>
+<details><summary>step X: XXX</summary><code>
+</code>
+</details>
+<details><summary>step X: XXX</summary><code>
+</code>
+</details>
+<details><summary>step X: XXX</summary><code>
+</code>
+</details>
+<details><summary>step X: XXX</summary><code>
+</code>
+</details>
+<details><summary>step X: XXX</summary><code>
+</code>
+</details>
+
 the length (aka Euclidean norm) of a vector $|\mathbf{v}|$ can be found using <code>norm(v)</code>
 
-<b>2. hello cow</b>
-make an app that replicates the functionality in this video
+<hr>
+<b>2. hello open-ended hw problem</b>
+plese make an app that replicates the functionality in this video
 
 <hr>
 <b>I. hello extra credit</b>
