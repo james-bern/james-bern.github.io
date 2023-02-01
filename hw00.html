@@ -1,6 +1,6 @@
 <html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
 <script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 <link rel="stylesheet" href="csci-371.css">
 </head><body><div class="content">
 
@@ -24,18 +24,20 @@
 
 follow the codebase quickstart guide and verify that you can build and run
 
-you should see rainbow colors, spinning bunnies, hear music (unless you're on Linux), be able to draw on the screen, etc.
+you should see rainbow colors, spinning bunnies, be able to draw on the screen, and hear music (unless you're on Linux)
 
 <hr>
 <b>1. hello codebase</b>
 
-let's make a new app together from scratch
+let's write an app together
+this app is primarily designed to help you get acquainted with the codebase and practical prototyping practices, but will also be a neat, useful app in its own right
+
 while one could skip straight to the end and finish this problem in about 30 seconds...
-...i recommend spending at least 3-6 hours on it
+...i recommend spending at least 3-9 hours on it
 
 please make the *exact* changes i make, in the order that i make them
 and please make the changes the slow way (i.e., by typing) rather than copy and paste
-- we are trying to build literal muscle memory; trust me we will need it going forward!
+- we are trying to build literal muscle memory; trust me, we're going to need it going forward!
 
 for better or for worse, this will be the last time i micromanage your coding style and process
 after this, you will be graded on a "does it work" + "did you make a strong effort" basis
@@ -144,7 +146,7 @@ int main() {
 - make the triangle's three vertices each a different color--red, green, and blue
 - try, e.g., <code>SOUP_POITNS</code> instead of <code>SOUP_TRIANGLES</code>; what other options are there?
 </details>
-<details><summary>step 4: (cleanup) get rid of camera gui controls; also i'm sick of those bunnies popping up every time i run the code
+<details><summary>step 4: (clean) get rid of camera gui controls; also i'm sick of those bunnies popping up every time i run the code
 - the only thing better than writing code is deleting code :)</summary>
 <codex>#include "include.cpp"
 
@@ -549,16 +551,21 @@ int main() {
     return 0;
 }
 </codex>
-- note that i've made as few changes as possible
-- - first verify the refactored code actually works (i.e., build and run)...
-- - ...then you can clean :)
-- how is our function different than what we might have written had we not written the usage code first?
-- - i.e., if i had just told you "write a function that computes the area of a triangle?," what might you have written?
-- - - in what ways would this function be *worse* than the one we ended up with organically?
+note how i've made as few changes as possible
+- (the body of the function is literally just code that i cut and pasted, only with a return statement at the end)
+- - there are huge reasons to work this way
+- - - 1. let's you test the refactor in isolation; don't let cleaning be an additional possible source of bugs!
+- - - - process: first verify the refactored code actually works (i.e., build and run)...
+- - - - ...then clean it up :)
+- - - 2. good functions do not fall from the heavens like comets 🙅‍♂️☄; rather, they grow up organically like plants 🙆‍♀️🌱; we germinate seeds by coding directly and clearly in <code>main()</code>; only once we have a few promising looking seeds (repeated code) do we even consider transplanting a seed up into a globally-scoped function (imagine a sturdy tree standing tall amidst green rolling hills and lush valleys); aside: if C++'s lambda syntax was less horrifying, i would recommend an intermediate step between straight-up code and globally-scoped functions, wherein you nurture young seedlings in locally-scoped (indoor) lambda functions (pots); alas it is not. 
+
+food for thought
+- how is <code>get_triangle_signed_area(...)</code> likely different than it would have been if we had not written the usage code first?
+- - i.e., if i had just told you to "write a function that computes the signed area of a triangle?," what might you have written?--specifically focus on the arguments it would take
+- - - in what ways would this hypothetical function be *worse* than the one we ended up "growing" organically?
 - - - "WRITE THE USAGE CODE FIRST" --Casey Muratori
 </details>
-<details><summary>step 14: factor out the triangle signed area computation into a function
-- note: i recommend *not* writing a function until you've repeated (very similar) code in at least one or two other places</summary>
+<details><summary>step 14: (clean) remove no-longer-necessary scaffolding, merge lines iff convenient and clarifying</summary>
 <codex>#include "include.cpp"
 
 real get_triangle_signed_area(vec2 *vertex_positions) {
@@ -579,17 +586,13 @@ void hw00a() {
         V2(0.0, 1.0),
     };
 
-    {
-        real signed_area = get_triangle_signed_area(vertex_positions);
-        printf("signed_area_0 %lf\n", signed_area);
-   }
+   printf("signed_area_0 %lf\n", get_triangle_signed_area(vertex_positions));
 
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 PV = camera_get_PV(&camera);
 
-        real signed_area = get_triangle_signed_area(vertex_positions);
-        gui_readout("signed_area", &signed_area);
+        gui_printf("signed_area %lf\n", get_triangle_signed_area(vertex_positions));
 
         widget_drag(PV, 3, vertex_positions);
         soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
@@ -603,22 +606,66 @@ int main() {
     return 0;
 }
 </codex>
-- note that i've made as few changes as possible
-- - first verify the refactored code actually works (i.e., build and run)...
-- - ...then you can clean :)
-- how is our function different than what we might have written had we not written the usage code first?
-- - i.e., if i had just told you "write a function that computes the area of a triangle?," what might you have written?
-- - - in what ways would this function be *worse* than the one we ended up with organically?
-- - - "WRITE THE USAGE CODE FIRST" --Casey Muratori
-</details>
-
+- note how our code becomes *easier* to read as we go; this is a good sign :)
+- note how few comments are necessary
+- note that i switched back to <code>gui_printf(...)</code> 🤷‍♂️
+- aside: iff means "if and only if"; isn't that fun?
+- alright enough chit chat, time to let you loose on an actual problem! gl;hf 🙂👍</details>
 <hr>
 <b>2. hello open-ended hw problem</b>
 - add a gui button that, when clicked, randomizes the triangle's vertex positions
+- - choose the positions from within the 2D double unit box $[-1.0, 1.0]^2$
+- add a gui button that, when clicked, randomizes the triangle's color
+- - choose the color from within the 3D unit box $[0.0, 1.0]^3$
+- add keyboard controls
+- - when the user holds <code>w</code>, have the triangle move slowly up
+- - when the user holds <code>s</code>, have the triangle move slowly down
+- - when the user presses <code>SPACE</code>, have something interesting (your choice exactly what) happen
+- record a video (using cow's builtin recorder) demoing *all* aspects of this spec; verify it plays (in VLC player) and then submit your homework :) congrats!
+- - there's also some extra credit below if you want an extra challenge (if you have already been sufficiently challenged, then just take the win and call it a day 🙂👍)
 
 
-<hr>
-<b>I. hello extra credit</b>
+hint: search the docs for <code>gui_button</code> and <code>key_held</code>
+
+
+note: there are multiple ways to access the elements of snail vectors
+- e.g., consider a <code>vec2 s</code>
+
+<details><summary>option 1: using <code>.x</code>, <code>.y</code>, and <code>.z</code></summary>
+<codex>s.x = 42.0;
+s.y = 42.0;</codex>
+- tempting, and occasionally necessary, but tends to be bug-prone and can create a lot of repetition in your code
+- A OK to code something this way to start, but then seriously consider refactoring with...</details>
+<details><summary>option 2: using square brackets</summary>
+<codex>for (int d = 0; d < 2; ++d) {
+    s[d] = 42.0;
+}</codex>
+- lets you wrap up repeated code into a <code>for</code> loop
+- - often less bug prone
+- aside: <code>d</code> stands for "dimension" but please use whatever variable name you like</details>
+<hr>note: emoji problems are extra credit and are *not* reqiured to get an A on this homework<hr>
+<b>🚀. hello rocket</b>
+- extend the app into the rocket ship from the classic game asteroids
+- - when the user holds <code>a</code>, have the triangle turn counter-clockwise
+- - when the user holds <code>d</code>, have the triangle turn clockwise
+- - when the user holds <code>w</code>, have the triangle fly forward
+- - when the user holds <code>s</code>, have the triangle fly backward
+- - incorporate some momentum (triangle keeps moving a bit after you let go of the key)
+- - when the user presses <code>SPACE</code>, have the triangle shoot little circlar bullets out; pew pew!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </div></body></html>
-
