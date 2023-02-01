@@ -34,19 +34,20 @@ while one could skip straight to the end and finish this problem in about 30 sec
 ...i recommend spending at least 3-6 hours on it
 
 please make the *exact* changes i make, in the order that i make them
-and please make the changes the slow way (by typing) rather than copy and paste
+and please make the changes the slow way (i.e., by typing) rather than copy and paste
 - we are trying to build literal muscle memory; trust me we will need it going forward!
 
-for better or for worse, this is the last time i will micromanage your coding style and process
+for better or for worse, this will be the last time i micromanage your coding style and process
 after this, you will be graded on a "does it work" + "did you make a strong effort" basis
 
 ✨ super duper important ✨
 - build and run your code and investigate what it does after *every single step*
 - - experiment!--what *exactly* does the code do? what if i changed this line? got rid of that line?
+- - - don't be afraid to change the code!--break the code!--break all the code!
 - - i will indicate put the bare minimum things you should try as bullets; but try more stuff than just that!
 - rigorously cross-reference the docs as we go (your goal is to understand every single change and every single line)
 
-<details><summary>step 0: the starter code</summary>
+<details><summary>step 0: (starter code) play with a silly example app</summary>
 <codex>#include "include.cpp"
 
 int main() {
@@ -55,21 +56,20 @@ int main() {
     }
     return 0;
 }</codex>
-let's get a sense of what cow can do!
 - play with the gui controls
-- - (Mac and Windows only) can you turn down the music volume?
-- - what happens when you press <code>SPACE</code>?
-- - how about <code>j</code> and <code>k</code>
+- - how happens when you press <code>j</code> and <code>k</code> on the keyboard?
+- - what about <code>r</code>?
 - - when you click?
 - - double click?
+- - (Mac and Windows only) can you turn down the music volume?
 - press <code>?</code> on the keyboard while cow is running
 - - what does <code>=</code> do?
 - - how about <code>~</code>?
 </details>
-<details><summary>step 1: create a new app</summary><code>
-#include "include.cpp"
+<details><summary>step 1: add a new app</summary>
+<codex>#include "include.cpp"
 
-void hw00() {
+void hw00a() {
     while (cow_begin_frame()) {
 
     }
@@ -78,39 +78,244 @@ void hw00() {
 int main() {
     APPS {
         APP(eg_kitchen_sink);
-        APP(hw00);
+        APP(hw00a);
     }
     return 0;
 }
-</code>
+</codex>
+- what's the difference between pressing <code>--></code> (i.e., the right arrow key) and pressing <code>q</code>?
+- what's the difference between pressing <code>q</code> and <code>Q</code> (i.e., <code>SHIFT</code> + <code>Q</code>)?
 </details>
-<details><summary>step X: XXX</summary><code>
-</code>
+<details><summary>step 2: add a camera</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        camera_attach_to_gui(&camera);
+    }
+}
+
+int main() {
+    APPS {
+        APP(eg_kitchen_sink);
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- right click and drag
+- scroll with the mouse wheel (or trackpad)
+- inspect <code>camera</code> in a visual debugger (see quickstart guide for debugging info--we will also go over it in class)
 </details>
-<details><summary>step X: XXX</summary><code>
-</code>
+<details><summary>step 3: draw a triangle using easy soup</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        camera_attach_to_gui(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        eso_begin(PV, SOUP_TRIANGLES);
+        eso_color(1.0, 0.0, 1.0);
+        eso_vertex(0.0, 0.0);
+        eso_vertex(1.0, 0.0);
+        eso_vertex(0.0, 1.0);
+        eso_end();
+    }
+}
+
+int main() {
+    APPS {
+        APP(eg_kitchen_sink);
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- right click and drag
+- scroll with the mouse wheel (or trackpad)
+- make the triangle yellow
+- make the triangle's three vertices each a different color--red, green, and blue
+- try, e.g., <code>SOUP_POITNS</code> instead of <code>SOUP_TRIANGLES</code>; what other options are there?
 </details>
-<details><summary>step X: XXX</summary><code>
-</code>
+<details><summary>step 4: (cleanup) get rid of camera gui controls; i'm sick of those bunnies popping up every time i run the code</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        eso_begin(PV, SOUP_TRIANGLES);
+        eso_color(1.0, 0.0, 1.0);
+        eso_vertex(0.0, 0.0);
+        eso_vertex(1.0, 0.0);
+        eso_vertex(0.0, 1.0);
+        eso_end();
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- the only thing better than writing code is deleting code :)
 </details>
-<details><summary>step X: XXX</summary><code>
-</code>
+<details><summary>step 5: (refactor) store the triangle's color vertex positions in the "setup" section of the app (i.e., before the loop);
+this could be a good time to read the beginning of the docs where i talk about our notion of an "app", as well as the end of the docs where i go over snail (our math library)</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        eso_begin(PV, SOUP_TRIANGLES);
+        eso_color(color);
+        eso_vertex(vertex_positions[0]);
+        eso_vertex(vertex_positions[1]);
+        eso_vertex(vertex_positions[2]);
+        eso_end();
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- what are <code>V2(...)</code> and <code>V3(...)</code> about? do we actually need them here?
+- what's going on with, e.g., <code>eso_vertex(...)</code>? it used to take two <code>real</code> numbers; now it's taking just a single <code>vec2</code>...
 </details>
-<details><summary>step X: XXX</summary><code>
-</code>
+<details><summary>step 6: (refactor) use soup instead of easy soup (see docs)</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- what is that <code>NULL</code> about?
+- make the triangle's three vertices each a different color--red, green, and blue
 </details>
-<details><summary>step X: XXX</summary><code>
-</code>
+<details><summary>[DON'T ACTUALLY DO THIS] step 😢: compute the triangle's area in components (i.e., the painful, typo-prone way)</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    real triangle_area = .5 * (ABS(vertex_positions[0].x * (vertex_positions[1].y - vertex_positions[2].y)) + ABS(vertex_positions[1].x * (vertex_positions[2].y - vertex_positions[0].y)) + ABS(vertex_positions[2].x * (vertex_positions[0].y - vertex_positions[1].y)));
+    printf("the triangle's area is %lf\n", triangle_area);
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- what is <code>real</code> about?
+- what is <code>ABS(...)</code> about?
+- remember <code>printf(...)</code>?
 </details>
-<details><summary>step X: XXX</summary><code>
-</code>
+<details><summary>step 7: compute the triangle's area using snail (i.e., with vector linear algebra stuff)</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+    vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+    real triangle_area = .5 * ABS(cross(edge_1, edge_2));
+    printf("the triangle's area is %lf\n", triangle_area);
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- what is <code>real</code> about?
+- remember <code>printf(...)</code>?
 </details>
-<details><summary>step X: XXX</summary><code>
-</code>
-</details>
-<details><summary>step X: XXX</summary><code>
-</code>
-</details>
+
+
+
+
+
 
 the length (aka Euclidean norm) of a vector $|\mathbf{v}|$ can be found using <code>norm(v)</code>
 
