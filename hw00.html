@@ -144,7 +144,8 @@ int main() {
 - make the triangle's three vertices each a different color--red, green, and blue
 - try, e.g., <code>SOUP_POITNS</code> instead of <code>SOUP_TRIANGLES</code>; what other options are there?
 </details>
-<details><summary>step 4: (cleanup) get rid of camera gui controls; i'm sick of those bunnies popping up every time i run the code</summary>
+<details><summary>step 4: (cleanup) get rid of camera gui controls; also i'm sick of those bunnies popping up every time i run the code
+- the only thing better than writing code is deleting code :)</summary>
 <codex>#include "include.cpp"
 
 void hw00a() {
@@ -170,10 +171,9 @@ int main() {
     return 0;
 }
 </codex>
-- the only thing better than writing code is deleting code :)
 </details>
 <details><summary>step 5: (refactor) store the triangle's color vertex positions in the "setup" section of the app (i.e., before the loop);
-this could be a good time to read the beginning of the docs where i talk about our notion of an "app", as well as the end of the docs where i go over snail (our math library)</summary>
+- this could be a good time to read the beginning of the docs where i talk about our notion of an "app", as well as the end of the docs where i go over snail (our math library)</summary>
 <codex>#include "include.cpp"
 
 void hw00a() {
@@ -240,7 +240,8 @@ int main() {
 - what is that <code>NULL</code> about?
 - make the triangle's three vertices each a different color--red, green, and blue
 </details>
-<details><summary>[DON'T ACTUALLY DO THIS] step 😢: compute the triangle's area in components (i.e., the painful, typo-prone way)</summary>
+<details><summary>[DON'T ACTUALLY DO THIS] step 😢: compute the triangle's signed area in components
+- i.e., the painful, typo-prone way</summary>
 <codex>#include "include.cpp"
 
 void hw00a() {
@@ -253,8 +254,8 @@ void hw00a() {
         V2(0.0, 1.0),
     };
 
-    real triangle_area = .5 * (ABS(vertex_positions[0].x * (vertex_positions[1].y - vertex_positions[2].y)) + ABS(vertex_positions[1].x * (vertex_positions[2].y - vertex_positions[0].y)) + ABS(vertex_positions[2].x * (vertex_positions[0].y - vertex_positions[1].y)));
-    printf("the triangle's area is %lf\n", triangle_area);
+    real signed_area = .5 * (vertex_positions[0].x * (vertex_positions[1].y - vertex_positions[2].y) + vertex_positions[1].x * (vertex_positions[2].y - vertex_positions[0].y) + vertex_positions[2].x * (vertex_positions[0].y - vertex_positions[1].y));
+    printf("signed_area %lf\n", signed_area);
 
     while (cow_begin_frame()) {
         camera_move(&camera);
@@ -271,11 +272,12 @@ int main() {
     return 0;
 }
 </codex>
+- what are <code>.x</code> and <code>.y</code> about?
 - what is <code>real</code> about?
-- what is <code>ABS(...)</code> about?
 - remember <code>printf(...)</code>?
+- - if you don't know where your console is, now is a good time to find it!
 </details>
-<details><summary>step 7: compute the triangle's area using snail (i.e., with vector linear algebra stuff)</summary>
+<details><summary>step 7: compute the triangle's signed area using snail (i.e., with fun vector operations go snail go)</summary>
 <codex>#include "include.cpp"
 
 void hw00a() {
@@ -290,8 +292,8 @@ void hw00a() {
 
     vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
     vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
-    real triangle_area = .5 * ABS(cross(edge_1, edge_2));
-    printf("the triangle's area is %lf\n", triangle_area);
+    real signed_area = .5 * cross(edge_1, edge_2);
+    printf("signed_area %lf\n", signed_area);
 
     while (cow_begin_frame()) {
         camera_move(&camera);
@@ -308,20 +310,312 @@ int main() {
     return 0;
 }
 </codex>
-- what is <code>real</code> about?
-- remember <code>printf(...)</code>?
+- what's up with those minus signs?
+- - hint: operator overloading
+- where is <code>cross(...)</code> in the docs?
 </details>
+<details><summary>step 8: make it so we can drag around the triangle's vertices</summary>
+<codex>#include "include.cpp"
 
+void hw00a() {
+    Camera2D camera = { 3.0 };
 
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
 
+    vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+    vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+    real signed_area = .5 * cross(edge_1, edge_2);
+    printf("signed_area %lf\n", signed_area);
 
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
 
+        widget_drag(PV, 3, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
 
-the length (aka Euclidean norm) of a vector $|\mathbf{v}|$ can be found using <code>norm(v)</code>
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- what changes if i swap the order of <code>widget_drag(...)</code> and <code>soup_draw(...)</code>? why?
+- what changes if i pass <code>2</code> to <code>widget_drag(...)</code> instead of <code>3</code>?
+</details>
+<details><summary>step 9: compute (and print) the signed area every frame</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+        vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+        real signed_area = .5 * (cross(edge_1, edge_2));
+        printf("signed_area %lf\n", signed_area);
+
+        widget_drag(PV, 3, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+</details>
+<details><summary>step 10: print the triangle's signed area to the gui instead of the console
+- now our console is free to use for something more interesting!</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+        vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+        real signed_area = .5 * cross(edge_1, edge_2);
+        gui_printf("signed_area %lf\n", signed_area);
+
+        widget_drag(PV, 3, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+</details>
+<details><summary>[optional] step 11: use <code>gui_readout(...)</code> instead of <code>gui_printf(...)</code>
+(if you love <code>gui_printf(...)</code>, feel free to continue using that API; <code>gui_readout(...)</code> is just sugar)</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+        vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+        real signed_area = .5 * cross(edge_1, edge_2);
+        gui_readout("signed_area", &signed_area);
+
+        widget_drag(PV, 3, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+</details>
+<details><summary>step 12: print the triangle's initial signed area</summary>
+<codex>#include "include.cpp"
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    {
+        vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+        vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+        real signed_area = .5 * cross(edge_1, edge_2);
+        printf("signed_area_0 %lf\n", signed_area);
+   }
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+        vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+        real signed_area = .5 * cross(edge_1, edge_2);
+        gui_readout("signed_area", &signed_area);
+
+        widget_drag(PV, 3, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- why did i put curly braces around that code i just added?--what happens if you don't?
+- - do i get an error, or just a warning? in this particular case, is my code actually broken (i.e., doesn't follow my intent)?
+- - - even if the answer is no, i recommend you *get rid of all the warnings*;--no warnings!
+</details>
+<details><summary>step 13: factor out the triangle signed area computation into a function
+- note: i recommend *not* writing a function until you've repeated (very similar) code in at least one or two other places</summary>
+<codex>#include "include.cpp"
+
+real get_triangle_signed_area(vec2 *vertex_positions) {
+    // vertex_positions should be a pointer to three contiguous vec2's
+    // convention: clockwise is positive
+    vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+    vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+    return .5 * cross(edge_1, edge_2);
+}
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    {
+        real signed_area = get_triangle_signed_area(vertex_positions);
+        printf("signed_area_0 %lf\n", signed_area);
+   }
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        real signed_area = get_triangle_signed_area(vertex_positions);
+        gui_readout("signed_area", &signed_area);
+
+        widget_drag(PV, 3, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- note that i've made as few changes as possible
+- - first verify the refactored code actually works (i.e., build and run)...
+- - ...then you can clean :)
+- how is our function different than what we might have written had we not written the usage code first?
+- - i.e., if i had just told you "write a function that computes the area of a triangle?," what might you have written?
+- - - in what ways would this function be *worse* than the one we ended up with organically?
+- - - "WRITE THE USAGE CODE FIRST" --Casey Muratori
+</details>
+<details><summary>step 14: factor out the triangle signed area computation into a function
+- note: i recommend *not* writing a function until you've repeated (very similar) code in at least one or two other places</summary>
+<codex>#include "include.cpp"
+
+real get_triangle_signed_area(vec2 *vertex_positions) {
+    // vertex_positions should be a pointer to three contiguous vec2's
+    // convention: clockwise is positive
+    vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+    vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+    return .5 * cross(edge_1, edge_2);
+}
+
+void hw00a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    {
+        real signed_area = get_triangle_signed_area(vertex_positions);
+        printf("signed_area_0 %lf\n", signed_area);
+   }
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        real signed_area = get_triangle_signed_area(vertex_positions);
+        gui_readout("signed_area", &signed_area);
+
+        widget_drag(PV, 3, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw00a);
+    }
+    return 0;
+}
+</codex>
+- note that i've made as few changes as possible
+- - first verify the refactored code actually works (i.e., build and run)...
+- - ...then you can clean :)
+- how is our function different than what we might have written had we not written the usage code first?
+- - i.e., if i had just told you "write a function that computes the area of a triangle?," what might you have written?
+- - - in what ways would this function be *worse* than the one we ended up with organically?
+- - - "WRITE THE USAGE CODE FIRST" --Casey Muratori
+</details>
 
 <hr>
 <b>2. hello open-ended hw problem</b>
-plese make an app that replicates the functionality in this video
+- add a gui button that, when clicked, randomizes the triangle's vertex positions
+
 
 <hr>
 <b>I. hello extra credit</b>
