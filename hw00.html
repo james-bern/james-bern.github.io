@@ -50,14 +50,14 @@ after this, you will be graded on a "does it work" + "did you make a strong effo
 - rigorously cross-reference the docs as we go (your goal is to understand every single change and every single line)
 
 <details><summary>step 0: (starter code) play with a silly example app</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 int main() {
     APPS {
         APP(eg_kitchen_sink);
     }
     return 0;
-}</codex>
+}</code>
 - play with the gui controls
 - - how happens when you press <code>j</code> and <code>k</code> on the keyboard?
 - - what about <code>r</code>?
@@ -69,7 +69,7 @@ int main() {
 - - how about <code>~</code>?
 </details>
 <details><summary>step 1: add a new app</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     while (cow_begin_frame()) {
@@ -84,12 +84,12 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - what's the difference between pressing <code>--></code> (i.e., the right arrow key) and pressing <code>q</code>?
 - what's the difference between pressing <code>q</code> and <code>Q</code> (i.e., <code>SHIFT</code> + <code>Q</code>)?
 </details>
 <details><summary>step 2: add a camera</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -107,13 +107,13 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - right click and drag
 - scroll with the mouse wheel (or trackpad)
 - inspect <code>camera</code> in a visual debugger (see quickstart guide for debugging info--we will also go over it in class)
 </details>
 <details><summary>step 3: draw a triangle using easy soup</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -139,7 +139,7 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - right click and drag
 - scroll with the mouse wheel (or trackpad)
 - make the triangle yellow
@@ -148,7 +148,7 @@ int main() {
 </details>
 <details><summary>step 4: (clean) get rid of camera gui controls; also i'm sick of those bunnies popping up every time i run the code
 - the only thing better than writing code is deleting code :)</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -172,11 +172,11 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 </details>
 <details><summary>step 5: (refactor) store the triangle's color vertex positions in the "setup" section of the app (i.e., before the loop);
 - this could be a good time to read the beginning of the docs where i talk about our notion of an "app", as well as the end of the docs where i go over snail (our math library)</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -207,12 +207,12 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - what are <code>V2(...)</code> and <code>V3(...)</code> about? do we actually need them here?
 - what's going on with, e.g., <code>eso_vertex(...)</code>? it used to take two <code>real</code> numbers; now it's taking just a single <code>vec2</code>...
 </details>
 <details><summary>step 6: (refactor) use soup instead of easy soup (see docs)</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -238,13 +238,13 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - what is that <code>NULL</code> about?
 - make the triangle's three vertices each a different color--red, green, and blue
 </details>
 <details><summary>[DON'T ACTUALLY DO THIS] step 😢: compute the triangle's signed area in components
 - i.e., the painful, typo-prone way</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -273,14 +273,14 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - what are <code>.x</code> and <code>.y</code> about?
 - what is <code>real</code> about?
 - remember <code>printf(...)</code>?
 - - if you don't know where your console is, now is a good time to find it!
 </details>
 <details><summary>step 7: compute the triangle's signed area using snail (i.e., with fun vector operations go snail go)</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -311,13 +311,13 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - what's up with those minus signs?
 - - hint: operator overloading
 - where is <code>cross(...)</code> in the docs?
 </details>
 <details><summary>step 8: make it so we can drag around the triangle's vertices</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -349,12 +349,12 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - what changes if i swap the order of <code>widget_drag(...)</code> and <code>soup_draw(...)</code>? why?
 - what changes if i pass <code>2</code> to <code>widget_drag(...)</code> instead of <code>3</code>?
 </details>
 <details><summary>step 9: compute (and print) the signed area every frame</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -386,11 +386,11 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 </details>
 <details><summary>step 10: print the triangle's signed area to the gui instead of the console
 - now our console is free to use for something more interesting!</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -422,11 +422,11 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 </details>
 <details><summary>[optional] step 11: use <code>gui_readout(...)</code> instead of <code>gui_printf(...)</code>
 (if you love <code>gui_printf(...)</code>, feel free to continue using that API; <code>gui_readout(...)</code> is just sugar)</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -458,10 +458,10 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 </details>
 <details><summary>step 12: print the triangle's initial signed area</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 void hw00a() {
     Camera2D camera = { 3.0 };
@@ -500,14 +500,14 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - why did i put curly braces around that code i just added?--what happens if you don't?
 - - do i get an error, or just a warning? in this particular case, is my code actually broken (i.e., doesn't follow my intent)?
 - - - even if the answer is no, i recommend you *get rid of all the warnings*;--no warnings!
 </details>
 <details><summary>step 13: factor out the triangle signed area computation into a function
 - note: i recommend *not* writing a function until you've repeated (very similar) code in at least one or two other places</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 real get_triangle_signed_area(vec2 *vertex_positions) {
     // vertex_positions should be a pointer to three contiguous vec2's
@@ -550,7 +550,7 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 note how i've made as few changes as possible
 - (the body of the function is literally just code that i cut and pasted, only with a return statement at the end)
 - - there are huge reasons to work this way
@@ -566,7 +566,7 @@ food for thought
 - - - "WRITE THE USAGE CODE FIRST" --Casey Muratori
 </details>
 <details><summary>step 14: (clean) remove no-longer-necessary scaffolding, merge lines iff convenient and clarifying</summary>
-<codex>#include "include.cpp"
+<code class="x">#include "include.cpp"
 
 real get_triangle_signed_area(vec2 *vertex_positions) {
     // vertex_positions should be a pointer to three contiguous vec2's
@@ -605,7 +605,7 @@ int main() {
     }
     return 0;
 }
-</codex>
+</code>
 - note how our code becomes *easier* to read as we go; this is a good sign :)
 - note how few comments are necessary
 - note that i switched back to <code>gui_printf(...)</code> 🤷‍♂️
@@ -632,14 +632,14 @@ note: there are multiple ways to access the elements of snail vectors
 - e.g., consider <code>vec2 s;</code>
 
 <details><summary>option 1: using <code>.x</code>, <code>.y</code>, and <code>.z</code></summary>
-<codex>s.x = 42.0;
-s.y = 42.0;</codex>
+<code class="x">s.x = 42.0;
+s.y = 42.0;</code>
 - tempting, and occasionally necessary, but tends to be bug-prone and can create a lot of repetition in your code
 - A OK to code up something this way to start, but then seriously consider refactoring with...</details>
 <details><summary>option 2: using square brackets</summary>
-<codex>for (int d = 0; d < 2; ++d) {
+<code class="x">for (int d = 0; d < 2; ++d) {
     s[d] = 42.0;
-}</codex>
+}</code>
 - lets you wrap up repeated code into a <code>for</code> loop
 - - often less bug prone
 - aside: <code>d</code> stands for "dimension" but please use whatever variable name you like</details>
