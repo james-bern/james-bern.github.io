@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="csci-371.css">
 </head><body><div class="content">
 
-<a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+<a href="csci-371.html"><b><- back</b></a><!--<button onClick="window.print()" style="float:right;">print this page</button>-->
 
 
 <center><b>hw00</b>
@@ -629,13 +629,13 @@ hint: search the docs for <code>gui_button</code> and <code>key_held</code>
 
 
 note: there are multiple ways to access the elements of snail vectors
-- e.g., consider a <code>vec2 s</code>
+- e.g., consider <code>vec2 s;</code>
 
 <details><summary>option 1: using <code>.x</code>, <code>.y</code>, and <code>.z</code></summary>
 <codex>s.x = 42.0;
 s.y = 42.0;</codex>
 - tempting, and occasionally necessary, but tends to be bug-prone and can create a lot of repetition in your code
-- A OK to code something this way to start, but then seriously consider refactoring with...</details>
+- A OK to code up something this way to start, but then seriously consider refactoring with...</details>
 <details><summary>option 2: using square brackets</summary>
 <codex>for (int d = 0; d < 2; ++d) {
     s[d] = 42.0;
