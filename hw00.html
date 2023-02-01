@@ -150,7 +150,7 @@ int main() {
 - make the triangle's three vertices each a different color--red, green, and blue
 - try, e.g., <code>SOUP_POINTS</code> instead of <code>SOUP_TRIANGLES</code>; what other options are there?
 </details>
-<details><summary>step 4: (clean) get rid of camera gui controls; also i'm tired of those bunnies popping up every time i run the code
+<details><summary>step 4: (clean-up) get rid of camera gui controls; also i'm tired of those bunnies popping up every time i run the code
 - the only thing better than writing code is deleting code :)</summary>
 <code class="x">#include "include.cpp"
 
@@ -509,7 +509,7 @@ int main() {
 - - do i get an error, or just a warning? in this particular case, is my code actually broken (i.e., doesn't follow my intent)?
 - - - even if the answer is no, i recommend you *get rid of all the warnings*;--no warnings!
 </details>
-<details><summary>step 13: factor out the triangle signed area computation into a function
+<details><summary>step 13: (refactor) factor out the triangle signed area computation into a function
 - note: i recommend *not* writing a function until you've repeated (very similar) code in at least one or two other places</summary>
 <code class="x">#include "include.cpp"
 
@@ -569,7 +569,7 @@ food for thought
 - - - in what ways would this hypothetical function be *worse* than the one we ended up "growing" organically?
 - - - "WRITE THE USAGE CODE FIRST" --Casey Muratori
 </details>
-<details><summary>step 14: (clean) remove no-longer-necessary scaffolding, merge lines iff convenient and clarifying</summary>
+<details><summary>step 14: (clean-up) remove no-longer-necessary scaffolding, merge lines iff convenient and clarifying</summary>
 <code class="x">#include "include.cpp"
 
 real get_triangle_signed_area(vec2 *vertex_positions) {
