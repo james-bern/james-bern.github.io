@@ -1,22 +1,30 @@
 { box-sizing: border-box; }
 .content { max-width:780; margin:auto; }
 .content_no_max_width { max-width:1000000000; margin:auto; }
-a {color:blue;}
+
+a {
+ color:blue;
+}
+
+.dead {
+ color:aliceblue;
+}
+
 p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;}
 img { max-width:780; display: block; margin-left: auto; margin-right: auto;}
 
 
 body {
-font-family:serif,Menlo,monospace;
-font-size:1em;margin:24;
-background-color:white;
-color:black;
-white-space:pre-wrap;
+ font-family:serif,Menlo,monospace;
+ font-size:1em;margin:24;
+ background-color:white;
+ color:black;
+ white-space:pre-wrap;
 }
 
 math {
-white-space:normal;
-font-family:serif;
+ white-space:normal;
+ font-family:serif;
 }
 
 code {
