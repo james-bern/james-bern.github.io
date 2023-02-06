@@ -347,16 +347,41 @@ int main() {
 
 using the eso API, draw a regular polygon with N sides
 - expose a slider to vary N from 0 to 64
-- - your code must not crash when N is 0
+- - the app must not crash when N is 0
 
-you will be graded on how closely you match the functionality (not necessarily exact appearance) here
+<a href="hw01a.mp4">reference video</a>
+
+note: you will be graded on how closely you match the reference video's functionality (not necessarily its exact appearance)
 
 <hr>
 <b>c. bouncing balls</b>
 
+using the soup_draw API, simulate and draw 100,000 balls bouncing around the 3D double unit box $[-1.0, 1.0]^3$
+
+<a href="hw01b.mp4">reference video</a>
+
+- visuals
+- - the balls should have random color
+- - draw the outline of the box as white lines
+
+- phsyics
+- - the balls should have random initial position, initial velocity, and color
+- - - the balls' speed should be slow enough that you can actually see them move (it shouldn't look like static)
+- - the ball's bounces should make physical sense (you can assume zero gravity, perfectly elastic collision, etc.)
+
+- controls
+- - the app should run at 60fps on a reasonable computer (e.g., the NUC's in the Ward Lab)
+- - include a slider to vary the primitive (you can follow the approach in the tutorial)
+- - - include all of the cow primitives, not just those used in the tutorial
+- - include a slider to vary the size of the primitive
+- - include a pause checkbox with hotkey 'p'
+- - include a "step" button with hotkey '.'
+- - - if we're paused, pressing this button should advance us forward one frame)
+
 <hr>note: emoji problems are extra credit and are *not* required to get an A on this homework<hr>
-<b>🚁. hello helicopter</b>
-- TODO
+<b>🎆. fireworks</b>
+implement a fireworks display; it may be interactive if you would like
+- reading: <a href="https://web.cs.wpi.edu/~matt/courses/cs563/talks/cbyrd/pres4.html">https://web.cs.wpi.edu/~matt/courses/cs563/talks/cbyrd/pres4.html</a>
 
 
 
