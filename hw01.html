@@ -55,7 +55,7 @@ here is a reasonable pattern for iterating over the elements of an array
 note that <code>i</code> takes on the values $0, ..., N - 1$
 
 <hr>
-<b>0. hello SOUP_*</b>
+<b>a. hello SOUP</b>
 
 let's write another app together; woo get pumped! :)
 this one will help us better understand <code>soup_draw(...)</code>
@@ -227,7 +227,7 @@ int main() {
 }
 </code>
 </details>
-<details><summary>step 6: instead of specifying the PRIMITIVE directly, specify the index into a list of PRIMITIVE's
+<details><summary>step 6: instead of specifying the PRIMITIVE itself, specify an index into an array of PRIMITIVE's
 - notice how this change should _preserve the program's output_
 - - this gives us a nice little sanity check (if the output looks way different, we did something wrong!)
 - - this is also why cow always uses the same random seed when it starts up</summary>
@@ -312,8 +312,7 @@ int main() {
 </code>
 </details>
 <details><summary>step 9: final touch; random colors for vertices
-- careful copy and pasting the <code>vertex_positions</code> allocation to make the <code>vertex_colors</code> allocation!--lots of 2's that need become 3's!
-- see how small of a change this was?</summary>
+- careful copy and pasting the <code>vertex_positions</code> allocation to make the <code>vertex_colors</code> allocation!--lots of 2's that need become 3's!</summary>
 <code class="x">void hw01a() {
     Camera2D camera = { 3.0 };
 
@@ -343,16 +342,57 @@ int main() {
 }
 </code>
 </details>
+<hr>
+<b>b. hello ~circle</b>
 
+using the eso API, draw a regular polygon with N sides
+- expose a slider to vary N from 0 to 64
+- - the app must not crash when N is 0
 
+<a href="hw01a.mp4">reference video</a>
 
+note: you will be graded on how closely you match the reference video's functionality (not necessarily its exact appearance)
 
+<hr>
+<b>c. dog and cat and mouse and ...</b>
+- implement the cat and mouse example we did in class (cat chases your mouse; cat has a maximum possible speed)
+- extend it to also include a dog that chases the _cat_ (the dog should have _lower_ maximum speed than the cat)
+- continue this to the extreme with 1000 animals of progressively lower max speeds each chasing the one before them; what a kerfluffle!
 
+<hr>
+<b>d. bouncing balls</b>
 
+using the soup_draw API, simulate and draw 100,000 balls bouncing around the 3D double unit box $[-1.0, 1.0]^3$
+
+<a href="https://www.youtube.com/embed/21BWYtjF2fA?rel=0">reference video</a>
+
+- visuals
+- - the balls should have random color
+- - draw the outline of the box as white lines
+
+- phsyics
+- - the balls should have random initial position, initial velocity, and color
+- - - the balls' speed should be slow enough that you can actually see them move (it shouldn't look like static)
+- - the ball's bounces should make physical sense (you can assume zero gravity, perfectly elastic collision, etc.)
+
+- controls
+- - the app should run at 60fps on a reasonable computer (e.g., the NUC's in the Ward Lab)
+- - include a slider to vary the primitive (you can follow the approach in the tutorial)
+- - - include all of the cow primitives, not just those used in the tutorial
+- - include a slider to vary the size of the primitive
+- - include a pause checkbox with hotkey 'p'
+- - include a "step" button with hotkey '.'
+- - - if we're paused, pressing this button should advance us forward one frame
+- - - if we're not paused, this button shouldn't even show up
 
 <hr>note: emoji problems are extra credit and are *not* required to get an A on this homework<hr>
-<b>🚁. hello helicopter</b>
-- TODO
+<b>🎆. fireworks</b>
+implement a 3D fireworks display; it may be interactive if you would like
+- there should be many fireworks shooting off with different colors and parabolic trajectories and vapor trails and wow
+- also no leaking memory
+- reading: <a href="https://web.cs.wpi.edu/~matt/courses/cs563/talks/cbyrd/pres4.html">https://web.cs.wpi.edu/~matt/courses/cs563/talks/cbyrd/pres4.html</a>
+
+note: <code>soup_draw(...)</code> is a wonderful function, but it doesn't let you specify the size, e.g. of <code>SOUP_POINTS</code>, per vertex; you are welcome either hack around this limitation, or to leave all the particles the same size
 
 
 
