@@ -358,7 +358,7 @@ note: you will be graded on how closely you match the reference video's function
 
 using the soup_draw API, simulate and draw 100,000 balls bouncing around the 3D double unit box $[-1.0, 1.0]^3$
 
-<a href="hw01b.mp4">reference video</a>
+<a href="https://www.youtube.com/embed/21BWYtjF2fA?rel=0">reference video</a>
 
 - visuals
 - - the balls should have random color
@@ -376,12 +376,17 @@ using the soup_draw API, simulate and draw 100,000 balls bouncing around the 3D 
 - - include a slider to vary the size of the primitive
 - - include a pause checkbox with hotkey 'p'
 - - include a "step" button with hotkey '.'
-- - - if we're paused, pressing this button should advance us forward one frame)
+- - - if we're paused, pressing this button should advance us forward one frame
+- - - if we're not paused, this button shouldn't even show up
 
 <hr>note: emoji problems are extra credit and are *not* required to get an A on this homework<hr>
 <b>🎆. fireworks</b>
-implement a fireworks display; it may be interactive if you would like
+implement a 3D fireworks display; it may be interactive if you would like
+- there should be many fireworks shooting off with different colors and parabolic trajectories and vapor trails and wow
+- also no leaking memory
 - reading: <a href="https://web.cs.wpi.edu/~matt/courses/cs563/talks/cbyrd/pres4.html">https://web.cs.wpi.edu/~matt/courses/cs563/talks/cbyrd/pres4.html</a>
+
+note: <code>soup_draw(...)</code> is a wonderful function, but it doesn't let you specify the size, e.g. of <code>SOUP_POINTS</code>, per vertex; you are welcome either hack around this limitation, or to leave all the particles the same size
 
 
 
