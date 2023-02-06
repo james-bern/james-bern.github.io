@@ -55,7 +55,7 @@ here is a reasonable pattern for iterating over the elements of an array
 note that <code>i</code> takes on the values $0, ..., N - 1$
 
 <hr>
-<b>0. hello SOUP_*</b>
+<b>a. hello SOUP</b>
 
 let's write another app together; woo get pumped! :)
 this one will help us better understand <code>soup_draw(...)</code>
@@ -227,7 +227,7 @@ int main() {
 }
 </code>
 </details>
-<details><summary>step 6: instead of specifying the PRIMITIVE directly, specify the index into a list of PRIMITIVE's
+<details><summary>step 6: instead of specifying the PRIMITIVE itself, specify an index into an array of PRIMITIVE's
 - notice how this change should _preserve the program's output_
 - - this gives us a nice little sanity check (if the output looks way different, we did something wrong!)
 - - this is also why cow always uses the same random seed when it starts up</summary>
@@ -284,7 +284,7 @@ int main() {
 }
 </code>
 </details>
-<details><summary>step 7: add a slider</summary>
+<details><summary>step 8: add a slider</summary>
 <code class="x">void hw01a() {
     Camera2D camera = { 3.0 };
 
@@ -311,9 +311,8 @@ int main() {
 }
 </code>
 </details>
-<details><summary>step 8: final touch; random colors for vertices
-- careful copy and pasting the <code>vertex_positions</code> allocation to make the <code>vertex_colors</code> allocation!--lots of 2's that need become 3's!
-- see how small of a change this was?</summary>
+<details><summary>step 9: final touch; random colors for vertices
+- careful copy and pasting the <code>vertex_positions</code> allocation to make the <code>vertex_colors</code> allocation!--lots of 2's that need become 3's!</summary>
 <code class="x">void hw01a() {
     Camera2D camera = { 3.0 };
 
@@ -343,12 +342,17 @@ int main() {
 }
 </code>
 </details>
+<hr>
+<b>b. hello ~circle</b>
 
+using the eso API, draw a regular polygon with N sides
+- expose a slider to vary N from 0 to 64
+- - your code must not crash when N is 0
 
+you will be graded on how closely you match the functionality (not necessarily exact appearance) here
 
-
-
-
+<hr>
+<b>c. bouncing balls</b>
 
 <hr>note: emoji problems are extra credit and are *not* required to get an A on this homework<hr>
 <b>🚁. hello helicopter</b>
