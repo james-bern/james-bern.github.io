@@ -16,7 +16,7 @@ however, this is a pretty bad formula in practice
 
 consider vector $\begin{bmatrix}1.0\\1.0\end{bmatrix}$; the formula says its angle is $\theta_\text{atan}(1.0, 1.0) = \tan^{-1}\left(\frac{1.0}{1.0}\right) = \tan^{-1}(1.0) = 45\deg$
 
-so...so far so good..
+so...so far so good...
 except now, consider vector $\begin{bmatrix}-1.0\\-1.0\end{bmatrix}$; it's angle is apparently also $45 \deg$; oh no :(
 
 the issue is that $\theta_\text{atan}(y, x)$ only returns angles in the interval $[-90\deg, 90\deg]$; calling it on the vector $\begin{bmatrix}-1.0\\-1.0\end{bmatrix}$ is invalid
