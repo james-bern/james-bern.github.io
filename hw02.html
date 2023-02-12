@@ -1,0 +1,413 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" href="csci-371.css">
+</head><body><div class="content">
+
+<a href="csci-371.html"><b><- back</b></a><!--<button onClick="window.print()" style="float:right;">print this page</button>-->
+
+<center><b>hw02</b>
+<a href="https://github.com/james-bern/CSCI-371">codebase</a> | <a href="https://github.com/james-bern/CSCI-371/wiki">docs</a> | <a href="https://www.overleaf.com/read/mcyyczwqzbzz">notes</a> | <a href="https://glow.williams.edu/courses/3619655">glow</a>
+</center>
+<hr> You are highly encouraged to collaborate on homework provided you follow the spirit of the <a href="http://courses.cms.caltech.edu/cs171/materials/pdfs/50ft_policy.pdf">50 ft rule</a>.
+
+<strike>for better or for worse, this will be the last time i micromanage your coding style and process</strike>
+<span style="color:blue">i think the tutorial-style questions may be quite useful for many students; if you don't personally like them, you are always welcome to skip to the end of that particular question</span>
+<hr>
+<b>goals.</b>
+
+- feel comfortable looping over data
+- feel comfortable choosing between stack allocation and heap allocation
+- more snail; more cow
+- start getting a sense of how to carefully extend an app from one -> many (dots, triangles, etc.)
+
+<hr>
+<b>reading. memory allocation</b>
+
+note: there are multiple ways to allocate contiguous data (i.e., an array) in C
+- e.g., consider an array of 16 vec2's
+
+<details><summary>option 1: stack allocation</summary>
+<code class="x">vec2 foo[16] = {};
+// "the stack" "gets foo's memory back" when foo goes out of scope</code>
+- appropriate for small numbers of things (say...under 256?) that you only need locally
+- the <code>= {};</code> fills the array with 0; otherwise it would be filled with whatever was already there, i.e. "garbage"
+- [for certain C/C++ compilers, including ours] the size of a stack-allocated array must be a compile-time constant</details>
+<details><summary>option 2: heap allocation</summary>
+<code class="x">vec2 *foo = (vec2 *) calloc(16, sizeof(vec2));
+// you "own" foo's memory until you call free(foo);--failing to do so is a "memory leak"</code>
+- appropriate for large numbers of things
+- the c in <code>calloc</code> may or may not actually stand for "clear," but it's a useful mnemonic. <code>calloc</code> [allocates and then] clears memory to 0!
+- - if we'd instead used <code>malloc(16 * sizeof(vec2))</code> the memory would be filled with garbage
+- - 🛡 use <code>calloc</code> instead of <code>malloc</code>
+- the <code>(vec2 *)</code> is called a cast; casting in this particular case ("from <code>void *</code>") is only necessary in C++, _not_ in C</details>
+
+<hr>
+<b>reading. for loop</b>
+
+here is a reasonable pattern for iterating over the elements of an array
+- e.g., consider an array <code>vec2 foo[N] = {};</code>, i.e. an array of N vec2's.
+
+<code class="x">for (int i = 0; i < N; ++i) {
+    foo[i] = ...;
+}</code>
+
+note that <code>i</code> takes on the values $0, ..., N - 1$
+
+<hr>
+<b>a. hello SOUP</b>
+
+let's write another app together; woo get pumped! :)
+this one will help us better understand <code>soup_draw(...)</code>
+
+<details><summary>step 0: let's start with the app we wrote last time; copy paste go go go!
+- find and replace hw00 -> hw01a</summary>
+<code class="x">#include "include.cpp"
+
+real get_triangle_signed_area(vec2 *vertex_positions) {
+    // vertex_positions should be a pointer to three contiguous vec2's
+    // convention: clockwise is positive
+    vec2 edge_1 = vertex_positions[1] - vertex_positions[0];
+    vec2 edge_2 = vertex_positions[2] - vertex_positions[0];
+    return .5 * cross(edge_1, edge_2);
+}
+
+void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    printf("signed_area_0 %lf\n", get_triangle_signed_area(vertex_positions));
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        gui_printf("signed_area %lf\n", get_triangle_signed_area(vertex_positions));
+
+        widget_drag(PV, 3, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+
+int main() {
+    APPS {
+        APP(hw01a);
+    }
+    return 0;
+}
+</code>
+</details>
+<details><summary>step 1: tear out a bunch of stuff we don't need (make sure it still runs after you're done)
+- don't copy and paste anymore; make changes the slow way
+- note: in order to save space, i'm going to start leaving out the include and the main function; they are implied</summary>
+<code class="x">void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+    vec2 vertex_positions[3] = {
+        V2(0.0, 0.0),
+        V2(1.0, 0.0),
+        V2(0.0, 1.0),
+    };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        widget_drag(PV, 3, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, 3, vertex_positions, NULL, color);
+    }
+}
+</code>
+</details>
+<details><summary>step 2: switch to malloc'ing the vertex positions
+ - a good time to define the number of vertices as a variable and remove all the "magic number" 3's</summary>
+<code class="x">void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+
+    int num_vertices = 3;
+    vec2 *vertex_positions = (vec2 *) malloc(num_vertices * sizeof(vec2));
+    vertex_positions[0] = V2(0.0, 0.0);
+    vertex_positions[1] = V2(1.0, 0.0);
+    vertex_positions[2] = V2(0.0, 1.0);
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        widget_drag(PV, num_vertices, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, num_vertices, vertex_positions, NULL, color);
+    }
+
+    // optional -- memory will get freed when close the executable
+    free(vertex_positions);
+}
+</code>
+</details>
+<details><summary>step 3: randomly initialize the vertex positions</summary>
+<code class="x">void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+
+    int num_vertices = 3;
+    vec2 *vertex_positions = (vec2 *) malloc(num_vertices * sizeof(vec2));
+    for (int i = 0; i < num_vertices; ++i) {
+        vertex_positions[i] = V2(random_real(-1.0, 1.0), random_real(-1.0, 1.0));
+    }
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        widget_drag(PV, num_vertices, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, num_vertices, vertex_positions, NULL, color);
+    }
+
+    free(vertex_positions);
+}
+</code>
+</details>
+<details><summary>step 4: increase the number of vertices to 12</summary>
+<code class="x">void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+
+    int num_vertices = 12;
+    vec2 *vertex_positions = (vec2 *) malloc(num_vertices * sizeof(vec2));
+    for (int i = 0; i < num_vertices; ++i) {
+        vertex_positions[i] = V2(random_real(-1.0, 1.0), random_real(-1.0, 1.0));
+    }
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        widget_drag(PV, num_vertices, vertex_positions);
+        soup_draw(PV, SOUP_TRIANGLES, num_vertices, vertex_positions, NULL, color);
+    }
+
+    free(vertex_positions);
+}
+</code>
+</details>
+<details><summary>step 5: move the PRIMITIVE out into a variable
+- this is a tiny change, but it is honestly all i would change before building and running again (i am a big believer in only testing one change at a time; our codebase compiles fast!--take advantage of it!</summary>
+<code class="x">void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+
+    int num_vertices = 12;
+    vec2 *vertex_positions = (vec2 *) malloc(num_vertices * sizeof(vec2));
+    for (int i = 0; i < num_vertices; ++i) {
+        vertex_positions[i] = V2(random_real(-1.0, 1.0), random_real(-1.0, 1.0));
+    }
+
+    int primitive = SOUP_TRIANGLES;
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        widget_drag(PV, num_vertices, vertex_positions);
+        soup_draw(PV, primitive, num_vertices, vertex_positions, NULL, color);
+    }
+
+    free(vertex_positions);
+}
+</code>
+</details>
+<details><summary>step 6: instead of specifying the PRIMITIVE itself, specify an index into an array of PRIMITIVE's
+- notice how this change should _preserve the program's output_
+- - this gives us a nice little sanity check (if the output looks way different, we did something wrong!)
+- - this is also why cow always uses the same random seed when it starts up</summary>
+<code class="x">void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+
+    int num_vertices = 12;
+    vec2 *vertex_positions = (vec2 *) malloc(num_vertices * sizeof(vec2));
+    for (int i = 0; i < num_vertices; ++i) {
+        vertex_positions[i] = V2(random_real(-1.0, 1.0), random_real(-1.0, 1.0));
+    }
+
+    int primitives[] = { SOUP_TRIANGLES };
+    int primitive_index = 0;
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        widget_drag(PV, num_vertices, vertex_positions);
+        soup_draw(PV, primitives[primitive_index], num_vertices, vertex_positions, NULL, color);
+    }
+
+    free(vertex_positions);
+}
+</code>
+</details>
+<details><summary>step 7: add some other primitives</summary>
+<code class="x">void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+
+    int num_vertices = 12;
+    vec2 *vertex_positions = (vec2 *) malloc(num_vertices * sizeof(vec2));
+    for (int i = 0; i < num_vertices; ++i) {
+        vertex_positions[i] = V2(random_real(-1.0, 1.0), random_real(-1.0, 1.0));
+    }
+
+    int primitives[] = { SOUP_POINTS, SOUP_LINES, SOUP_LINE_STRIP, SOUP_LINE_LOOP, SOUP_TRIANGLES, SOUP_QUADS };
+    int primitive_index = 0;
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        widget_drag(PV, num_vertices, vertex_positions);
+        soup_draw(PV, primitives[primitive_index], num_vertices, vertex_positions, NULL, color);
+    }
+
+    free(vertex_positions);
+}
+</code>
+</details>
+<details><summary>step 8: add a slider</summary>
+<code class="x">void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+
+    int num_vertices = 12;
+    vec2 *vertex_positions = (vec2 *) malloc(num_vertices * sizeof(vec2));
+    for (int i = 0; i < num_vertices; ++i) {
+        vertex_positions[i] = V2(random_real(-1.0, 1.0), random_real(-1.0, 1.0));
+    }
+
+    int primitives[] = { SOUP_POINTS, SOUP_LINES, SOUP_LINE_STRIP, SOUP_LINE_LOOP, SOUP_TRIANGLES, SOUP_QUADS };
+    int primitive_index = 0;
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+        gui_slider("primitive_index", &primitive_index, 0, 5, 'j', 'k', true); // _COUNT_OF(vertex_positions) - 1 also valid instead of 5
+        widget_drag(PV, num_vertices, vertex_positions);
+        soup_draw(PV, primitives[primitive_index], num_vertices, vertex_positions, NULL, color);
+    }
+
+    free(vertex_positions);
+}
+</code>
+</details>
+<details><summary>step 9: final touch; random colors for vertices
+- careful copy and pasting the <code>vertex_positions</code> allocation to make the <code>vertex_colors</code> allocation!--lots of 2's that need become 3's!</summary>
+<code class="x">void hw01a() {
+    Camera2D camera = { 3.0 };
+
+    vec3 color = V3(1.0, 0.0, 1.0);
+
+    int num_vertices = 12;
+    vec2 *vertex_positions = (vec2 *) malloc(num_vertices * sizeof(vec2));
+    vec3 *vertex_colors = (vec3 *) malloc(num_vertices * sizeof(vec3));
+    for (int i = 0; i < num_vertices; ++i) {
+        vertex_positions[i] = V2(random_real(-1.0, 1.0), random_real(-1.0, 1.0));
+        vertex_colors[i] = V3(random_real(0.0, 1.0), random_real(0.0, 1.0), random_real(0.0, 1.0));
+    }
+
+    int primitives[] = { SOUP_POINTS, SOUP_LINES, SOUP_LINE_STRIP, SOUP_LINE_LOOP, SOUP_TRIANGLES, SOUP_QUADS };
+    int primitive_index = 0;
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+        gui_slider("primitive_index", &primitive_index, 0, 5, 'j', 'k', true); // _COUNT_OF(vertex_positions) - 1 also valid instead of 5
+        widget_drag(PV, num_vertices, vertex_positions);
+        soup_draw(PV, primitives[primitive_index], num_vertices, vertex_positions, vertex_colors);
+    }
+
+    free(vertex_positions);
+    free(vertex_colors);
+}
+</code>
+</details>
+<hr>
+<b>b. hello ~circle</b>
+
+using the eso API, draw a regular polygon with N sides
+- expose a slider to vary N from 0 to 64
+- - the app must not crash when N is 0
+
+<a href="hw01a.mp4?v=0">reference video</a>
+
+note: you will be graded on how closely you match the reference video's functionality (not necessarily its exact appearance)
+
+<hr>
+<b>c. dog and cat and mouse and ...</b>
+- implement the cat and mouse example we did in class (cat chases your mouse; cat has a maximum possible speed)
+- extend it to also include a dog that chases the _cat_ (the dog should have _lower_ maximum speed than the cat)
+- continue this to the extreme with 1000 animals of progressively lower max speeds each chasing the one before them; what a kerfluffle!
+
+<hr>
+<b>d. bouncing balls</b>
+
+using the soup_draw API, simulate and draw 100,000 balls bouncing around the 3D double unit box $[-1.0, 1.0]^3$
+
+<a href="https://www.youtube.com/embed/21BWYtjF2fA?rel=0">reference video</a>
+
+- visuals
+- - the balls should have random color
+- - draw the outline of the box as white lines
+
+- phsyics
+- - the balls should have random initial position, initial velocity, and color
+- - - the balls' speed should be slow enough that you can actually see them move (it shouldn't look like static)
+- - the ball's bounces should make physical sense (you can assume zero gravity, perfectly elastic collision, etc.)
+- note: balls only collide with the walls; not with each other
+
+- controls
+- - the app should run at 60fps on a reasonable computer (e.g., the NUC's in the Ward Lab)
+- - include a slider to vary the primitive (you can follow the approach in the tutorial)
+- - - include all of the cow primitives, not just those used in the tutorial
+- - include a slider to vary the size of the primitive
+- - include a pause checkbox with hotkey 'p'
+- - include a "step" button with hotkey '.'
+- - - if we're paused, pressing this button should advance us forward one frame
+- - - if we're not paused, this button shouldn't even show up
+
+<hr>note: emoji problems are extra credit and are *not* required to get an A on this homework<hr>
+<b>🎆. fireworks</b>
+implement a 3D fireworks display; it may be interactive if you would like
+- there should be many fireworks shooting off with different colors and parabolic trajectories and vapor trails and wow
+- also no leaking memory
+- reading: <a href="https://web.cs.wpi.edu/~matt/courses/cs563/talks/cbyrd/pres4.html">https://web.cs.wpi.edu/~matt/courses/cs563/talks/cbyrd/pres4.html</a>
+
+note: <code>soup_draw(...)</code> is a wonderful function, but it doesn't let you specify the size, e.g. of <code>SOUP_POINTS</code>, per vertex; you are welcome either hack around this limitation, or to leave all the particles the same size
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></body></html>
