@@ -429,7 +429,7 @@ void hw02a() {
         gui_slider("b", &b, -3.0, 3.0);
         gui_slider("time", &time, 0.0, 1.0);
         gui_checkbox("playing", &playing, 'p');
-        gui_slider("mode", &mode, 0, num_modes - 1, 'j', 'k');
+        gui_slider("mode", &mode, 0, num_modes - 1, 'j', 'k', true);
 
         if (playing) { // update time
             time += _time_sign * .0167;
@@ -480,14 +480,23 @@ void hw02a() {
     }
 }</code></details>
 <hr>
-<b>b. line-line intersection</b> 
+<b>b. cubic bezier curve</b> 
+one generalization of linear interpolation is a cubic bezier curve
+a cubic bezier curve defined by points $\mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{d}$ has the equation
+$$\mathbf{f(t)} = (1-t)^3 \mathbf{a} + 3 (1 - t^2) \mathbf{b} + 3 (1 - t) t^2 \mathbf{c} + t^3 \mathbf{d}$$create a 2D app that let's us drag around the four points of a bezier curve
+- (optional) derive this with an extension of the quadratic bezier curve construction we did in class
+- draw the control polygon, i.e., the line strip $(\mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{d})$, 
+- draw the cubic bezier curve
+- (extra credit) 🐝 extend your app into a bezier spline editor, enforcing positional and <a href="https://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve#Smoothly_joining_cubic_B%C3%A9ziers">velocity continuity</a>
+
+<hr>
+<b>c. line-line intersection</b> 
 implement the line-line intersection app we started in class
 - the first line passes through points $\mathbf{a}$ and $\mathbf{b}$
 - the second line passes through points $\mathbf{c}$ and $\mathbf{d}$
 - you must solve a linear system using snail's <code>inverse(...)</code> function
 
-<details><summary>(optional) starter code</summary><code class = "x">
-void hw02b() {
+<details><summary>(optional) starter code</summary><code class = "x">void hw02c() {
     Camera2D camera = { 3.0 };
 
     vec2 a = { -1.0, -1.0 };
@@ -504,38 +513,27 @@ void hw02b() {
         widget_drag(PV, 1, &c);
         widget_drag(PV, 1, &d);
 
-        // TODO set e to be the intersection of line (a, b) and line (c, d)
-        vec2 e  = {};
+        // TODO: set e to be the intersection of line (a, b) and line (c, d)
+        vec2 e = {};
 
-        for_(pass, 2) {
-            eso_begin(PV, pass == 0 ? SOUP_LINES : SOUP_POINTS, pass * 24.0); {
-                eso_color(monokai.green);
-                eso_vertex(a);
-                eso_color(monokai.red);
-                eso_vertex(b);
-                eso_color(monokai.blue);
-                eso_vertex(c);
-                eso_color(monokai.orange);
-                eso_vertex(d);
-            } eso_end();
+        { // lines
+            eso_begin(PV, SOUP_LINES);
+            eso_color(monokai.gray);
+            eso_vertex(a);
+            eso_vertex(b);
+            eso_vertex(c);
+            eso_vertex(d);
+            eso_end();
         }
-        eso_begin(PV, SOUP_POINTS, 24.0); {
-            eso_color(monokai.white);
+
+        { // intersection point
+            eso_begin(PV, SOUP_POINTS, 24.0);
+            eso_color(monokai.blue);
             eso_vertex(e);
-        } eso_end();
+            eso_end();
+        }
     }
 }</code></details>
-
-<hr>
-<b>c. bezier curve</b> 
-one generalization of linear interpolation is a cubic bezier curve
-a cubic bezier curve defined by points $\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3$ has the equation
-$$\mathbf{b(t)} = (1-t)^3 \mathbf{p}_0 + 3 (1 - t^2) \mathbf{p}_1 + 3 (1 - t) t^2 \mathbf{p}_2 + t^3 \mathbf{p}_3$$create a 2D app that let's us drag around the four points of a bezier curve
-- draw the control polygon, i.e., the line strip $(\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3)$, 
-- draw the cubic bezier curve
-
-🐝 (extra credit): extend your app into a bezier spline editor, enforcing positional and <a href="https://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve#Smoothly_joining_cubic_B%C3%A9ziers">velocity continuity</a>
-
 <hr>
 <b>d. (creative coding)</b> make an animation evocative of the topic "Galactic Journey" or "Space Fish"
 - you must interpolate (lerp, smoothstep, spline, etc.) at least three different aspects of your scene (these could include, e.g., position, color, ...)
