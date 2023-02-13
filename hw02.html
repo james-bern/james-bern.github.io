@@ -90,7 +90,37 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 2: add sliders (and organize a bit)
+<details><summary>step 2: add some data
+ - to start, we'll just LERP between 0.0 and 1.0 over the interval [0.0, 1.0]</summary>
+ <code class="x">#include "include.cpp"
+ void hw02a() {
+     Camera2D camera = { 3.0 };
+
+     while (cow_begin_frame()) {
+         camera_move(&camera);
+         mat4 PV = camera_get_PV(&camera);
+
+         eso_begin(PV, SOUP_LINE_STRIP);
+         eso_color(monokai.gray);
+         eso_vertex(1.0, 0.0);
+         eso_vertex(0.0, 0.0);
+         eso_vertex(0.0, 1.0);
+         eso_end();
+
+         int N = 64;
+         eso_begin(PV, SOUP_LINE_STRIP);
+         eso_color(monokai.yellow);
+         for (int i = 0; i < N; ++i) {
+             real t = real(i) / (N - 1);
+             real y = 0.0 + t * (1.0 - 0.0);
+             eso_vertex(t, y);
+         }
+         eso_end();
+     }
+ }
+ </code>
+ </details>
+<details><summary>step 3: add sliders (and organize a bit)
 - now we're LERPing between a and b over the interval [0.0, 1.0]</summary>
 <code class="x">#include "include.cpp"
 void hw02a() {
@@ -130,7 +160,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 3: pull the interpolation out into a function</summary>
+<details><summary>step 4: pull the interpolation out into a function</summary>
 <code class="x">#include "include.cpp"
 real interpolate(real t, real a, real b) {
     return a + (t) * (b - a);
@@ -173,7 +203,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 4: draw a time bar</summary>
+<details><summary>step 5: draw a time bar</summary>
 <code class="x">#include "include.cpp"
 real interpolate(real t, real a, real b) {
     return a + (t) * (b - a);
@@ -226,7 +256,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 5: draw a ball</summary>
+<details><summary>step 6: draw a ball</summary>
 <code class="x">#include "include.cpp"
 real interpolate(real t, real a, real b) {
     return a + (t) * (b - a);
@@ -286,7 +316,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 6: add a playing checkbox to update time
+<details><summary>step 7: add a playing checkbox to update time
 - let's make time "ping pong" back and forth between 0.0 and 1.0 for the purposes of visualization</summary>
 <code class="x">#include "include.cpp"
 real interpolate(real t, real a, real b) {
@@ -361,7 +391,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 7: let's check out some other interpolating functions :)</summary>
+<details><summary>step 8: let's check out some other interpolating functions :)</summary>
 <code class="x">#include "include.cpp"
 int mode = 0;
 int num_modes = 4;
