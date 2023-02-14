@@ -91,36 +91,36 @@ void hw02a() {
 </code>
 </details>
 <details><summary>step 2: add some data
-- to start, we'll just LERP between 0.0 and 1.0 over the interval [0.0, 1.0]</summary>
-<code class="x">#include "include.cpp"
-void hw02a() {
-    Camera2D camera = { 3.0 };
+ - to start, we'll just LERP between 0.0 and 1.0 over the interval [0.0, 1.0]</summary>
+ <code class="x">#include "include.cpp"
+ void hw02a() {
+     Camera2D camera = { 3.0 };
 
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 PV = camera_get_PV(&camera);
+     while (cow_begin_frame()) {
+         camera_move(&camera);
+         mat4 PV = camera_get_PV(&camera);
 
-        eso_begin(PV, SOUP_LINE_STRIP);
-        eso_color(monokai.gray);
-        eso_vertex(1.0, 0.0);
-        eso_vertex(0.0, 0.0);
-        eso_vertex(0.0, 1.0);
-        eso_end();
+         eso_begin(PV, SOUP_LINE_STRIP);
+         eso_color(monokai.gray);
+         eso_vertex(1.0, 0.0);
+         eso_vertex(0.0, 0.0);
+         eso_vertex(0.0, 1.0);
+         eso_end();
 
-        int N = 64;
-        eso_begin(PV, SOUP_LINE_STRIP);
-        eso_color(monokai.yellow);
-        for (int i = 0; i < N; ++i) {
-            real t = real(i) / (N - 1);
-            real y = 0.0 + t * (1.0 - 0.0);
-            eso_vertex(t, y);
-        }
-        eso_end();
-    }
-}
-</code>
-</details>
-<details><summary>step 2: add sliders (and organize a bit)
+         int N = 64;
+         eso_begin(PV, SOUP_LINE_STRIP);
+         eso_color(monokai.yellow);
+         for (int i = 0; i < N; ++i) {
+             real t = real(i) / (N - 1);
+             real y = 0.0 + t * (1.0 - 0.0);
+             eso_vertex(t, y);
+         }
+         eso_end();
+     }
+ }
+ </code>
+ </details>
+<details><summary>step 3: add sliders (and organize a bit)
 - now we're LERPing between a and b over the interval [0.0, 1.0]</summary>
 <code class="x">#include "include.cpp"
 void hw02a() {
@@ -160,7 +160,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 3: pull the interpolation out into a function</summary>
+<details><summary>step 4: pull the interpolation out into a function</summary>
 <code class="x">#include "include.cpp"
 real interpolate(real t, real a, real b) {
     return a + (t) * (b - a);
@@ -203,7 +203,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 4: draw a time bar</summary>
+<details><summary>step 5: draw a time bar</summary>
 <code class="x">#include "include.cpp"
 real interpolate(real t, real a, real b) {
     return a + (t) * (b - a);
@@ -256,7 +256,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 5: draw a ball</summary>
+<details><summary>step 6: draw a ball</summary>
 <code class="x">#include "include.cpp"
 real interpolate(real t, real a, real b) {
     return a + (t) * (b - a);
@@ -316,7 +316,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 6: add a playing checkbox to update time
+<details><summary>step 7: add a playing checkbox to update time
 - let's make time "ping pong" back and forth between 0.0 and 1.0 for the purposes of visualization</summary>
 <code class="x">#include "include.cpp"
 real interpolate(real t, real a, real b) {
@@ -341,7 +341,7 @@ void hw02a() {
         gui_slider("time", &time, 0.0, 1.0);
         gui_checkbox("playing", &playing, 'p');
 
-        if (playing || gui_button("step", '.') { // update time
+        if (playing || gui_button("step", '.')) { // update time
             time += _time_sign * .0167;
             if (time > 1.0) {
                 _time_sign *= -1;
@@ -391,7 +391,7 @@ void hw02a() {
 }
 </code>
 </details>
-<details><summary>step 7: let's check out some other interpolating functions :)</summary>
+<details><summary>step 8: let's check out some other interpolating functions :)</summary>
 <code class="x">#include "include.cpp"
 int mode = 0;
 int num_modes = 4;
@@ -431,7 +431,7 @@ void hw02a() {
         gui_slider("time", &time, 0.0, 1.0);
         gui_checkbox("playing", &playing, 'p');
 
-        if (playing || gui_button("step", '.') { // update time
+        if (playing || gui_button("step", '.')) { // update time
             time += _time_sign * .0167;
             if (time > 1.0) {
                 _time_sign *= -1;
@@ -484,7 +484,7 @@ void hw02a() {
 <b>b. cubic bezier curve</b> 
 one generalization of linear interpolation is a cubic bezier curve
 a cubic bezier curve defined by points $\mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{d}$ has the equation
-$$\mathbf{f(t)} = (1-t)^3 \mathbf{a} + 3 (1 - t^2) \mathbf{b} + 3 (1 - t) t^2 \mathbf{c} + t^3 \mathbf{d}$$create a 2D app that let's us drag around the four points of a bezier curve
+$$\mathbf{f(t)} = (1-t)^3 \mathbf{a} + 3 (1 - t)^2 t \mathbf{b} + 3 (1 - t) t^2 \mathbf{c} + t^3 \mathbf{d}$$create a 2D app that lets us drag around the four points of a bezier curve
 - (optional) derive this with an extension of the quadratic bezier curve construction we did in class
 - draw the control polygon, i.e., the line strip $(\mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{d})$, 
 - draw the cubic bezier curve
