@@ -1,0 +1,147 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" href="csci-371.css">
+</head><body><div class="content">
+
+<a href="csci-371.html"><b><- back</b></a><!--<button onClick="window.print()" style="float:right;">print this page</button>-->
+
+<center><b>hw02</b>
+<a href="https://github.com/james-bern/CSCI-371">codebase</a> | <a href="https://github.com/james-bern/CSCI-371/wiki">docs</a> | <a href="https://www.overleaf.com/read/mcyyczwqzbzz">notes</a> | <a href="https://glow.williams.edu/courses/3619655">glow</a>
+</center>
+<hr> You are highly encouraged to collaborate on homework provided you follow the spirit of the <a href="http://courses.cms.caltech.edu/cs171/materials/pdfs/50ft_policy.pdf">50 ft rule</a>.
+<hr>
+<b>goals.</b>
+
+- understand indexed triangle meshes
+- start playing with the idea of transforms
+
+<hr>
+<b>reading. meshes</b>
+
+in this class we consider two basic types of triangle meshes
+- there are others!--e.g., a half-edge mesh, which we won't have time to cover
+
+a <i>triangle soup mesh</i> (<code>SOUP_TRIANGLES</code>) has data
+$$\begin{cases}
+\text{vertex positions} = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5, ... ).
+\end{cases}$$Its zeroth triangle is $\mathbf{T}_0 = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2)$; its first triangle is $\mathbf{T}_1 = (\mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5),$ and so on.
+
+a triangle soup mesh has no way of storing connectivity information
+
+an <i>indexed triangle mesh</i> has data
+$$\begin{cases}
+\text{vertex positions} = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5, ... ) \\
+\text{triangle indices} = (i_0, i_1, i_2, ...),\\
+\end{cases}$$Its zeroth triangle is $\mathbf{T}_0 = (\mathbf{p}_{i_0}, \mathbf{p}_{i_1}, \mathbf{p}_{i_2})$; its first triangle $\mathbf{T}_1 = (\mathbf{p}_{i_3}, \mathbf{p}_{i_4}, \mathbf{p}_{i_5}),$ and so on.
+
+an indexed triangle mesh *can* store connectivity information
+
+<hr>
+<b>a. hello indexed triangle mesh</b>
+
+alright let's do some graphics
+
+<details><summary>let's start with a blank 3D app</summary>
+<code class="x">void hw03a() {
+    Camera3D camera = { 5.0, RAD(45.0) };
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 P = camera_get_P(&camera);
+        mat4 V = camera_get_V(&camera);
+        mat4 M = globals.Identity;
+    }
+}
+</code>
+</details>
+<details><summary>go into the docs and draw a green indexed triangle mesh teapot
+- spoilers below; no peeking!</summary>
+<code class="x">void hw03a() {
+    Camera3D camera = { 5.0, RAD(45.0) };
+    IndexedTriangleMesh3D mesh = library.meshes.teapot;
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 P = camera_get_P(&camera);
+        mat4 V = camera_get_V(&camera);
+        mat4 M = globals.Identity;
+        mesh.draw(P, V, M, monokai.green);
+    }
+}
+
+</code>
+</details>
+<details><summary>the cool kids are always making their meshes rotate; let us do the same</summary>
+<code class="x">void hw03a() {
+    Camera3D camera = { 5.0, RAD(45.0) };
+    IndexedTriangleMesh3D mesh = library.meshes.teapot;
+    double time = 0.0;
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 P = camera_get_P(&camera);
+        mat4 V = camera_get_V(&camera);
+        mat4 M = M4_RotationAboutYAxis(time);
+        mesh.draw(P, V, M, monokai.green);
+        time += 0.0167;
+    }
+}
+</code>
+</details>
+<details><summary>add a checkbox to draw the <code>vertex_positions</code> as <code>SOUP_POINTS</code>
+- you can always go back to <code>SOUP_POINTS</code> when you need to!</summary>
+<code class="x">void hw03a() {
+    Camera3D camera = { 5.0, RAD(45.0) };
+    IndexedTriangleMesh3D mesh = library.meshes.teapot;
+    double time = 0.0;
+    bool soup_points = false;
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 P = camera_get_P(&camera);
+        mat4 V = camera_get_V(&camera);
+        mat4 M = M4_RotationAboutYAxis(time);
+        mesh.draw(P, V, M, monokai.green);
+        gui_checkbox("SOUP_POINTS", &soup_points, COW_KEY_TAB);
+        if (soup_points) {
+            soup_draw(P * V * M, SOUP_POINTS, mesh.num_vertices, mesh.vertex_positions, NULL, monokai.yellow, 8.0);
+        }
+        time += 0.0167;
+    }
+}
+</code>
+</details>
+<details><summary>pause and carefully think about this question</summary>
+ + what happens if you use <code>SOUP_TRIANGLES</code> instead of <code>SOUP_POINTS</code>?--why?
+</details>
+<details><summary>(reading) here is an excerpt of <code>mesh</code>'s struct (note: fields are not in the order they actually are in cow)</summary>
+<code class="x">struct IndexedTriangleMesh3D {
+    int num_vertices;
+    vec3 *vertex_positions;
+    vec3 *vertex_normals;
+    vec3 *vertex_colors; // leave NULL to draw the mesh in a single color
+
+    int num_triangles;
+    int3 *triangle_indices;
+
+    void draw(...); // the only instance method in cow; wow!
+};
+</code>
+</details>
+<details><summary>let's mess around with the teapot (just apply one change at a time, don't combine them); try to at least sort of understand what's going on in each case
+- you will almost certainly have to google for C documentation; please do :)</summary>
++ what happens if you set <code>mesh.num_triangles /= 2;</code>?--why?
++ what happens if you call <code>memset(mesh.vertex_positions, 0, (mesh.num_vertices / 2) * sizeof(real));</code>?--why?
++ what happens if you call <code>memset(mesh.vertex_normals, 0, (mesh.num_vertices / 2) * sizeof(real));</code>?--why?
++ what happens if you set <code>mesh.num_vertices /= 2;</code>?--why?
++ try adding this line of code into the while loop: <code>mesh.num_triangles--;</code>
+</details>
+
+
+
+<b>b. hello triangle soup</b>
+
+
+
+
+</div></body></html>
