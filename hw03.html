@@ -14,7 +14,7 @@
 <b>goals.</b>
 
 - understand indexed triangle meshes
-- start playing with the idea of transforms
+- start playing with transforms
 
 <hr>
 <b>reading. meshes</b>
@@ -25,22 +25,22 @@ in this class we consider two basic types of triangle meshes
 a <i>triangle soup mesh</i> (<code>SOUP_TRIANGLES</code>) has data
 $$\begin{cases}
 \text{vertex positions} = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5, ... ).
-\end{cases}$$Its zeroth triangle is $\mathbf{T}_0 = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2)$; its first triangle is $\mathbf{T}_1 = (\mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5),$ and so on.
+\end{cases}$$Its zeroth triangle has vertex positions $\mathbf{T}_0 = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2)$; its first triangle $\mathbf{T}_1 = (\mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5),$ and so on.
 
 a triangle soup mesh has no way of storing connectivity information
 
 an <i>indexed triangle mesh</i> has data
 $$\begin{cases}
 \text{vertex positions} = (\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3, \mathbf{p}_4, \mathbf{p}_5, ... ) \\
-\text{triangle indices} = (i_0, i_1, i_2, ...),\\
-\end{cases}$$Its zeroth triangle is $\mathbf{T}_0 = (\mathbf{p}_{i_0}, \mathbf{p}_{i_1}, \mathbf{p}_{i_2})$; its first triangle $\mathbf{T}_1 = (\mathbf{p}_{i_3}, \mathbf{p}_{i_4}, \mathbf{p}_{i_5}),$ and so on.
+\text{triangle indices} = \left((i_0, i_1, i_2), (i_3, i_4, i_5), ...\right),\\
+\end{cases}$$Its zeroth triangle has vertex positions $\mathbf{T}_0 = (\mathbf{p}_{i_0}, \mathbf{p}_{i_1}, \mathbf{p}_{i_2})$; its first triangle $\mathbf{T}_1 = (\mathbf{p}_{i_3}, \mathbf{p}_{i_4}, \mathbf{p}_{i_5}),$ and so on.
 
 an indexed triangle mesh *can* store connectivity information
 
 <hr>
 <b>a. hello indexed triangle mesh</b>
 
-alright let's do some graphics
+alright let's do some graphics :D
 
 <details><summary>let's start with a blank 3D app</summary>
 <code class="x">void hw03a() {
@@ -55,8 +55,8 @@ alright let's do some graphics
 }
 </code>
 </details>
-<details><summary>go into the docs and draw a green indexed triangle mesh teapot
-- spoilers below; no peeking!</summary>
+<details><summary>referencing the docs, draw a green indexed triangle mesh teapot
+- spoilers below; try it yourself first--no peeking!</summary>
 <code class="x">void hw03a() {
     Camera3D camera = { 5.0, RAD(45.0) };
     IndexedTriangleMesh3D mesh = library.meshes.teapot;
@@ -76,7 +76,7 @@ alright let's do some graphics
 <code class="x">void hw03a() {
     Camera3D camera = { 5.0, RAD(45.0) };
     IndexedTriangleMesh3D mesh = library.meshes.teapot;
-    double time = 0.0;
+    real time = 0.0;
 
     while (cow_begin_frame()) {
         camera_move(&camera);
@@ -89,21 +89,22 @@ alright let's do some graphics
 }
 </code>
 </details>
-<details><summary>add a checkbox to draw the <code>vertex_positions</code> as <code>SOUP_POINTS</code>
-- you can always go back to <code>SOUP_POINTS</code> when you need to!</summary>
+<details><summary>add a checkbox to <code>soup_draw(...)</code> the <code>vertex_positions</code> as <code>SOUP_POINTS</code>
+- spoilers below; try it yourself first--no peeking!</summary>
 <code class="x">void hw03a() {
     Camera3D camera = { 5.0, RAD(45.0) };
     IndexedTriangleMesh3D mesh = library.meshes.teapot;
-    double time = 0.0;
-    bool soup_points = false;
+    real time = 0.0;
+    bool draw_vertex_positions = false;
+
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
         mat4 V = camera_get_V(&camera);
         mat4 M = M4_RotationAboutYAxis(time);
+        gui_checkbox("draw_vertex_positions", &draw_vertex_positions, COW_KEY_SPACE);
         mesh.draw(P, V, M, monokai.green);
-        gui_checkbox("SOUP_POINTS", &soup_points, COW_KEY_TAB);
-        if (soup_points) {
+        if (draw_vertex_positions) {
             soup_draw(P * V * M, SOUP_POINTS, mesh.num_vertices, mesh.vertex_positions, NULL, monokai.yellow, 8.0);
         }
         time += 0.0167;
@@ -111,10 +112,10 @@ alright let's do some graphics
 }
 </code>
 </details>
-<details><summary>pause and carefully think about this question</summary>
- + what happens if you use <code>SOUP_TRIANGLES</code> instead of <code>SOUP_POINTS</code>?--why?
+<details><summary>what do you think will happen if you use <code>SOUP_TRIANGLES</code> instead of <code>SOUP_POINTS</code>?--why?</summary>
+moo 🐄
 </details>
-<details><summary>(reading) here is an excerpt of <code>mesh</code>'s struct (note: fields are not in the order they actually are in cow)</summary>
+<details><summary>(reading) here is an excerpt of <code>mesh</code>'s struct (sidenote: fields are NOT in the same order as in the actual struct)</summary>
 <code class="x">struct IndexedTriangleMesh3D {
     int num_vertices;
     vec3 *vertex_positions;
@@ -124,24 +125,207 @@ alright let's do some graphics
     int num_triangles;
     int3 *triangle_indices;
 
-    void draw(...); // the only instance method in cow; wow!
+    void draw(...); // one of the only instance methods in cow; wow!
 };
 </code>
 </details>
 <details><summary>let's mess around with the teapot (just apply one change at a time, don't combine them); try to at least sort of understand what's going on in each case
-- you will almost certainly have to google for C documentation; please do :)</summary>
-+ what happens if you set <code>mesh.num_triangles /= 2;</code>?--why?
-+ what happens if you call <code>memset(mesh.vertex_positions, 0, (mesh.num_vertices / 2) * sizeof(real));</code>?--why?
-+ what happens if you call <code>memset(mesh.vertex_normals, 0, (mesh.num_vertices / 2) * sizeof(real));</code>?--why?
-+ what happens if you set <code>mesh.num_vertices /= 2;</code>?--why?
-+ try adding this line of code into the while loop: <code>mesh.num_triangles--;</code>
+- recall cow apps have the structure <code>/* SETUP */ while (cow_begin_frame()) { /* LOOP */ }</code>
+- you will almost certainly have to google for C documentation; please do :)
+- undo all the changes after you're done</summary>
++ what happens if you call <code>mesh.vertex_normals = NULL;</code> in the setup (before the loop)?--why?
++ what happens if you call <code>mesh.num_triangles /= 2;</code> in the setup (before the loop)?--why?
++ what happens if you call <code>memset(mesh.vertex_positions, 0, (mesh.num_vertices / 2) * sizeof(real));</code> in the setup?--why?
++ what happens if you call <code>memset(mesh.vertex_normals, 0, (mesh.num_vertices / 2) * sizeof(real));</code> in the setup?--why?
++ what happens if you call <code>mesh.num_vertices /= 2;</code> in the setup?--why?
++ what happens if you call <code>mesh.num_triangles--;</code> in the loop?
 </details>
+<details><summary>add a checkbox to draw the mesh in "wireframe" (google for what this means)
+- i suggest (require) you use eso, calling <code>eso_begin(P * V, SOUP_LINES);</code> exactly once per frame
+- spoilers below; no peeking until after you try it yourself first!
+-- don't rush; this question requires you to completely understand how data is stored inside of <code>mesh.vertex_positions</code> and <code>mesh.triangle_indices</code>; once you do, the world is your oyster :)</summary>
+<code class="x">void hw03a() {
+    Camera3D camera = { 5.0, RAD(45.0) };
+    IndexedTriangleMesh3D mesh = library.meshes.teapot;
+    real time = 0.0;
+    bool draw_vertex_positions = false;
+    bool draw_wireframe = false;
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 P = camera_get_P(&camera);
+        mat4 V = camera_get_V(&camera);
+        mat4 M = M4_RotationAboutYAxis(time);
+
+        gui_checkbox("draw_vertex_positions", &draw_vertex_positions, COW_KEY_SPACE);
+        gui_checkbox("draw_wireframe", &draw_wireframe, COW_KEY_TAB);
+
+        mesh.draw(P, V, M, monokai.green);
+
+        if (draw_wireframe) {
+            eso_begin(P * V * M, SOUP_LINES, 4.0);
+            eso_color(monokai.red);
+            for (int i = 0; i < mesh.num_triangles; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    eso_vertex(mesh.vertex_positions[mesh.triangle_indices[i][j]]);
+                    eso_vertex(mesh.vertex_positions[mesh.triangle_indices[i][(j + 1) % 3]]);
+                }
+            }
+            eso_end();
+        }
+
+        if (draw_vertex_positions) {
+            soup_draw(P * V * M, SOUP_POINTS, mesh.num_vertices, mesh.vertex_positions, NULL, monokai.yellow, 8.0);
+        }
+
+        time += 0.0167;
+    }
+}
+</code>
+</details>
+<hr>
+<b>b. make an indexed triangle mesh cylinder (just the curvy part, don't worry about the end caps)</b>
+- include checkboxes for <code>draw_vertex_positions</code> and <code>draw_wireframe</code>
+
+
+<u>suggested development trajectory</u>
+
+- begin with an empty mesh <code>IndexedTriangleMesh3D mesh = {};</code>
+
+- then, nail down <code>mesh.num_vertices</code> and <code>mesh.vertex_positions</code>
+-- feel free to use a <code>StretchyBuffer&langle;vec3&rangle;</code> (or, if you prefer, <code>(vec3 *) malloc(mesh.num_vertices * sizeof(vec3)</code>)
+-- NOTE: before moving on, try visualizing the vertex positions using <code>SOUP_POINTS</code> like we did in the tutorial question!
+
+- next, tackle <code>mesh.num_triangles</code> and <code>mesh.triangle_indices</code>
+-- feel free to use a <code>StretchyBuffer&langle;int3&rangle;</code> (or, if you prefer, <code>(int3 *) malloc(mesh.num_triangles * sizeof(int3)</code>)
+-- you can now call <code>mesh_draw(...)</code>, passing <code>NULL</code> for <code>mesh.vertex_normals</code>)
+-- NOTE: before moving on, try visualizing the triangle edges using eso like we did in the tutorial question!
+
+- finally, attack <code>mesh.vertex_normals</code> so you get all the nice lighting effects
+-- NOTE: get the values of these normal vectors "from the underlying geometry," i.e. using your geometry skills and intuition
+
+- (optional) add the end caps
+
+
+🍩. (extra credit) modify your code to instead produce a torus (wikipedia is your friend here)
+🍩🍩. (extra extra credit) a torus knot?
+
+<hr>
+<b>c. the tetris problem</b>
+
+consider the white tetris piece shown in the figure below
+- it is two units wide and three units tall
+- its lower left corner is at the origin
+
+your job is to transform it into these other pieces
+- <code>M[0]</code> yellow
+- <code>M[1]</code> purple
+- <code>M[2]</code> orange
+- <code>M[3]</code> lightblue
+- <code>M[4]</code> red
+- <code>M[5]</code> buff (tan)
+- <code>M[6]</code> gray
+- <code>M[7]</code> green
+- <code>M[8]</code> purplishpink
+- 🔷. (extra credit) <code>M[9]</code> blue
+
+here are the functions you can use
+<code class="x">T(real t_x, real t_y) // 2D translation
+R(real theta_radians) // 2D rotation (counter-clockwise about the origin)
+S(real s_x, real s_y) // 2D scaling (about the origin)</code>
+IMPORTANT: we write chained transforms from <b>right to left</b>
+EXAMPLE: a rotation of 90 degrees (counter-clockwise about the origin) <b>followed by</b> a translation of five units to the right...
+- LaTeX: $\mathbf{T}^{\text{2D}}_{\begin{bmatrix}5\\0\end{bmatrix}}\mathbf{R}^{\text{2D}}_{90\deg}$
+- code: <code>T(5, 0) * R(RAD(90))</code>
+
+<img src="tetris.PNG">
+NOTE: All touching pieces touch "perfectly."
+NOTE: The green piece and the black silohuette it is touching are exactly the same size.
+NOTE: The purplishpink piece is the exact same shape as the gray piece, rotated 135 degrees counter-clockwise.
+HINT: Recall that reflection (flipping over an axis) can be seen as a special case of scaling.
+
+<details><summary>STARTER CODE :)</summary>
+<code class="x">void hw03c() {
+    #define T(t_x, t_y) M4_Translation(t_x, t_y)
+    #define R(theta)    M4_RotationAboutZAxis(theta)
+    #define S(s_x, s_y) M4_Scaling(s_x, s_y)
+    #define I globals.Identity
+    Camera2D camera = { 20.0 };
+    vec2 tetris_piece_as_SOUP_QUADS[] = {{0,0},{2,0},{2,1},{0,1},{0,0},{1,0},{1,3},{0,3}};
+    mat4 M[10] = {}; { for (int i = 0; i < _COUNT_OF(M); ++i) { M[i] = globals.Identity; } }
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 PV = camera_get_PV(&camera);
+
+        // TODO set M[0], ..., M[8]
+        M[0] = T(5, 0) * R(RAD(90)); // example from notes above
+        M[1] = I;
+        M[2] = I;
+        M[3] = I;
+        M[4] = I;
+        M[5] = I;
+        M[6] = I;
+        M[7] = I;
+        M[8] = I;
+        M[9] = I;
+
+        { // draw
+            { // draw tetris pieces
+                for (int i = 0; i < _COUNT_OF(M); ++i) {
+                    soup_draw(PV * M[i], SOUP_QUADS, 8, tetris_piece_as_SOUP_QUADS, NULL, color_kelly(i));
+                }
+                soup_draw(PV, SOUP_QUADS, 8, tetris_piece_as_SOUP_QUADS, NULL, monokai.white);
+            }
+            { // draw widget
+                vec2 mouse_position = mouse_get_position(PV);
+                int x = (int) roundf((float) mouse_position.x);
+                int y = (int) roundf((float) mouse_position.y);
+                gui_printf("(x, y) = (%d, %d)", x, y);
+                eso_begin(PV, SOUP_LINE_LOOP);
+                eso_color(0.0, 1.0, 0.0, 0.5);
+                eso_vertex(x, y);
+                eso_vertex(0, y);
+                eso_vertex(0, 0);
+                eso_vertex(x, 0);
+                eso_end();
+            }
+        }
+    }
+    #undef T
+    #undef R
+    #undef S
+    #undef I
+}
+</code>
+</details>
+<hr>
+<b>d. (creative coding) bouncy castle</b>
+
+Using at least 100 total copies of the meshes in library.meshes (e.g. 20 cones, 30 boxes, and 50 spheres), plus, optionally, whatever you can manage to load or script up yourself, make an animated sculpture evoactive of the topic "Bouncy Castle."
+- Don't forget the animation piece! Transforms are your friend here! Also for loops! :)
 
 
 
-<b>b. hello triangle soup</b>
+
+
+
+
 
 
 
 
 </div></body></html>
+
+<!--
+<hr>
+<b>☕. (extra credit) a wild fprintf and fscanf appeared; they look angry</b>
+
+- save the teapot mesh to a file <b>teapot.obj</b> following the <a href="https://en.wikipedia.org/wiki/Wavefront_.obj_file">obj</a> format
+-- you will need to write, e.g., <code>void save_obj(IndexedTriangleMesh3D mesh, char *filename);</code> yourself
+- load the mesh into <a href="https://www.meshlabjs.net/">meshlabjs</a> and run something fun (e.g., Quadric Simplification)
+- download the resulting mesh as an obj
+- load the resulting mesh into a cow app and draw it
+-- (feel free to mess with the result from meshlabjs in a text editor a bit before loading to make your life easier)
+-- you will need to write, e.g., <code>IndexedTriangleMesh3D load_obj(char *filename);</code> yourself
+--- do NOT implement the entire obj spec; just implement the bare minimum that you need!
+-->
