@@ -183,6 +183,60 @@ moo 🐄
 }
 </code>
 </details>
+<details><summary>add a checkbox to draw the vertex normals (normal vectors) and clean up the code a bit :)</summary>
+<code class="x">void hw03a() {
+    Camera3D camera = { 5.0, RAD(45.0) };
+    IndexedTriangleMesh3D mesh = library.meshes.teapot;
+    double time = 0.0;
+    bool draw_wireframe = false;
+    bool draw_vertex_positions = false;
+    bool draw_vertex_normals = false;
+
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 P = camera_get_P(&camera);
+        mat4 V = camera_get_V(&camera);
+        mat4 M = M4_RotationAboutYAxis(time);
+
+        gui_checkbox("draw_wireframe", &draw_wireframe, COW_KEY_TAB);
+        gui_checkbox("draw_vertex_positions", &draw_vertex_positions, COW_KEY_SPACE);
+        gui_checkbox("draw_vertex_normals", &draw_vertex_normals, 'n');
+
+        mesh.num_triangles--;
+
+        mesh.draw(P, V, M, monokai.green);
+
+        if (draw_wireframe) {
+            eso_begin(P * V * M, SOUP_LINES, 4.0);
+            eso_color(monokai.red);
+            for (int i = 0; i < mesh.num_triangles; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    eso_vertex(mesh.vertex_positions[mesh.triangle_indices[i][j]]);
+                    eso_vertex(mesh.vertex_positions[mesh.triangle_indices[i][(j + 1) % 3]]);
+                }
+            }
+            eso_end();
+        }
+
+        if (draw_vertex_positions) {
+            soup_draw(P * V * M, SOUP_POINTS, mesh.num_vertices, mesh.vertex_positions, NULL, monokai.yellow, 8.0);
+        }
+
+        if (draw_vertex_normals) {
+            eso_begin(P * V * M, SOUP_LINES, 4.0);
+            eso_color(monokai.orange);
+            for (int i = 0; i < mesh.num_vertices; ++i) {
+                eso_vertex(mesh.vertex_positions[i]);
+                eso_vertex(mesh.vertex_positions[i] + .05 * mesh.vertex_normals[i]);
+            }
+            eso_end();
+        }
+
+        time += 0.0167;
+    }
+}
+</code>
+</details>
 <hr>
 <b>b. make an indexed triangle mesh cylinder (just the curvy part, don't worry about the end caps)</b>
 - include checkboxes for <code>draw_vertex_positions</code> and <code>draw_wireframe</code>
