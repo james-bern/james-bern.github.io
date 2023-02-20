@@ -186,29 +186,55 @@ moo 🐄
 <hr>
 <b>b. make an indexed triangle mesh cylinder (just the curvy part, don't worry about the end caps)</b>
 - include checkboxes for <code>draw_vertex_positions</code> and <code>draw_wireframe</code>
+- for simplicity, i recommend including just one "stack" (i.e., your vertex positions will consist of two "circles" of vertices)
+- 🍩. (extra credit) modify your code to instead produce a torus (wikipedia is your friend here)
+-- NOTE: before attempting the torus, i recommend extending your cylinder code to have multiple stacks
 
 
 <u>suggested development trajectory</u>
 
 - begin with an empty mesh <code>IndexedTriangleMesh3D mesh = {};</code>
 
-- then, nail down <code>mesh.num_vertices</code> and <code>mesh.vertex_positions</code>
--- feel free to use a <code>StretchyBuffer&langle;vec3&rangle;</code> (or, if you prefer, <code>(vec3 *) malloc(mesh.num_vertices * sizeof(vec3)</code>)
+- nail down <code>mesh.num_vertices</code> and <code>mesh.vertex_positions</code>
+-- feel free to use a <code>StretchyBuffer&langle;vec3&rangle;</code> (or, if you prefer, just <code>(vec3 *) malloc(mesh.num_vertices * sizeof(vec3)</code>)
 -- NOTE: before moving on, try visualizing the vertex positions using <code>SOUP_POINTS</code> like we did in the tutorial question!
 
-- next, tackle <code>mesh.num_triangles</code> and <code>mesh.triangle_indices</code>
--- feel free to use a <code>StretchyBuffer&langle;int3&rangle;</code> (or, if you prefer, <code>(int3 *) malloc(mesh.num_triangles * sizeof(int3)</code>)
+- tackle <code>mesh.num_triangles</code> and <code>mesh.triangle_indices</code>
+-- feel free to use a <code>StretchyBuffer&langle;int3&rangle;</code> (or, if you prefer, just <code>(int3 *) malloc(mesh.num_triangles * sizeof(int3)</code>)
 -- you can now call <code>mesh_draw(...)</code>, passing <code>NULL</code> for <code>mesh.vertex_normals</code>)
 -- NOTE: before moving on, try visualizing the triangle edges using eso like we did in the tutorial question!
 
-- finally, attack <code>mesh.vertex_normals</code> so you get all the nice lighting effects
+- finally, include <code>mesh.vertex_normals</code> so you get all the nice lighting effects
 -- NOTE: get the values of these normal vectors "from the underlying geometry," i.e. using your geometry skills and intuition
 
-- (optional) add the end caps
 
+<u>how to use a stretchy buffer to implicitly calculate the number of things</u>
 
-🍩. (extra credit) modify your code to instead produce a torus (wikipedia is your friend here)
+sometimes you don't actually know how much memory to malloc
+(this is often the case when you're creating something programmatically)
+one option would be to just allocate a BUNCH of memory...
+...but this is actually a great time to use a stretchy buffer!
 
+<code class="x">int num_things;
+vec3 *things;
+{
+    StretchyBuffer<vec3> tmp = {};
+
+    sbuff_push_back(&tmp, ...);
+    sbuff_push_back(&tmp, ...);
+    sbuff_push_back(&tmp, ...);
+    sbuff_push_back(&tmp, ...);
+    ...
+    sbuff_push_back(&tmp, ...);
+    sbuff_push_back(&tmp, ...);
+
+    num_things = tmp.length;
+    things = tmp.data;
+
+    // in this case, do NOT call sbuff_free
+    // we just "stole" tmp's data pointer; so sneaky! :)
+}
+</code>
 <hr>
 <b>c. the tetris problem</b>
 
