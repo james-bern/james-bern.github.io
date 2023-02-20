@@ -331,6 +331,24 @@ HINT: Recall that reflection (flipping over an axis) can be seen as a special ca
 Using at least 100 total copies of the meshes in library.meshes (e.g. 20 cones, 30 boxes, and 50 spheres), plus, optionally, whatever you can manage to load or script up yourself, make an animated sculpture evoactive of the topic "Bouncy Castle."
 - Don't forget the animation piece! Transforms are your friend here! Also for loops! :)
 
+<details><summary>(totally optional) starter code :)</summary>
+<code class="x">void hw03d() {
+    Camera3D camera = { 20.0 };
+    real time = 0.0;
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 P = camera_get_P(&camera);
+        mat4 V = camera_get_V(&camera);
+
+        mat4 S = M4_Scaling(1.0, 1.0 + 0.5 * sin(5 * time), 1.0);
+        library.meshes.cylinder.draw(P, V, S, monokai.red);
+        library.meshes.cone.draw(P, V, S * M4_Translation(0.0, 1.0, 0.0), monokai.orange);
+        time += 0.0167;
+    }
+}
+</code>
+</details>
+
 
 
 
