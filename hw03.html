@@ -196,11 +196,11 @@ moo 🐄
 - begin with an empty mesh <code>IndexedTriangleMesh3D mesh = {};</code>
 
 - nail down <code>mesh.num_vertices</code> and <code>mesh.vertex_positions</code>
--- feel free to use a <code>StretchyBuffer&langle;vec3&rangle;</code> (or, if you prefer, just <code>(vec3 *) malloc(mesh.num_vertices * sizeof(vec3)</code>)
+-- feel free to use a <code>StretchyBuffer&lt;vec3&gt;</code> (or, if you prefer, just <code>(vec3 *) malloc(mesh.num_vertices * sizeof(vec3)</code>)
 -- NOTE: before moving on, try visualizing the vertex positions using <code>SOUP_POINTS</code> like we did in the tutorial question!
 
 - tackle <code>mesh.num_triangles</code> and <code>mesh.triangle_indices</code>
--- feel free to use a <code>StretchyBuffer&langle;int3&rangle;</code> (or, if you prefer, just <code>(int3 *) malloc(mesh.num_triangles * sizeof(int3)</code>)
+-- feel free to use a <code>StretchyBuffer&lt;int3&gt;</code> (or, if you prefer, just <code>(int3 *) malloc(mesh.num_triangles * sizeof(int3)</code>)
 -- you can now call <code>mesh_draw(...)</code>, passing <code>NULL</code> for <code>mesh.vertex_normals</code>)
 -- NOTE: before moving on, try visualizing the triangle edges using eso like we did in the tutorial question!
 
@@ -211,14 +211,15 @@ moo 🐄
 <u>how to use a stretchy buffer to implicitly calculate the number of things</u>
 
 sometimes you don't actually know how much memory to malloc
-(this is often the case when you're creating something programmatically)
-one option would be to just allocate a BUNCH of memory...
-...but this is actually a great time to use a stretchy buffer!
+(perhaps to discover this quantity you would have to do like...math...
+...or in other cases it's literally impossible to know beforehand)
+
+one very convenient solution is to this problem is to use a stretchy buffer :)
 
 <code class="x">int num_things;
 vec3 *things;
 {
-    StretchyBuffer<vec3> tmp = {};
+    StretchyBuffer&lt;vec3&gt; tmp = {};
 
     sbuff_push_back(&tmp, ...);
     sbuff_push_back(&tmp, ...);
