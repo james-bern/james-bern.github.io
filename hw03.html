@@ -202,8 +202,6 @@ moo 🐄
         gui_checkbox("draw_vertex_positions", &draw_vertex_positions, COW_KEY_SPACE);
         gui_checkbox("draw_vertex_normals", &draw_vertex_normals, 'n');
 
-        mesh.num_triangles--;
-
         mesh.draw(P, V, M, monokai.green);
 
         if (draw_wireframe) {
