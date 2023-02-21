@@ -9,7 +9,8 @@
 <center><b>hw02</b>
 <a href="https://docs.google.com/spreadsheets/d/1WaJkilThuOXpyYGPvUCOo2pz12IhGobCWyKco-HACGY/edit?usp=sharing">help hours</a> | <a href="https://github.com/james-bern/CSCI-371">codebase</a> | <a href="https://github.com/james-bern/CSCI-371/wiki">docs</a> | <a href="notes.html">notes</a> | <a href="https://glow.williams.edu/courses/3619655">glow</a>
 </center>
-<hr> You are highly encouraged to collaborate on homework provided you follow the spirit of the <a href="http://courses.cms.caltech.edu/cs171/materials/pdfs/50ft_policy.pdf">50 ft rule</a>.
+<hr> you are highly encouraged to collaborate on homework provided you follow the spirit of the <a href="http://courses.cms.caltech.edu/cs171/materials/pdfs/50ft_policy.pdf">50 ft rule</a>
+<hr>🚨 make sure you pull a fresh copy of the codebase before starting this homework!--there are some changes we'll need :)
 <hr>
 <b>goals.</b>
 
@@ -135,8 +136,8 @@ moo 🐄
 - undo all the changes after you're done</summary>
 + what happens if you call <code>mesh.vertex_normals = NULL;</code> in the setup (before the loop)?--why?
 + what happens if you call <code>mesh.num_triangles /= 2;</code> in the setup (before the loop)?--why?
-+ what happens if you call <code>memset(mesh.vertex_positions, 0, (mesh.num_vertices / 2) * sizeof(real));</code> in the setup?--why?
-+ what happens if you call <code>memset(mesh.vertex_normals, 0, (mesh.num_vertices / 2) * sizeof(real));</code> in the setup?--why?
++ what happens if you call <code>memset(mesh.vertex_positions, 0, (mesh.num_vertices / 2) * sizeof(vec3));</code> in the setup?--why?
++ what happens if you call <code>memset(mesh.vertex_normals, 0, (mesh.num_vertices / 2) * sizeof(vec3));</code> in the setup?--why?
 + what happens if you call <code>mesh.num_vertices /= 2;</code> in the setup?--why?
 + what happens if you call <code>mesh.num_triangles--;</code> in the loop?
 </details>
