@@ -358,8 +358,8 @@ HINT: Recall that reflection (flipping over an axis) can be seen as a special ca
             }
             { // draw widget
                 vec2 mouse_position = mouse_get_position(PV);
-                int x = (int) roundf((float) mouse_position.x);
-                int y = (int) roundf((float) mouse_position.y);
+                int x = (int) roundf(mouse_position.x);
+                int y = (int) roundf(mouse_position.y);
                 gui_printf("(x, y) = (%d, %d)", x, y);
                 eso_begin(PV, SOUP_LINE_LOOP);
                 eso_color(0.0, 1.0, 0.0, 0.5);
