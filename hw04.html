@@ -21,19 +21,28 @@
 - play with a (very) simple architecture for a game
 
 <hr>
-<b>reading. coordinate systems</b>
+<b>non-optional reading. coordinate systems</b>
 
-a coordinate system is an x-axis $\mathbf{\hat x}$, a y-axis $\mathbf{\hat y}$, a z-axis $\mathbf{\hat z}$, and an origin $\mathbf{\hat o}$
-the axes are vectors and the origin is a point
+a coordinate system is an x-axis $\mathbf{\hat x}$, a y-axis $\mathbf{\hat y}$, a z-axis $\mathbf{\hat z}$, and an origin $\mathbf{o}$
+the axes are unit vectors and the origin is a point
 in homogeneous coordinates, it is convenient to pack a coordinate system into a 4x4 matrix like this
 
-$\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{\hat o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
+$\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
 
-note that here it is implied that the quantities $\mathbf{\hat x}, \mathbf{\hat y}, \mathbf{\hat z}, \mathbf{\hat o}$ are written <i>in world coordinates</i>
-the world coordinate system is there the identity matrix, which is nice :)
+note that here it is implied that the quantities $\mathbf{\hat x}, \mathbf{\hat y}, \mathbf{\hat z}, \mathbf{o}$ are written <i>in world coordinates</i>
 
 
-there are a few coordinate systems that are so special we give them names
+consider a point <i>written in coordinate system $\mathbf{C}$</i> as $\mathbf{p_C} = (x_\mathbf{C}, y_\mathbf{C}, z_\mathbf{C})^T$
+by definiton of a coordinate system, $\mathbf{p}_\text{world} = \mathbf{C}\begin{bmatrix}\mathbf{p_C}\\1\end{bmatrix}$
+
+to see why, note that $\mathbf{C}\mathbf{p_C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}\begin{bmatrix}x_\mathbf{C}\\y_\mathbf{C}\\z_\mathbf{C}\\1\end{bmatrix} = \mathbf{o} + x_\mathbf{C} \mathbf{\hat x} + y_\mathbf{C} \mathbf{\hat y} + z_\mathbf{C} \mathbf{\hat z}$
+i.e., we start at the origin $\mathbf{o}$ and then walk along the axes by the prescribed amounts (just like plotting in Algebra 2)
+
+
+a similar fact is try for vectors; $\mathbf{v}_\text{world} = \mathbf{C}\begin{bmatrix}\mathbf{v_C}\\0\end{bmatrix}$
+
+<hr color="lightblue">
+there are a few special coordinate systems we give names
 
 <b>model coordinates</b> (aka modeling coordinates, aka object coordinates)
 - this is the coordinate system of a single mesh
@@ -49,29 +58,56 @@ there are a few coordinate systems that are so special we give them names
 - this is the coordinate system of the world (scene)
 -- when you place an object in the scene, you're working in world coordinates
 
-<hr color="gray">
+<b>normalized device coordinates (NDC)</b>
+- when OpenGL actually draws, it assumes vertices are in NDC
+- the lower left is $(-1.0, -1.0)^T$ and the upper right is $(1.0, 1.0)^T$
 
-there are also a few matrices that are so special we give them names
+<hr color="lightblue">
+there are a few special matrices we give names
 
 <b>model matrix</b> $\mathbf{M}$
 - it takes us to world coordinates <i>from</i> model coordinates, i.e. $\mathbf{p}_\text{world} = \mathbf{M}\mathbf{p}_\text{model}$
+- a convenient way to build a model matrix is as $\mathbf{TRS}$
+-- this is a 3D scaling by $\mathbf{s}$, followed by a 3D rotation $\mathbf{R}_\text{3x3}$, followed by a 3D translation by $\mathbf{t}$
+  $\mathbf{TRS} = \begin{bmatrix}\mathbf{R}_{\text{3x3}}\text{diag}(\mathbf{s}) & \mathbf{t} \\ \mathbf{0}^T & 1\end{bmatrix}$
 
 <b>camera matrix</b> $\mathbf{C}$
-- it is the camera's axes and origin
-  $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{\hat o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
-- as such, it takes us from camera coordinates to world coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
+- the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix
+  $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
+- as such, it takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
+- deriving a camera matrix is fun! write down the axes and origin and pack them into a matrix :)
 
 <b>view matrix</b> $\mathbf{V} = \mathbf{C}^{-1}$
-- it's just the inverse of the camera matrix
-+ $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{\hat o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
+- the view matrix is just the inverse of the camera matrix
+- as such, it takes us to camera coordinates <i>from</i> world coordinates, i.e., $\mathbf{p}_\text{camera} = \mathbf{V}\mathbf{p}_\text{world}$
+
+<b>projection matrix</b> $\mathbf{P}$
+- the projection matrix takes us to NDC <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{NDC} = \mathbf{P}\mathbf{p}_\text{camera}$
+- deriving a projection matrix is a bit tricky; we will go over it in class; you will NOT have to do it on this homework
+
+<b>"transform"</b> $\mathbf{PVM}$
+- it takes us alllll the way to NDC <i>from</i> model coordinates
+- <code>soup_draw(mat4 PVM, ...);</code> takes this
+
+<hr color="lightblue">
+<b>sidenote:</b> sometimes we talk about <i>pixel coordinates</i> (especially when writing a GUI)
+- the lower left is $(0, 0)^T$ and the upper right is $(W, H)^T,$ where $W$ and $H$ are the screen width and height in pixels
 
 
-sidenote: more explicit notation with left and right subscripts
-- model matrix $\mathbf{p}_\text{world} = {}_\text{world} \mathbf{A}_\text{model} \ \mathbf{p}_\text{model}$
-- camera matrix $\mathbf{p}_\text{world} = {}_\text{world} \mathbf{A}_\text{camera} \ \mathbf{p}_\text{camera}$
+<b>sidenote:</b> sometimes $\mathbf{VM}$ is called the <i>model-view</i> matrix (reading right to left)
+- note $\mathbf{p}_\text{camera} = \mathbf{VM}\mathbf{p}_\text{model}$
 
-<hr>
-<b>reading. $\mathbf{V}$</b>
+
+<b>sidenote:</b> instead of writing $\mathbf{M}, \mathbf{C}, \mathbf{V}, \mathbf{P}$, we could adopt a more explicit notation using left and right subscripts, where the $\mathbf{F}$ is read as "from"
+
+- model matrix ${}_\text{world}\mathbf{F}_\text{model} $, where $\mathbf{p}_\text{world} = {}_\text{world}\mathbf{F}_\text{model}  \ \mathbf{p}_\text{model}$
+- camera matrix ${}_\text{world}\mathbf{F}_\text{camera}$, where $\mathbf{p}_\text{world} = {}_\text{world}\mathbf{F}_\text{camera} \ \mathbf{p}_\text{camera}$
+- view matrix ${}_\text{camera}\mathbf{F}_\text{world}$, where $\mathbf{p}_\text{camera} = {}_\text{camera}\mathbf{F}_\text{world} \ \mathbf{p}_\text{world}$
+- projection matrix ${}_\text{NDC}\mathbf{F}_\text{camera}  $, where $\mathbf{p}_\text{NDC} = {}_\text{NDC}\mathbf{F}_\text{camera}   \ \mathbf{p}_\text{camera}$
+
+in this notation, it is clear that, e.g., $\mathbf{p}_\text{NDC} = {}_\text{NDC}\mathbf{F}_\text{camera} \ {}_\text{camera}\mathbf{F}_\text{world} \ {}_\text{world}\mathbf{F}_\text{model} \ \mathbf{p}_\text{model}$
+
+in code you could write <code>mat4 NDC_from_camera;</code>, etc.
 
 <hr>
 <b>a. mini world</b>
