@@ -112,11 +112,48 @@ in code you could write <code>mat4 NDC_from_camera;</code>, etc.
 <hr>
 <b>a. mini world</b>
 
+compute $\mathbf{C}$ for the various cameras
+- complete <code>orbit_camera_get_C(...)</code>
+- complete <code>fps_camera_get_C(...)</code>
+- complete <code>tracking_camera_get_C(...)</code>
+- complete <code>arbitrary_camera_get_C(...)</code>
 
+implement controls for the various camera
+- complete <code>orbit_camera_move(...)</code>
+- complete <code>fps_camera_move(...)</code>
+- complete <code>arbitrary_camera_move(...)</code>
+- complete <code>draw_basic_box_with_fake_shadows(...)</code>
 
+implement shadows in <code>draw_basic_box_with_fake_shadows</code>
 
+creative coding (choose 2+ of the following suggestions or equivalent)
+- add your bouncy castle from hw03
+- let the human sprint (run faster) when holding shift
+- let the human jump with the spacebar
+- let the human shoot bullets with the left mouse
+- make the tracking camera shoot bullets automatically
+- let the plane shoot rockets with the left mouse; the rockets could explode on impact with the ground?
+- add an AI to make the human walk when <code>selected_camera != HUMAN_CAMERA</code>
+- add an AI to make the plane fly around when <code>selected_camera != PLANE_CAMERA</code>
+- add mesh(es) for the human
+- add mesh(es) for the plane (with a spinning propellor?)
+- add mesh(es) for the tracking camera (eye of sauron?)
+- let the human jump onto obstacles (implement box-box collisions)
 
-
+<!--
+   NOTE: my answer to this question is one line.
+<code>human->origin += .01 * humansForwardVectorInWorldCoordinates;</code></details>
+   NOTE: in this question, you are recreating (most of) the camera controls i shipped with cow (Camera3D). it should zoom in and out when you move (roll?) the mouse wheel, and rotate appropriately when you left click and drag 👍
+   NOTE: pressing W should move you in the direction you are facing; 
+   <details><summary>HINT</summary><code>vec3 humansForwardVectorInWorldCoordinates = transformVector(RotationY(human->theta), V3(0, 0, -1));</code>
+   </details>
+   NOTE: "strafing" means moving left/right in your coordinate system (i.e., side stepping)
+   <details><summary>HINT</summary>
+<code>human->origin += .01 * humansForwardVectorInWorldCoordinates;</code></details>
+   NOTE: you should move in the direction you are facing
+   NOTE: alpha of 0 is fully transparent, alpha of 1 is fully opaque
+   NOTE: we are assuming a directional light source from the sun directly over head (i.e. all rays of light are going straight down)
+-->
 
 
 
