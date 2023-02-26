@@ -23,12 +23,12 @@
 <b>non-optional reading. coordinate systems</b>
 
 a coordinate system is an x-axis $\mathbf{\hat x}$, a y-axis $\mathbf{\hat y}$, a z-axis $\mathbf{\hat z}$, and an origin $\mathbf{o}$
+note that here it is implied that the quantities $\mathbf{\hat x}, \mathbf{\hat y}, \mathbf{\hat z}, \mathbf{o}$ are written <i>in world coordinates</i>
+
 the axes are unit vectors and the origin is a point
 in homogeneous coordinates, it is convenient to pack a coordinate system into a 4x4 matrix like this
 
 $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
-
-note that here it is implied that the quantities $\mathbf{\hat x}, \mathbf{\hat y}, \mathbf{\hat z}, \mathbf{o}$ are written <i>in world coordinates</i>
 
 
 consider a point <i>written in coordinate system $\mathbf{C}$</i> as $\mathbf{p_C} = (x_\mathbf{C}, y_\mathbf{C}, z_\mathbf{C})^T$
