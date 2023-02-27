@@ -149,7 +149,7 @@ in code you could write <code>mat4 NDC_from_camera;</code>, etc.
 
 <b>note:</b> i expect questions marked with a * to be substantially trickier
 <b>note:</b> when i say, e.g., "exactly like Camera3D," i mean that the actions of clicking and dragging the mouse (left/right/down/up) as well as scrolling the mouse wheel or trackpad (down/up) should have the same result
-- don't forget to check extreme cases!--what happens if you zoom in real far?--what happens if you drag really far down?
+- don't forget to check extreme cases!--what happens if you zoom in real far?--what happens if you drag down really far?
 
 <details><summary>HINT (what to expect)</summary>
 - correct answers can be *short* :)
@@ -167,7 +167,7 @@ globals.mouse_change_in_position_NDC
 globals.mouse_wheel_offset
 normalized(...)
 transformVector(...)</code></details>
-<hr color="blue">
+<hr color="lightblue">
 <b>i. compute $\mathbf{C}$ for the various cameras</b> (more details in the code)
 - complete <code>orbit_camera_get_C(...)</code>
 - complete <code>fps_camera_get_C(...)</code>
