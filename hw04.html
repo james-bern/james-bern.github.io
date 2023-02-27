@@ -25,8 +25,12 @@
 
 a coordinate system is an x-axis $\mathbf{\hat x}$, a y-axis $\mathbf{\hat y}$, a z-axis $\mathbf{\hat z}$, and an origin $\mathbf{o}$
 the axes are vectors and the origin is a point
+
 <b>note:</b> here it is implied that the quantities $\mathbf{\hat x}, \mathbf{\hat y}, \mathbf{\hat z}, \mathbf{o}$ are written <i>in world coordinates</i>
+- they have to be written in something!
+
 <b>note:</b> *unlike the slides from class*, here it is implied that everything is written in homogeneous coordinates
+- this makes the derivation way cleaner
 
 
 it is convenient to pack a coordinate system into a 4x4 matrix like this
@@ -83,16 +87,9 @@ there are a few special matrices that we give names
    i.e., $\begin{bmatrix}\mathbf{R}\text{diag}(\mathbf{s}) & \mathbf{t} \\ \mathbf{0}^T & 1\end{bmatrix}$
 
 <b>camera matrix</b> $\mathbf{C}$
-<<<<<<< HEAD
 - the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \end{bmatrix}$
 - the camera matrix takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
 - we can also see a (typical) camera matrix as a rotation followed by a translation $\begin{bmatrix}\mathbf{R} & \mathbf{t} \\ 0 & 1 \end{bmatrix}$
-=======
-- the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix
-  $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
-- as such, it takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
-- deriving a camera matrix is fun! :)
->>>>>>> d9fec5fa833c4e527488c89e1a78c46cab4be953
 
 <b>view matrix</b> $\mathbf{V} = \mathbf{C}^{-1}$
 - the view matrix is the inverse of the camera matrix
