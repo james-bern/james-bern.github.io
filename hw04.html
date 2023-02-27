@@ -47,7 +47,7 @@ to do this in code, you could call <code>mat4 M4_xyzo(vec3 x, vec3 y, vec3 z, ve
 
 consider a point <i>written in coordinate system $\mathbf{C}$</i> as $\mathbf{p_C} = (x_\mathbf{C}, y_\mathbf{C}, z_\mathbf{C}, 1)^T$
 note that $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p_C} = \mathbf{o} + x_\mathbf{C} \mathbf{\hat x} + y_\mathbf{C} \mathbf{\hat y} + z_\mathbf{C} \mathbf{\hat z}$
-i.e., we start at the origin $\mathbf{o}$ and then walk along each axes by the prescribed amounts (just like plotting in Algebra 1)
+i.e., we start at the origin $\mathbf{o}$ and then walk along each axes by the prescribed amounts (just like plotting points in Algebra 1)
 to do this in code, you could call <code>vec3 transformPoint(mat4 C, vec3 p_C);</code>
 
 
