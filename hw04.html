@@ -74,7 +74,7 @@ there are a few special matrices that we give names
 - the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix
   $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
 - as such, it takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
-- deriving a camera matrix is fun! write down the axes and origin and pack them into a matrix :)
+- deriving a camera matrix is fun! :)
 
 <b>view matrix</b> $\mathbf{V} = \mathbf{C}^{-1}$
 - the view matrix is just the inverse of the camera matrix
