@@ -83,9 +83,16 @@ there are a few special matrices that we give names
    i.e., $\begin{bmatrix}\mathbf{R}\text{diag}(\mathbf{s}) & \mathbf{t} \\ \mathbf{0}^T & 1\end{bmatrix}$
 
 <b>camera matrix</b> $\mathbf{C}$
+<<<<<<< HEAD
 - the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \end{bmatrix}$
 - the camera matrix takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
 - we can also see a (typical) camera matrix as a rotation followed by a translation $\begin{bmatrix}\mathbf{R} & \mathbf{t} \\ 0 & 1 \end{bmatrix}$
+=======
+- the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix
+  $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
+- as such, it takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
+- deriving a camera matrix is fun! :)
+>>>>>>> d9fec5fa833c4e527488c89e1a78c46cab4be953
 
 <b>view matrix</b> $\mathbf{V} = \mathbf{C}^{-1}$
 - the view matrix is the inverse of the camera matrix
@@ -152,7 +159,7 @@ transformVector(...)</code></details>
 
 complete <code>draw_basic_box_with_fake_shadows(...) // should look like the sun is directly overhead</code>
 
-creative coding (choose 4+ of the following suggestions or equivalent)
+creative coding (choose 3+ of the following suggestions or equivalent)
 - add your bouncy castle from hw03
 - let the human sprint (run faster) when holding shift
 - let the human jump with the spacebar
