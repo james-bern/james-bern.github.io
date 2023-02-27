@@ -60,6 +60,8 @@ there are a few special coordinate systems that we give names
 <b>normalized device coordinates (NDC)</b>
 - when OpenGL actually draws, it assumes vertices are in NDC
 - the lower left is $(-1.0, -1.0)^T$ and the upper right is $(1.0, 1.0)^T$
+- this is a useful coordinate system for getting mouse movement!
+-- <code>globals.mouse_change_in_position_NDC</code> is <code>vec2</code> that tells you how far the user just moved their mouse in NDC!
 
 <hr color="lightblue">
 there are a few special matrices that we give names
@@ -67,22 +69,21 @@ there are a few special matrices that we give names
 <b>model matrix</b> $\mathbf{M}$
 - it takes us to world coordinates <i>from</i> model coordinates, i.e. $\mathbf{p}_\text{world} = \mathbf{M}\mathbf{p}_\text{model}$
 - a convenient way to build a model matrix is as $\mathbf{TRS}$
--- this is a 3D scaling by $\mathbf{s}$, followed by a 3D rotation $\mathbf{R}_\text{3x3}$, followed by a 3D translation by $\mathbf{t}$
-  $\mathbf{TRS} = \begin{bmatrix}\mathbf{R}_{\text{3x3}}\text{diag}(\mathbf{s}) & \mathbf{t} \\ \mathbf{0}^T & 1\end{bmatrix}$
+-- this is a 3D scaling by $\mathbf{s}$, followed by a 3D rotation $\mathbf{R}$, followed by a 3D translation by $\mathbf{t}$
+   i.e., $\begin{bmatrix}\mathbf{R}\text{diag}(\mathbf{s}) & \mathbf{t} \\ \mathbf{0}^T & 1\end{bmatrix}$
 
 <b>camera matrix</b> $\mathbf{C}$
 - the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix
   $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
-- as such, it takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
-- deriving a camera matrix is fun! write down the axes and origin and pack them into a matrix :)
+- the camera matrix takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
+- note we can also see a camera matrix as a rotation followed by a translation $\begin{bmatrix}\mathbf{R} & \mathbf{t} \\ 0 & 1 \end{bmatrix}$
 
 <b>view matrix</b> $\mathbf{V} = \mathbf{C}^{-1}$
-- the view matrix is just the inverse of the camera matrix
-- as such, it takes us to camera coordinates <i>from</i> world coordinates, i.e., $\mathbf{p}_\text{camera} = \mathbf{V}\mathbf{p}_\text{world}$
+- the view matrix is the inverse of the camera matrix
+- the view matrix takes us to camera coordinates <i>from</i> world coordinates, i.e., $\mathbf{p}_\text{camera} = \mathbf{V}\mathbf{p}_\text{world}$
 
 <b>projection matrix</b> $\mathbf{P}$
 - the projection matrix takes us to NDC <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{NDC} = \mathbf{P}\mathbf{p}_\text{camera}$
-- deriving a projection matrix is a bit tricky; we will go over it in class; you will NOT have to do it on this homework
 
 <b>"transform"</b> $\mathbf{PVM}$
 - it takes us alllll the way to NDC <i>from</i> model coordinates
@@ -93,11 +94,11 @@ there are a few special matrices that we give names
 - the lower left is $(0, 0)^T$ and the upper right is $(W, H)^T,$ where $W$ and $H$ are the screen width and height in pixels
 
 
-<b>sidenote:</b> sometimes $\mathbf{VM}$ is called the <i>model-view</i> matrix (reading right to left)
+<b>sidenote:</b> $\mathbf{VM}$ is sometimes called the <i>model-view</i> matrix (reading right to left)
 - note $\mathbf{p}_\text{camera} = \mathbf{VM}\mathbf{p}_\text{model}$
 
 
-<b>sidenote:</b> instead of writing $\mathbf{M}, \mathbf{C}, \mathbf{V}, \mathbf{P}$, we could adopt a more explicit notation using left and right subscripts, where the $\mathbf{F}$ is read as "from"
+<b>sidenote:</b> instead of writing $\mathbf{M}, \mathbf{C}, \mathbf{V}, \mathbf{P}$, we could adopt a more explicit and general-purpose notation using left and right subscripts, where the $\mathbf{F}$ is read as "from"
 
 - model matrix ${}_\text{world}\mathbf{F}_\text{model} $, where $\mathbf{p}_\text{world} = {}_\text{world}\mathbf{F}_\text{model}  \ \mathbf{p}_\text{model}$
 - camera matrix ${}_\text{world}\mathbf{F}_\text{camera}$, where $\mathbf{p}_\text{world} = {}_\text{world}\mathbf{F}_\text{camera} \ \mathbf{p}_\text{camera}$
@@ -123,9 +124,17 @@ implement controls for the various camera (more details in code)
 - complete <code>arbitrary_camera_move(...) // should feel like you're flying a plane (ish)</code>
 
 
+<details><summary>HINT (what to expect)</summary>
+- correct answers can be *short* :)
+- the <code>M4_*(...)</code> functions are your friends here
+- and <code>transformVector(...)</code> can be nice too
+- take your time to make the controls feel good (what happens when you zoom in a lot, what about corner cases, etc.)
+</details>
 <details><summary>HINT (useful functions and fields)</summary>
 <code class="x">CLAMP(...)
 cross(...)
+M4_Translation(...)
+M4_Rotation*(...)
 M4_xyzo(...)
 globals.mouse_change_in_position_NDC
 globals.mouse_wheel_offset
