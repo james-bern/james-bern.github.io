@@ -22,30 +22,40 @@
 <hr>
 <b>non-optional reading. coordinate systems</b>
 
+
 a coordinate system is an x-axis $\mathbf{\hat x}$, a y-axis $\mathbf{\hat y}$, a z-axis $\mathbf{\hat z}$, and an origin $\mathbf{o}$
-note that here it is implied that the quantities $\mathbf{\hat x}, \mathbf{\hat y}, \mathbf{\hat z}, \mathbf{o}$ are written <i>in world coordinates</i>
-
-the axes are unit vectors and the origin is a point
-in homogeneous coordinates, it is convenient to pack a coordinate system into a 4x4 matrix like this
-
-$\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
+the axes are vectors and the origin is a point
+<b>note:</b> it is implied that the quantities $\mathbf{\hat x}, \mathbf{\hat y}, \mathbf{\hat z}, \mathbf{o}$ are written <i>in world coordinates</i>
+<b>note:</b> it is implied that everything in this reading is written in homogeneous coordinates
 
 
-consider a point <i>written in coordinate system $\mathbf{C}$</i> as $\mathbf{p_C} = (x_\mathbf{C}, y_\mathbf{C}, z_\mathbf{C})^T$
-by definiton of a coordinate system, $\mathbf{p}_\text{world} = \mathbf{C}\begin{bmatrix}\mathbf{p_C}\\1\end{bmatrix}$
+it is convenient to pack a coordinate system into a 4x4 matrix like this
+$\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \end{bmatrix}
+= \begin{bmatrix}
+{\hat x}_x & {\hat y}_x & {\hat z}_x & {o}_x \\
+{\hat x}_y & {\hat y}_y & {\hat z}_y & {o}_y \\
+{\hat x}_z & {\hat y}_z & {\hat z}_z & {o}_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}$
+to do this in code, you could call <code>mat4 M4_xyzo(vec3 x, vec3 y, vec3 z, vec3 o);</code>
+<b>note:</b> observe that the world coordinate system (in world coordinates) is the 4x4 identity matrix
 
-to see why, note that $\mathbf{C}\mathbf{p_C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}\begin{bmatrix}x_\mathbf{C}\\y_\mathbf{C}\\z_\mathbf{C}\\1\end{bmatrix} = \mathbf{o} + x_\mathbf{C} \mathbf{\hat x} + y_\mathbf{C} \mathbf{\hat y} + z_\mathbf{C} \mathbf{\hat z}$
-i.e., we start at the origin $\mathbf{o}$ and then walk along the axes by the prescribed amounts (just like plotting in Algebra 2)
+
+consider a point <i>written in coordinate system $\mathbf{C}$</i> as $\mathbf{p_C} = (x_\mathbf{C}, y_\mathbf{C}, z_\mathbf{C}, 1)^T$
+note that $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p_C} = \mathbf{o} + x_\mathbf{C} \mathbf{\hat x} + y_\mathbf{C} \mathbf{\hat y} + z_\mathbf{C} \mathbf{\hat z}$
+i.e., we start at the origin $\mathbf{o}$ and then walk along each axes by the prescribed amounts (just like plotting in Algebra 1)
+to do this in code, you could call <code>vec3 transformPoint(mat4 C, vec3 p_C);</code>
 
 
-a similar fact is true for vectors; $\mathbf{v}_\text{world} = \mathbf{C}\begin{bmatrix}\mathbf{v_C}\\0\end{bmatrix}$
+a similar fact is true for vectors; considering vector $\mathbf{v_C}$ written in coordinate system $\mathbf{C}$, we have $\mathbf{v}_\text{world} = \mathbf{C}\mathbf{v_C}$
+to do this in code, you could call <code>vec3 transformVector(mat4 C, vec3 v_C);</code>
 
 <hr color="lightblue">
 there are a few special coordinate systems that we give names
 
 <b>model coordinates</b> (aka modeling coordinates, aka object coordinates)
 - this is the coordinate system of a single mesh
--- when you are modeling in Blender, you're working in model coordinates
+-- if you ever sculpt/model in Blender or zBrush, you're working in model coordinates
 -- when you were scripting up the cylinder by hand, you were working in model coordinates
 
 <b>camera coordinates</b>
@@ -60,23 +70,22 @@ there are a few special coordinate systems that we give names
 <b>normalized device coordinates (NDC)</b>
 - when OpenGL actually draws, it assumes vertices are in NDC
 - the lower left is $(-1.0, -1.0)^T$ and the upper right is $(1.0, 1.0)^T$
-- this is a useful coordinate system for getting mouse movement!
--- <code>globals.mouse_change_in_position_NDC</code> is <code>vec2</code> that tells you how far the user just moved their mouse in NDC!
+- this is a very useful coordinate system for getting (usefully scaled) mouse movement!
+-- <code>globals.mouse_change_in_position_NDC</code> is a <code>vec2</code> telling you how far the user moved their mouse since the last frame (in NDC!)
 
 <hr color="lightblue">
 there are a few special matrices that we give names
 
 <b>model matrix</b> $\mathbf{M}$
 - it takes us to world coordinates <i>from</i> model coordinates, i.e. $\mathbf{p}_\text{world} = \mathbf{M}\mathbf{p}_\text{model}$
-- a convenient way to build a model matrix is as $\mathbf{TRS}$
+- a convenient way to build a model matrix is $\mathbf{TRS}$
 -- this is a 3D scaling by $\mathbf{s}$, followed by a 3D rotation $\mathbf{R}$, followed by a 3D translation by $\mathbf{t}$
    i.e., $\begin{bmatrix}\mathbf{R}\text{diag}(\mathbf{s}) & \mathbf{t} \\ \mathbf{0}^T & 1\end{bmatrix}$
 
 <b>camera matrix</b> $\mathbf{C}$
-- the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix
-  $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \\ 0 & 0 & 0 & 1 \end{bmatrix}$
+- the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \end{bmatrix}$
 - the camera matrix takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
-- note we can also see a camera matrix as a rotation followed by a translation $\begin{bmatrix}\mathbf{R} & \mathbf{t} \\ 0 & 1 \end{bmatrix}$
+- we can also see a (typical) camera matrix as a rotation followed by a translation $\begin{bmatrix}\mathbf{R} & \mathbf{t} \\ 0 & 1 \end{bmatrix}$
 
 <b>view matrix</b> $\mathbf{V} = \mathbf{C}^{-1}$
 - the view matrix is the inverse of the camera matrix
