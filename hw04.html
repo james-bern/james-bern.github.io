@@ -103,6 +103,28 @@ there are a few special matrices that we give names
 - <code>soup_draw(mat4 PVM, ...);</code> takes this
 
 <hr color="lightblue">
+special camera matrix constructions sometimes sort of get names
+- you're welcome to google (e.g. "orbit camera graphics") for help, but please first try them without googling
+-- all of these cameras can be figured out from first principles (i.e., that a camera points along its negative z-axis)
+--- also a little trial and error
+
+i call the <code>ORBIT_CAMERA</code> an <code>OrbitCamera</code>
+- it always points at the world origin
+- it has a notion of the world y-axis being "up"
+
+i call the <code>HUMAN_CAMERA</code> an <code>FPSCamera</code> (first person shooter camera)
+- it has a notion of where the payer is standing
+- it has a notion of the world y-axis being "up"
+ 
+i call the <code>TRACK_CAMERA</code> a <code>TrackingCamera</code>, but it is more typically known as a "lookAt" camera (after some long forgotten function in an old OpenGL helper library)
+- it "looks at" a target
+- it has a notion of the world y-axis being "up"
+ 
+i call the <code>PLANE_CAMERA</code> an <code>ArbitraryCamera</code>
+- by this i just mean that we specify the rotation and translation directly (the consturction really isn't much)
+-- for (very inefficient) convenience, we'll specify the rotation as a <code>mat4</code>
+
+<hr color="lightblue">
 <b>sidenote:</b> sometimes we talk about <i>pixel coordinates</i> (especially when writing a GUI)
 - the lower left is $(0, 0)^T$ and the upper right is $(W, H)^T,$ where $W$ and $H$ are the screen width and height in pixels
 
@@ -125,25 +147,15 @@ in code you could write <code>mat4 NDC_from_camera;</code>, etc.
 <hr color="black">
 <b>a. mini world</b>
 
-note: i expect questions marked with a * to be substantially trickier
-
-compute $\mathbf{C}$ for the various cameras
-- complete <code>orbit_camera_get_C(...)</code>
-- complete <code>fps_camera_get_C(...)</code>
-* complete <code>tracking_camera_get_C(...)</code>
-- complete <code>arbitrary_camera_get_C(...)</code>
-
-implement controls for the various camera (more details in code)
-- complete <code>orbit_camera_move(...)     // should feel ~exactly like Camera3D</code>
-* complete <code>fps_camera_move(...)       // should feel ~exactly like MineCraft</code>
-* complete <code>arbitrary_camera_move(...) // should feel like you're flying a plane (ish)</code>
-
+<b>note:</b> i expect questions marked with a * to be substantially trickier
+<b>note:</b> when i say, e.g., "exactly like Camera3D," i mean that the actions of clicking and dragging the mouse (left/right/down/up) as well as scrolling the mouse wheel or trackpad (down/up) should have the same result
+- don't forget to check extreme cases!--what happens if you zoom in real far?--what happens if you drag really far down?
 
 <details><summary>HINT (what to expect)</summary>
 - correct answers can be *short* :)
 - the <code>M4_*(...)</code> functions are your friends here
 - and <code>transformVector(...)</code> can be nice too
-- take your time to make the controls feel good (what happens when you zoom in a lot, what about corner cases, etc.)
+- take your time to make the controls feel good (check extreme cases!--what happens when you zoom really far, drag the mouse really far down, etc.)
 </details>
 <details><summary>HINT (useful functions and fields)</summary>
 <code class="x">CLAMP(...)
@@ -155,10 +167,21 @@ globals.mouse_change_in_position_NDC
 globals.mouse_wheel_offset
 normalized(...)
 transformVector(...)</code></details>
+<hr color="orange">
+<b>i. compute $\mathbf{C}$ for the various cameras</b> (more details in the code)
+- complete <code>orbit_camera_get_C(...)</code>
+- complete <code>fps_camera_get_C(...)</code>
+* complete <code>tracking_camera_get_C(...)</code>
+- complete <code>arbitrary_camera_get_C(...)</code>
 
-* complete <code>draw_basic_box_with_fake_shadows(...) // should look like the sun is directly overhead</code>
+<b>ii. implement controls for the various camera</b> (more details in the code)
+- complete <code>orbit_camera_move(...)     // should feel ~exactly like Camera3D</code>
+* complete <code>fps_camera_move(...)       // should feel ~exactly like MineCraft</code>
+* complete <code>arbitrary_camera_move(...) // should feel like you're flying a plane (ish)</code>
 
-creative coding (choose 3+ of the following suggestions or equivalent)
+<b>iii. complete</b> <code>draw_basic_box_with_fake_shadows(...) // should look like the sun is directly overhead</code>
+
+<b>iv. creative coding</b> (choose 3+ of the following suggestions or equivalent)
 - add your bouncy castle from hw03
 - let the human sprint (run faster) when holding shift
 - let the human jump with the spacebar
@@ -174,6 +197,8 @@ creative coding (choose 3+ of the following suggestions or equivalent)
 
 <hr color="black">note: emoji problems are extra credit and are *not* required to get an A on this homework<hr color="black">
 <b>🎱. the arcball</b> Implement the matrix-version (_not_ quaternions, unless you really want to) of the rather interesting arcball camera controls. Explanation is in Section 2 <a href="http://courses.cms.caltech.edu/cs171/assignments/hw3/hw3-notes/notes-hw3.html">here</a>.
+
+<b>note:</b> the arcball is an "arbitrary camera" with no translation; it has NO notion of the world y-axis being "up"
 
 <!--
    NOTE: my answer to this question is one line.
