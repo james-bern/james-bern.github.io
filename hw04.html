@@ -118,6 +118,7 @@ i call the <code>HUMAN_CAMERA</code> an <code>FPSCamera</code> (first person sho
 - it has a notion of the world y-axis being "up"
  
 i call the <code>TRACK_CAMERA</code> a <code>TrackingCamera</code>, but it is more typically known as a "lookAt" camera (after some long forgotten function in an old OpenGL helper library)
+- its origin is at a fixed position in space (never changes)
 - it "looks at" a target (note that internally <code>TrackingCamera</code> stores this target as a pointer; you can just dereference this pointer and use it inside of <code>get_C</code>)
 - it has a notion of the world y-axis being "up"
  
