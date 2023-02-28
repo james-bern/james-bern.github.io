@@ -90,6 +90,7 @@ there are a few special matrices that we give names
 - the camera matrix is the camera's axes and origin packed into a 4x4 homogeneous matrix $\mathbf{C} = \begin{bmatrix}\mathbf{\hat x} & \mathbf{\hat y} & \mathbf{\hat z} & \mathbf{o} \end{bmatrix}$
 - the camera matrix takes us to world coordinates <i>from</i> camera coordinates, i.e., $\mathbf{p}_\text{world} = \mathbf{C}\mathbf{p}_\text{camera}$
 - we can also see a (typical) camera matrix as a rotation followed by a translation $\begin{bmatrix}\mathbf{R} & \mathbf{t} \\ 0 & 1 \end{bmatrix}$
+-- this is NOT how we'll build all the cameras in this homework!
 
 <b>view matrix</b> $\mathbf{V} = \mathbf{C}^{-1}$
 - the view matrix is the inverse of the camera matrix
