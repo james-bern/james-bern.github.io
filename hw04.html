@@ -150,7 +150,7 @@ in code you could write <code>mat4 NDC_from_camera;</code>, etc.
 <b>a. mini world</b>
 
 <b>note:</b> i expect questions marked with a * to be substantially trickier
-<b>note:</b> when i say, e.g., "exactly like Camera3D," i mean that the actions of clicking and dragging the mouse (left/right/down/up) as well as scrolling the mouse wheel or trackpad (down/up) should have the same result
+<b>note:</b> when i say, e.g., "very similar to MineCraft," i mean that the mouse controls (in this case, moving the mouse) should "feel" the same
 - don't forget to check extreme cases!--what happens if you zoom in real far?--what happens if you drag down really far?
 
 <details><summary>HINT (what to expect)</summary>
@@ -177,7 +177,7 @@ transformVector(...)</code></details>
 - complete <code>arbitrary_camera_get_C(...)</code>
 
 <b>ii. implement controls for the various camera</b> (more details in the code)
-- complete <code>orbit_camera_move(...)     // should feel ~exactly like Camera3D</code>
+- complete <code>orbit_camera_move(...)     // should feel very similar to Camera3D</code> (except that the world origin should remain in the exact center of your screen--i.e. we have no notion of offsetting the origin)
 * complete <code>fps_camera_move(...)       // should feel ~exactly like MineCraft</code>
 * complete <code>arbitrary_camera_move(...) // should feel like you're flying a plane (ish)</code>
 
