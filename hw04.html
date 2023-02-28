@@ -156,8 +156,13 @@ in code you could write <code>mat4 NDC_from_camera;</code>, etc.
 
 <details><summary>HINT (what to expect)</summary>
 - correct answers can be *short* :)
+
 - the <code>M4_*(...)</code> functions are your friends here
-- and <code>transformVector(...)</code> can be nice too, but is less crucial
+-- you can think about, e.g. <code>M4_RotationAboutXAxis(alpha)</code> as being $\mathbf{R}^{x}_{\alpha} = \mathbf{R}^{x}_{\alpha} \mathbf{I}$
+--- i.e. our construction starts with the camera matrix being the identity (origin at the world origin, axes at the world axes) and then rotates this coordinate system about the world x-axis by angle $\alpha$
+
+- <code>transformVector(...)</code> can be nice too, but is less crucial
+
 - take your time to make the controls feel good (check extreme cases!--what happens when you zoom really far, drag the mouse really far down, etc.)
 </details>
 <details><summary>HINT (useful functions and fields)</summary>
