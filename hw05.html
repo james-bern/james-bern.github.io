@@ -31,7 +31,9 @@ for j
 <hr color="black">
 <b>a. software rasterizer</b>
 
-<b>note:</b> i expect parts marked with a * to be substantially trickier
+
+<b>note:</b> this homework is hard.
+
 
 <details><summary>HINT (what to expect)</summary>
  - a correct solution should be relatively short; my real-time bunny solution to <code>rasterize(...)</code> is only about 60 lines
@@ -41,6 +43,7 @@ for j
 - ✨ <code>transformPoint(...)</code> is your friend :)
 
 </details>
+
 <details><summary>HINT (possibly useful functions and fields)</summary>
 <code class="x">inverse(...)
 INVERSE_LERP(...)
@@ -50,9 +53,10 @@ real(...) // just a cast
 texture_set_pixel(...)
 texture_get_pixel(...)
 transformPoint(...)</code></details>
+
 <hr color="lightblue">
 
-<b>note:</b> for this problem, we will be working entirely inside of the <code>rasterize(...)</code> function
+<b>note:</b> we will be working entirely inside of the <code>rasterize(...)</code> function
 find your way on in there now
 note that it is totally empty
 ohno D:
@@ -87,23 +91,37 @@ on the bright side i've already got the color and depth buffers all set up for y
 <b>ii. rasterize the triangles without worrying about color</b> (e.g., draw them all blue)
 - this would be a good time to refresh yourself on the <code>IndexedTriangleMesh3D</code>
 
+
 <b>iii. add color</b> (according to mesh->vertex_colors)
 
+
 <b>iv. implement depth testing (z buffering)</b>
-- verify that the overlap is correct
-- again, you can press Z to toggle viewing the color buffer and the depth buffer
+
+- the near and far clip planes are at $z_\text{near}$ and $z_\text{far}$ respectively
+
+- verify that the overlap in the example mesh is correct
+-- again, you can press Z to toggle viewing the color buffer and the depth buffer
+
 
 <b>v. get the bunny drawing (slowly)</b> (more details in the code)
 - the bunny mesh doesn't include vertex_colors by default
 -- instead, please use the formula $(0.5, 0.5, 0.5)^T + 0.5 * \hat{\mathbf{n}}$ to calculate a vertex's color, where $\hat{\mathbf{n}}$ is that vertex's normal in model coordinates
 - make sure you take into account the model matrix $\mathbf{M}$ if you ignored it before (for the first example mesh, it was the identity)
 
+
 <b>vi. make the rasterizer FAST(er)</b>
 - real-time should be fairly easy (ish) :)
 
-<b>vii. creative coding</b> (choose 0+ of the following suggestions or equivalent)
 
-<b>✂. clipping</b> (choose 0+ of the following suggestions or equivalent)
+<b>(optional) vii. creative coding</b>
+- first, for some inspo, try moving the film plane *behind* the bunny. ooh.
+- now, inside of the <code>if (playing) { ... }</code> curly braces, script up some neat camera moves and such that showcase the good and bad parts of the rasterizer
+
+
+<b>✂. clipping</b>
+- code up something similar to the "external triangle" example in this <a href="http://simonstechblog.blogspot.com/2012/04/software-rasterizer-part-1.html">blog post</a> and verify it breaks our rasterizer :(
+- fix it (i.e., add clipping inside of <code>rasterize(...)</code>, in whatever coordiante system you like) :)
+
 
 <hr color="black">
 <b>b. sky box</b>
