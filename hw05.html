@@ -1,0 +1,90 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" href="csci-371.css">
+</head><body><div class="content">
+
+<a href="csci-371.html"><b><- back</b></a><!--<button onClick="window.print()" style="float:right;">print this page</button>-->
+
+<center><b>hw05</b>
+<a href="https://docs.google.com/spreadsheets/d/1WaJkilThuOXpyYGPvUCOo2pz12IhGobCWyKco-HACGY/edit?usp=sharing">help hours</a> | <a href="https://github.com/james-bern/CSCI-371">codebase</a> | <a href="https://github.com/james-bern/CSCI-371/wiki">docs</a> | <a href="notes.html">notes</a> | <a href="https://glow.williams.edu/courses/3619655">glow</a>
+</center>
+<hr color="black">🚨 please pull a fresh copy of the codebase before starting this homework!--it has the starter code in main.cpp :)
+🗣️ you are highly encouraged to collaborate on homework provided you follow the spirit of the <a href="http://courses.cms.caltech.edu/cs171/materials/pdfs/50ft_policy.pdf">50 ft rule</a>
+👥 additionally, for this lab you may optionally choose to work with a partner
+- only one of you is required to submit on glow (please add a glow comment saying who your partner is)
+<hr color="black">
+<b>goals.</b>
+
+- understand rasterization
+- get more experience extending a program from "one -> many"
+
+<hr color="black">
+<b>non-optional reading. rasterization</b>
+
+
+<hr color="black">
+<b>a. software rasterizer</b>
+
+<b>note:</b> i expect parts marked with a * to be substantially trickier
+
+<details><summary>HINT (what to expect)</summary>
+- correct answers can be *short* :)
+
+- 🚨 you should NOT have to call trig functions directly (unless you want to) -- my solution never calls sin or cos
+
+- ✨ the <code>M4_*(...)</code> functions are your friends here
+-- you can think about, e.g. <code>M4_RotationAboutXAxis(alpha)</code> as being $\mathbf{R}^{x}_{\alpha} = \mathbf{R}^{x}_{\alpha} \mathbf{I}$
+--- i.e. our construction starts with the camera matrix being the identity (origin at the world origin, axes at the world axes) and then rotates this coordinate system about the world x-axis by angle $\alpha$
+
+- <code>transformVector(...)</code> can be nice too, but is less crucial
+
+- take your time to make the controls feel good (check extreme cases!--what happens when you zoom really far, drag the mouse really far down, etc.)
+</details>
+<details><summary>HINT (useful functions and fields)</summary>
+<code class="x">CLAMP(...)
+cross(...)
+M4_Translation(...)
+M4_Rotation*(...)
+M4_xyzo(...)
+globals.mouse_change_in_position_NDC
+globals.mouse_wheel_offset
+normalized(...)
+transformVector(...)</code></details>
+<hr color="lightblue">
+<b>i. compute $\mathbf{C}$ for the various cameras</b> (more details in the code)
+- complete <code>orbit_camera_get_C(...)</code>
+- complete <code>fps_camera_get_C(...)</code>
+* complete <code>tracking_camera_get_C(...)</code>
+- complete <code>arbitrary_camera_get_C(...)</code>
+
+<b>ii. impleent controls for the various camera</b> (more details in the code)
+- complete <code>orbit_camera_move(...)     // should feel very similar to Camera3D</code> (except that the world origin should remain in the exact center of your screen--i.e. we have no notion of offsetting the origin)
+* complete <code>fps_camera_move(...)       // should feel ~exactly like MineCraft</code>
+* complete <code>arbitrary_camera_move(...) // should feel like you're flying a plane (ish)</code>
+
+<b>iii. complete</b> <code>draw_basic_box_with_fake_shadows(...) // should look like the sun is directly overhead</code>
+
+<b>iv. creative coding</b> (choose 3+ of the following suggestions or equivalent)
+- add your bouncy castle from hw03
+- let the human sprint (run faster) when holding shift
+- let the human jump with the spacebar
+* let the human shoot bullets with the left mouse
+* make the tracking camera shoot bullets automatically
+* let the plane shoot rockets with the left mouse; the rockets could explode on impact with the ground?
+* add an AI to make the human walk when <code>selected_camera != HUMAN_CAMERA</code>
+* add an AI to make the plane fly around when <code>selected_camera != PLANE_CAMERA</code>
+- add mesh(es) for the human (perhaps a teapot could be nice to start)
+- add mesh(es) for the plane (maybe with a spinning propellor?)
+- add mesh(es) for the tracking camera (eye of sauron could be cool)
+* let the human jump onto obstacles (implement box-box collisions)
+
+<hr color="black">
+<b>b. sky box</b>
+
+<hr color="black">note: emoji problems are extra credit and are *not* required to get an A on this homework<hr color="black">
+<b>🎱. the arcball</b> Implement the matrix-version (not quaternions, unless you really want to) of the rather interesting arcball camera controls. Explanation is in Section 2 <a href="http://courses.cms.caltech.edu/cs171/assignments/hw3/hw3-notes/notes-hw3.html">here</a>.
+
+<b>note:</b> the arcball is an "arbitrary camera" with no translation; it has NO notion of the world y-axis being "up"
+
+</div></body></html>
