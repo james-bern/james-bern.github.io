@@ -20,7 +20,12 @@
 - get more experience extending a program from "one -> many"
 
 <hr color="black">
-<b>non-optional reading. rasterization</b>
+<b>highly-recommended reading. rasterization</b>
+
+side_length_in_pixels
+for i
+for j
+
 
 
 <hr color="black">
@@ -29,62 +34,78 @@
 <b>note:</b> i expect parts marked with a * to be substantially trickier
 
 <details><summary>HINT (what to expect)</summary>
-- correct answers can be *short* :)
+ - a correct solution should be relatively short; my real-time bunny solution to <code>rasterize(...)</code> is only about 60 lines
 
-- 🚨 you should NOT have to call trig functions directly (unless you want to) -- my solution never calls sin or cos
+- 🚨 mind your coordinate systems (what should be in cmaera space, NDC, etc.?)
 
-- ✨ the <code>M4_*(...)</code> functions are your friends here
--- you can think about, e.g. <code>M4_RotationAboutXAxis(alpha)</code> as being $\mathbf{R}^{x}_{\alpha} = \mathbf{R}^{x}_{\alpha} \mathbf{I}$
---- i.e. our construction starts with the camera matrix being the identity (origin at the world origin, axes at the world axes) and then rotates this coordinate system about the world x-axis by angle $\alpha$
+- ✨ <code>transformPoint(...)</code> is your friend :)
 
-- <code>transformVector(...)</code> can be nice too, but is less crucial
-
-- take your time to make the controls feel good (check extreme cases!--what happens when you zoom really far, drag the mouse really far down, etc.)
 </details>
-<details><summary>HINT (useful functions and fields)</summary>
-<code class="x">CLAMP(...)
-cross(...)
-M4_Translation(...)
-M4_Rotation*(...)
-M4_xyzo(...)
-globals.mouse_change_in_position_NDC
-globals.mouse_wheel_offset
-normalized(...)
-transformVector(...)</code></details>
+<details><summary>HINT (possibly useful functions and fields)</summary>
+<code class="x">inverse(...)
+INVERSE_LERP(...)
+MAX(...)
+MIN(...)
+real(...) // just a cast
+texture_set_pixel(...)
+texture_get_pixel(...)
+transformPoint(...)</code></details>
 <hr color="lightblue">
-<b>i. compute $\mathbf{C}$ for the various cameras</b> (more details in the code)
-- complete <code>orbit_camera_get_C(...)</code>
-- complete <code>fps_camera_get_C(...)</code>
-* complete <code>tracking_camera_get_C(...)</code>
-- complete <code>arbitrary_camera_get_C(...)</code>
 
-<b>ii. impleent controls for the various camera</b> (more details in the code)
-- complete <code>orbit_camera_move(...)     // should feel very similar to Camera3D</code> (except that the world origin should remain in the exact center of your screen--i.e. we have no notion of offsetting the origin)
-* complete <code>fps_camera_move(...)       // should feel ~exactly like MineCraft</code>
-* complete <code>arbitrary_camera_move(...) // should feel like you're flying a plane (ish)</code>
+<b>note:</b> for this problem, we will be working entirely inside of the <code>rasterize(...)</code> function
+find your way on in there now
+note that it is totally empty
+ohno D:
 
-<b>iii. complete</b> <code>draw_basic_box_with_fake_shadows(...) // should look like the sun is directly overhead</code>
 
-<b>iv. creative coding</b> (choose 3+ of the following suggestions or equivalent)
-- add your bouncy castle from hw03
-- let the human sprint (run faster) when holding shift
-- let the human jump with the spacebar
-* let the human shoot bullets with the left mouse
-* make the tracking camera shoot bullets automatically
-* let the plane shoot rockets with the left mouse; the rockets could explode on impact with the ground?
-* add an AI to make the human walk when <code>selected_camera != HUMAN_CAMERA</code>
-* add an AI to make the plane fly around when <code>selected_camera != PLANE_CAMERA</code>
-- add mesh(es) for the human (perhaps a teapot could be nice to start)
-- add mesh(es) for the plane (maybe with a spinning propellor?)
-- add mesh(es) for the tracking camera (eye of sauron could be cool)
-* let the human jump onto obstacles (implement box-box collisions)
+on the bright side i've already got the color and depth buffers all set up for you, and everything (matrices, mesh, etc.) is already being passed to <code>rasterize(...)</code> as an argument :)
+
+
+<b>0. get familiar with the texture functions</b>
+
+- try calling <code>texture_set_pixel(color_buffer, 16, 4, monokai.orange, 0.5);</code>
+-- this sets the $(i, j)$-th pixel in the color buffer to be 50%-transparent orange
+--- $i$ refers to the $i$-th *row* of pixels (i.e., the pixel's $y$-coordinate in pixel coordinates)
+--- $j$ refers to the $j$-th *column* of pixels (i.e., the pixel's $x$-coordinate in pixel coordinates)
+--- by zooming in carefully, verify that this pixel is in fact transparent orange
+
+- duplicate and adapt the above exercise to prove to yourself you can write to the depth buffer as well
+-- press Z to toggle viewing the color buffer and the depth buffer
+
+
+<b>i. clear the color buffer and depth buffer</b> (more details in the code)
+
+- for simplicity, our "screen" is a square
+-- to get its side length, write, e.g., <code>int side_length_in_pixels = color_buffer->width;</code>
+
+- please run the code to verify you did this correctly
+- press Z to toggle viewing the color buffer and the depth buffer
+-- a cleared color buffer could be 50%-transparent white
+-- a cleared depth buffer should be full red (1.0 is max depth)
+
+
+<b>ii. rasterize the triangles without worrying about color</b> (e.g., draw them all blue)
+- this would be a good time to refresh yourself on the <code>IndexedTriangleMesh3D</code>
+
+<b>iii. add color</b> (according to mesh->vertex_colors)
+
+<b>iv. implement depth testing (z buffering)</b>
+- verify that the overlap is correct
+- again, you can press Z to toggle viewing the color buffer and the depth buffer
+
+<b>v. get the bunny drawing (slowly)</b> (more details in the code)
+- the bunny mesh doesn't include vertex_colors by default
+-- instead, please use the formula $(0.5, 0.5, 0.5)^T + 0.5 * \hat{\mathbf{n}}$ to calculate a vertex's color, where $\hat{\mathbf{n}}$ is that vertex's normal in model coordinates
+- make sure you take into account the model matrix $\mathbf{M}$ if you ignored it before (for the first example mesh, it was the identity)
+
+<b>vi. make the rasterizer FAST(er)</b>
+- real-time should be fairly easy (ish) :)
+
+<b>vii. creative coding</b> (choose 0+ of the following suggestions or equivalent)
+
+<b>✂. clipping</b> (choose 0+ of the following suggestions or equivalent)
 
 <hr color="black">
 <b>b. sky box</b>
-
-<hr color="black">note: emoji problems are extra credit and are *not* required to get an A on this homework<hr color="black">
-<b>🎱. the arcball</b> Implement the matrix-version (not quaternions, unless you really want to) of the rather interesting arcball camera controls. Explanation is in Section 2 <a href="http://courses.cms.caltech.edu/cs171/assignments/hw3/hw3-notes/notes-hw3.html">here</a>.
-
-<b>note:</b> the arcball is an "arbitrary camera" with no translation; it has NO notion of the world y-axis being "up"
 
 </div></body></html>
