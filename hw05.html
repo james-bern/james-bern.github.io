@@ -21,11 +21,40 @@
 <hr color="black">
 <b>highly-recommended reading. rasterization</b>
 
-side_length_in_pixels
-for i
-for j
+let's draw a triangle mesh on the screen; no OpenGL required :)
+
+consider a single triangle with model-space vertex positions $(\mathbf{a}^\text{model}, \mathbf{b}^\text{model}, \mathbf{c}^\text{model})$ and corresponding vertex colors $(\mathbf{color}_a, \mathbf{color}_b, \mathbf{color}_c)$
+
+you know how to transform these vertex positions into various coordinate systems, e.g.,
+$(\mathbf{a}^\text{world}, \mathbf{b}^\text{world}, \mathbf{c}^\text{world})$, and $(\mathbf{a}^\text{camera}, \mathbf{b}^\text{camera}, \mathbf{c}^\text{camera})$, $(\mathbf{a}^\text{NDC}, \mathbf{b}^\text{NDC}, \mathbf{c}^\text{NDC})$
+
+consider the $(i, j)$-th pixel ($i$-th row, $j$-th column)
+we can convert this pixel's position into NDC, which we denote $\mathbf{p}^\text{NDC}$
+if $\mathbf{p}^\text{NDC}$ lies inside the NDC projection of the triangle, then we should consider drawing it!
+
+<hr color="lightblue">
+<b>NDC from pixels</b>
+
+<hr color="lightblue">
+<b>inside test</b>
+
+<hr color="lightblue">
+<b>depth test</b>
+
+<hr color="lightblue">
+<b>screen-space interpolation</b>
+
+it is tempting to use these barycentric weights (which were found in NDC) directly, to interpolate both $z^\text{camera}$ and color
+$z^\text{camera} = \alpha{a_z^\text{camera}} + \beta{b_z^\text{camera}} + \gamma{c_z^\text{camera}}$ 
+$\mathbf{color} = \alpha{\mathbf{color}_a} + \beta{\mathbf{color}_b} + \gamma{\mathbf{color}_c}$ 
 
 
+this is unfortunately incorrect (but feel free to use it on this homework, as for what we're doing it looks okay)
+<a href="https://www.comp.nus.edu.sg/~lowkl/publications/lowk_persp_interp_techrep.pdf">here</a> is a derivation of how to interpolate properly, the punchline of which is
+
+$z^\text{camera} = \frac{1}{\alpha\frac{1}{a_z^\text{camera}} + \beta\frac{1}{b_z^\text{camera}} + \gamma\frac{1}{c_z^\text{camera}}}$ 
+
+$\mathbf{color} = \frac{{\alpha\frac{\mathbf{color}_a}{a_z^\text{camera}} + \beta\frac{\mathbf{color}_b}{b_z^\text{camera}} + \gamma\frac{\mathbf{color}_c}{c_z^\text{camera}}}}{\frac{1}{z^\text{camera}}}$ 
 
 <hr color="black">
 <b>a. software rasterizer</b>
@@ -46,6 +75,7 @@ for j
 <details><summary>HINT (possibly useful functions and fields)</summary>
 <code class="x">inverse(...)
 INVERSE_LERP(...)
+LINEAR_REMAP(...)
 MAX(...)
 MIN(...)
 real(...) // just a cast
@@ -84,7 +114,7 @@ on the bright side i've already got the color and depth buffers all set up for y
 - please run the code to verify you did this correctly
 - press Z to toggle viewing the color buffer and the depth buffer
 -- a cleared color buffer could be 50%-transparent white
--- a cleared depth buffer should be full red (1.0 is max depth)
+-- a cleared depth buffer should be full red; (0.0 (black) is min depth; 1.0 (red) is max depth)
 
 
 <b>ii. rasterize the triangles without worrying about color</b> (e.g., draw them all blue)
