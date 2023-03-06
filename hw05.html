@@ -21,16 +21,28 @@
 <hr color="black">
 <b>highly-recommended reading. rasterization</b>
 
+
 let's draw a triangle mesh on a screen; no OpenGL required :)
 
-consider a single triangle with model-space vertex positions $(\mathbf{a}^\text{model}, \mathbf{b}^\text{model}, \mathbf{c}^\text{model})$ and corresponding vertex colors $(\mathbf{color}_a, \mathbf{color}_b, \mathbf{color}_c)$
 
-you know how to transform these vertex positions into various coordinate systems, e.g.,
+consider a single triangle with model-space vertex positions $(\mathbf{a}^\text{model}, \mathbf{b}^\text{model}, \mathbf{c}^\text{model})$
+and corresponding vertex colors $(\mathbf{color}_a, \mathbf{color}_b, \mathbf{color}_c)$
+
+
+note that our notation here is a little different than you may be used to
+$\mathbf{a}^\text{model} = \begin{bmatrix}a_x^\text{model} \\ a_y^\text{model} \\ a_z^\text{model}\end{bmatrix}$ is a point $\mathbf{a}$ written in model coordinates
+$\mathbf{color}_a$ is the vertex color of vertex $\mathbf{a}$
+
+
+you know how to transform vertex positions into various coordinate systems, e.g.,
 $(\mathbf{a}^\text{world}, \mathbf{b}^\text{world}, \mathbf{c}^\text{world})$, and $(\mathbf{a}^\text{camera}, \mathbf{b}^\text{camera}, \mathbf{c}^\text{camera})$, $(\mathbf{a}^\text{NDC}, \mathbf{b}^\text{NDC}, \mathbf{c}^\text{NDC})$
 
+
+now let's talk pixels
 consider the $(i, j)$-th pixel ($i$-th row, $j$-th column)
 we can convert this pixel's position into NDC, which we denote $\mathbf{p}^\text{NDC}$
 if $\mathbf{p}^\text{NDC}$ lies inside the NDC projection of the triangle, then we should consider drawing it!
+
 
 <hr color="lightblue">
 <b>NDC from pixels</b>
@@ -44,12 +56,12 @@ if $\mathbf{p}^\text{NDC}$ lies inside the NDC projection of the triangle, then 
 <hr color="lightblue">
 <b>screen-space interpolation</b>
 
-it is tempting to use these barycentric weights (which were found in NDC) directly, to interpolate both $z^\text{camera}$ and color
+it is tempting to use these barycentric weights (which were found in NDC) directly, to interpolate both $z^\text{camera}$ and $\mathbf{color}$
 $z^\text{camera} = \alpha{a_z^\text{camera}} + \beta{b_z^\text{camera}} + \gamma{c_z^\text{camera}}$ 
 $\mathbf{color} = \alpha{\mathbf{color}_a} + \beta{\mathbf{color}_b} + \gamma{\mathbf{color}_c}$ 
 
 
-this is unfortunately incorrect (but feel free to use it on this homework, as for what we're doing it looks okay)
+unfortunately, this approach is incorrect (but feel free to use it on this homework, as for what we're doing it looks okay)
 <a href="https://www.comp.nus.edu.sg/~lowkl/publications/lowk_persp_interp_techrep.pdf">here</a> is a derivation of how to interpolate properly, the punchline of which is
 
 $z^\text{camera} = \frac{1}{\alpha\frac{1}{a_z^\text{camera}} + \beta\frac{1}{b_z^\text{camera}} + \gamma\frac{1}{c_z^\text{camera}}}$ 
