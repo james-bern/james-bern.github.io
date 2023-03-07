@@ -108,14 +108,20 @@ on the bright side i've already got the color and depth buffers all set up for y
 
 <b>0. get familiar with the texture functions</b>
 
-- try calling <code>texture_set_pixel(color_buffer, 16, 4, monokai.orange, 0.5);</code> inside of the <code>rasterize(...)</code> function
+- try calling <code>texture_set_pixel(color_buffer, 20, 5, monokai.orange, 0.5);</code> inside of the <code>rasterize(...)</code> function
 -- this sets the $(i, j)$-th pixel in the color buffer to be 50%-transparent orange
 --- $i$ refers to the $i$-th *row* of pixels (i.e., the pixel's $y$-coordinate in pixel coordinates)
 --- $j$ refers to the $j$-th *column* of pixels (i.e., the pixel's $x$-coordinate in pixel coordinates)
 --- by zooming in carefully, verify that this pixel is in fact transparent orange
 
-- duplicate and adapt the above exercise to prove to yourself you can write to the depth buffer as well
--- press Z to toggle viewing the color buffer and the depth buffer
+- try calling <code>texture_set_pixel(depth_buffer, 20, 5, 1.0);</code> inside of the <code>rasterize(...)</code> function
+-- this sets the $(i, j)$-th pixel in the color buffer to be full red (max depth)
+-- verify you can see it (press Z to toggle viewing the color buffer and the depth buffer)
+
+- try calling the following code to read (and print) the depth value you just set
+<code class="x">real current_depth;
+texture_get_pixel(depth_buffer, 20, 5, &amp;current_depth);
+printf("%lf\n", current_depth);</code>
 
 
 <b>i. clear the color buffer and depth buffer</b> (more details in the code)
@@ -145,6 +151,13 @@ on the bright side i've already got the color and depth buffers all set up for y
 
 - verify that the overlap in the example mesh is correct
 -- again, you can press Z to toggle viewing the color buffer and the depth buffer
+
+- NOTE: accessing the depth buffer is somewhat annoying
+<code class="x">
+ // read out an entry of a (1 channel) depth buffer
+ real current_depth;
+ texture_get_pixel(depth_buffer, i, j, &current_depth);
+</code>
 
 
 <b>v. get the bunny drawing (slowly)</b> (more details in the code)
