@@ -115,10 +115,10 @@ on the bright side i've already got the color and depth buffers all set up for y
 --- by zooming in carefully, verify that this pixel is in fact transparent orange
 
 - try calling <code>texture_set_pixel(depth_buffer, 20, 5, 1.0);</code> inside of the <code>rasterize(...)</code> function
--- this sets the $(i, j)$-th pixel in the color buffer to be full red (max depth)
+-- this sets the $(i, j)$-th pixel in the depth buffer to be full red (max depth)
 -- verify you can see it (press Z to toggle viewing the color buffer and the depth buffer)
 
-- try calling the following code to read (and print) the depth value you just set
+- try calling the following code to get (and print) the depth value you just set
 <code class="x">real current_depth;
 texture_get_pixel(depth_buffer, 20, 5, &amp;current_depth);
 printf("%lf\n", current_depth);</code>
