@@ -148,7 +148,7 @@ on the bright side i've already got the color and depth buffers all set up for y
 
 
 <b>v. get the bunny drawing (slowly)</b> (more details in the code)
-- the bunny mesh doesn't include vertex_colors by default
+- the bunny mesh doesn't include vertex_colors by default (i.e., <code>(mesh->vertex_colors == NULL)</code> will be true)
 -- instead, please use the formula $(0.5, 0.5, 0.5)^T + 0.5 * \hat{\mathbf{n}}$ to calculate a vertex's color, where $\hat{\mathbf{n}}$ is that vertex's normal in model coordinates
 - make sure you take into account the model matrix $\mathbf{M}$ if you ignored it before (for the first example mesh, it was the identity)
 
