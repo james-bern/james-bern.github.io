@@ -423,10 +423,13 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
     vec3 light_positions_world[MAX_NUM_LIGHTS] = {};
     vec3 light_colors[MAX_NUM_LIGHTS] = { monokai.red, monokai.orange, monokai.yellow, monokai.green, monokai.blue, monokai.purple };
     {
-        for (int i = 0; i < MAX_NUM_LIGHTS; ++i) {
-            light_positions_world[i] = 3 * normalized(V3(random_real(-1.0, 1.0), random_real(-1.0, 1.0), random_real(-1.0, 1.0)));
-        }
-        light_positions_world[0] = { 0.0, 0.0, 3.0 };
+        int k = 0;
+        light_positions_world[k++] = {  0.0,  0.0,  3.0 };
+        light_positions_world[k++] = {  0.0,  0.0, -3.0 };
+        light_positions_world[k++] = {  0.0,  3.0,  0.0 };
+        light_positions_world[k++] = {  0.0, -3.0,  0.0 };
+        light_positions_world[k++] = {  3.0,  0.0,  0.0 };
+        light_positions_world[k++] = { -3.0,  0.0,  0.0 };
     }
 
     IndexedTriangleMesh3D mesh = library.meshes.bunny;
@@ -444,7 +447,7 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
         mat4 M = globals.Identity;
         mat4 PV = P * V;
 
-        gui_slider("num_lights", &num_lights, 0, MAX_NUM_LIGHTS - 1, 'j', 'k');
+        gui_slider("num_lights", &num_lights, 0, MAX_NUM_LIGHTS, 'j', 'k');
         soup_draw(PV, SOUP_POINTS, num_lights, light_positions_world, light_colors);
         _widget_translate_3D(P * V, num_lights, light_positions_world, light_colors);
 
