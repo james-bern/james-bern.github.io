@@ -25,8 +25,6 @@
 <details><summary>let's start with a simple app that mesh_draw's a two triangle mesh of a square
 - if you don't know how to "fold code" to hide stuff in between curly braces, please let me know!</summary>
 <code class="x">void hw6a() {
-    Camera3D camera = { 3.0, RAD(45) };
-
     IndexedTriangleMesh3D mesh = {}; {
         mesh.num_triangles = 2;
         mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
@@ -44,36 +42,19 @@
         }
     }
 
+    Camera3D camera = { 3.0, RAD(45) };
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
         mat4 V = camera_get_V(&camera);
         mat4 M = globals.Identity;
+
         mesh.draw(P, V, M);
     }
 }</code></details>
 <details><summary>let's make a shader
 - note: we aren't actually doing anything with it yet</summary>
 <code class="x">void hw6a() {
-    Camera3D camera = { 3.0, RAD(45) };
-
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
-
     Shader shader = {}; {
         char *vertex_shader_source = R""(
             #version 330 core
@@ -97,35 +78,35 @@
         shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
     }
 
+    IndexedTriangleMesh3D mesh = {}; {
+        mesh.num_triangles = 2;
+        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
+            int k = 0;
+            mesh.triangle_indices[k++] = { 0, 1, 2 };
+            mesh.triangle_indices[k++] = { 0, 2, 3 };
+        }
+        mesh.num_vertices = 4;
+        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
+            int k = 0;
+            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
+            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
+            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
+            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
+        }
+    }
+
+    Camera3D camera = { 3.0, RAD(45) };
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
         mat4 V = camera_get_V(&camera);
         mat4 M = globals.Identity;
+
         mesh.draw(P, V, M);
     }
 }</code></details>
 <details><summary>let's draw the mesh with our shader</summary>
 <code class="x">void hw6a() {
-    Camera3D camera = { 3.0, RAD(45) };
-
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
-
     Shader shader = {}; {
         char *vertex_shader_source = R""(
             #version 330 core
@@ -149,11 +130,30 @@
         shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
     }
 
+    IndexedTriangleMesh3D mesh = {}; {
+        mesh.num_triangles = 2;
+        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
+            int k = 0;
+            mesh.triangle_indices[k++] = { 0, 1, 2 };
+            mesh.triangle_indices[k++] = { 0, 2, 3 };
+        }
+        mesh.num_vertices = 4;
+        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
+            int k = 0;
+            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
+            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
+            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
+            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
+        }
+    }
+
+    Camera3D camera = { 3.0, RAD(45) };
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
         mat4 V = camera_get_V(&camera);
         mat4 M = globals.Identity;
+
         shader_set_uniform(&shader, "P", P);
         shader_set_uniform(&shader, "V", V);
         shader_set_uniform(&shader, "M", M);
@@ -163,25 +163,6 @@
 }</code></details>
 <details><summary>let's pass the vertex positions to our fragment shader, and use them to determine pixel color</summary>
 <code class="x">void hw6a() {
-    Camera3D camera = { 3.0, RAD(45) };
-
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
-
     Shader shader = {}; {
         char *vertex_shader_source = R""(
             #version 330 core
@@ -208,22 +189,6 @@
         shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
     }
 
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
-        shader_set_uniform(&shader, "P", P);
-        shader_set_uniform(&shader, "V", V);
-        shader_set_uniform(&shader, "M", M);
-        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
-        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
-    }
-}</code></details>
-<details><summary>let's mess about in the fragment shader</summary>
-<code class="x">void hw6a() {
-    Camera3D camera = { 3.0, RAD(45) };
-
     IndexedTriangleMesh3D mesh = {}; {
         mesh.num_triangles = 2;
         mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
@@ -241,6 +206,22 @@
         }
     }
 
+    Camera3D camera = { 3.0, RAD(45) };
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 P = camera_get_P(&camera);
+        mat4 V = camera_get_V(&camera);
+        mat4 M = globals.Identity;
+
+        shader_set_uniform(&shader, "P", P);
+        shader_set_uniform(&shader, "V", V);
+        shader_set_uniform(&shader, "M", M);
+        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
+        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
+    }
+}</code></details>
+<details><summary>let's mess about in the fragment shader</summary>
+<code class="x">void hw6a() {
     Shader shader = {}; {
         char *vertex_shader_source = R""(
             #version 330 core
@@ -268,22 +249,6 @@
         shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
     }
 
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
-        shader_set_uniform(&shader, "P", P);
-        shader_set_uniform(&shader, "V", V);
-        shader_set_uniform(&shader, "M", M);
-        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
-        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
-    }
-}</code></details>
-<details><summary>let's add a uniform variable for time</summary>
-<code class="x">void hw6a() {
-    Camera3D camera = { 3.0, RAD(45) };
-
     IndexedTriangleMesh3D mesh = {}; {
         mesh.num_triangles = 2;
         mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
@@ -301,6 +266,22 @@
         }
     }
 
+    Camera3D camera = { 3.0, RAD(45) };
+    while (cow_begin_frame()) {
+        camera_move(&camera);
+        mat4 P = camera_get_P(&camera);
+        mat4 V = camera_get_V(&camera);
+        mat4 M = globals.Identity;
+
+        shader_set_uniform(&shader, "P", P);
+        shader_set_uniform(&shader, "V", V);
+        shader_set_uniform(&shader, "M", M);
+        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
+        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
+    }
+}</code></details>
+<details><summary>let's add a uniform variable for time</summary>
+<code class="x">void hw6a() {
     Shader shader = {}; {
         char *vertex_shader_source = R""(
             #version 330 core
@@ -329,10 +310,27 @@
         shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
     }
 
+    IndexedTriangleMesh3D mesh = {}; {
+        mesh.num_triangles = 2;
+        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
+            int k = 0;
+            mesh.triangle_indices[k++] = { 0, 1, 2 };
+            mesh.triangle_indices[k++] = { 0, 2, 3 };
+        }
+        mesh.num_vertices = 4;
+        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
+            int k = 0;
+            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
+            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
+            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
+            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
+        }
+    }
+
+    Camera3D camera = { 3.0, RAD(45) };
     real time = 0.0;
     while (cow_begin_frame()) {
         time += 0.0167;
-
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
         mat4 V = camera_get_V(&camera);
@@ -391,10 +389,10 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
 
             uniform vec3 o_camera_world; // camera position in world coordinates
             uniform int  num_lights;
-            uniform vec3 light_positions[16];
+            uniform vec3 light_positions_world[16];
             uniform vec3 light_colors[16];
-            uniform float k_ambient; // ambient strength
-            uniform float k_diffuse; // diffuse strength
+            uniform float k_ambient;  // ambient strength
+            uniform float k_diffuse;  // diffuse strength
             uniform float k_specular; // specular strength
             uniform float shininess; 
 
@@ -422,13 +420,13 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
 
     #define MAX_NUM_LIGHTS 6
     int num_lights = 1;
-    vec3 light_positions[MAX_NUM_LIGHTS] = {};
+    vec3 light_positions_world[MAX_NUM_LIGHTS] = {};
     vec3 light_colors[MAX_NUM_LIGHTS] = { monokai.red, monokai.orange, monokai.yellow, monokai.green, monokai.blue, monokai.purple };
     {
         for (int i = 0; i < MAX_NUM_LIGHTS; ++i) {
-            light_positions[i] = 3 * normalized(V3(random_real(-1, 1), random_real(-1, 1), random_real(-1, 1)));
+            light_positions_world[i] = 3 * normalized(V3(random_real(-1.0, 1.0), random_real(-1.0, 1.0), random_real(-1.0, 1.0)));
         }
-        light_positions[0] = { 0.0, 0.0, 3.0 };
+        light_positions_world[0] = { 0.0, 0.0, 3.0 };
     }
 
     IndexedTriangleMesh3D mesh = library.meshes.bunny;
@@ -447,8 +445,8 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
         mat4 PV = P * V;
 
         gui_slider("num_lights", &num_lights, 0, MAX_NUM_LIGHTS - 1, 'j', 'k');
-        soup_draw(PV, SOUP_POINTS, num_lights, light_positions, light_colors);
-        _widget_translate_3D(P * V, num_lights, light_positions, light_colors);
+        soup_draw(PV, SOUP_POINTS, num_lights, light_positions_world, light_colors);
+        _widget_translate_3D(P * V, num_lights, light_positions_world, light_colors);
 
         gui_printf("");
         gui_slider("k_ambient", &k_ambient, 0.0, 2.0);
@@ -461,7 +459,7 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
         shader_set_uniform(&shader, "M", M);
         shader_set_uniform(&shader, "o_camera_world", camera_get_origin(&camera));
         shader_set_uniform(&shader, "num_lights", num_lights);
-        shader_set_uniform(&shader, "light_positions", num_lights, light_positions);
+        shader_set_uniform(&shader, "light_positions_world", num_lights, light_positions_world);
         shader_set_uniform(&shader, "light_colors", num_lights, light_colors);
         shader_set_uniform(&shader, "k_ambient", k_ambient);
         shader_set_uniform(&shader, "k_diffuse", k_diffuse);
