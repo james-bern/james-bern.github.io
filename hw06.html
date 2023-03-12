@@ -368,7 +368,7 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
 <details><summary>recommended starter code (everything except part of the fragment shader's main() is set up for you)</summary>
 <code class="x">void hw6c() {
     Shader shader; {
-        char *vert = R""""(
+        char *vert = R""(
             #version 330 core
             layout (location = 0) in vec3 _p_model;
             layout (location = 1) in vec3 _n_model;
@@ -382,9 +382,9 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
                 _n_world = mat3(transpose(inverse(M))) * _n_model;
                 gl_Position = P * V * vec4(p_world, 1);
             }
-        )"""";
+        )"";
 
-        char *frag = R""""(
+        char *frag = R""(
             #version 330 core
 
             uniform vec3 o_camera_world; // camera position
@@ -413,7 +413,7 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
 
                 fragColor = vec4(color, 1);
             }
-        )"""";
+        )"";
 
         shader = shader_create(vert, 2, frag);
     }
