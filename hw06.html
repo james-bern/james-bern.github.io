@@ -369,8 +369,6 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
 
 <details><summary>recommended starter code (everything except part of the fragment shader's main() is set up for you)</summary>
 <code class="x">void hw6c() {
-    IndexedTriangleMesh3D mesh = library.meshes.bunny;
-
     Shader shader; {
         char *vert = R""""(
             #version 330 core
@@ -433,13 +431,14 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
         light_positions[0] = { 0.0, 0.0, 3.0 };
     }
 
+    IndexedTriangleMesh3D mesh = library.meshes.bunny;
+
     real k_ambient = 0.1;
     real k_diffuse = 0.6;
     real k_specular = 1.0;
     real shininess = 12.0;
 
     Camera3D camera = { 10.0, RAD(45) };
-
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
