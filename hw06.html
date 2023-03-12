@@ -391,9 +391,9 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
             uniform int  num_lights;
             uniform vec3 light_positions_world[16];
             uniform vec3 light_colors[16];
-            uniform float k_ambient;  // ambient strength
-            uniform float k_diffuse;  // diffuse strength
-            uniform float k_specular; // specular strength
+            uniform float ambientStrength;
+            uniform float diffuseStrength;
+            uniform float specularStrength;
             uniform float shininess; 
 
             in vec3 p_world; // position in world coordinates
@@ -404,7 +404,7 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
             void main() {
                 vec3 n_world = normalize(_n_world); // normal vector in world coordinates
 
-                vec3 color = vec3(k_ambient);
+                vec3 color = vec3(ambientStrength);
                 for (int i = 0; i < num_lights; ++i) {
                     // TODO add diffuse  contribution
                     // TODO add specular contribution
@@ -434,9 +434,9 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
 
     IndexedTriangleMesh3D mesh = library.meshes.bunny;
 
-    real k_ambient = 0.1;
-    real k_diffuse = 0.6;
-    real k_specular = 1.0;
+    real ambientStrength = 0.1;
+    real diffuseStrength = 0.6;
+    real specularStrength = 1.0;
     real shininess = 12.0;
 
     Camera3D camera = { 10.0, RAD(45) };
@@ -452,9 +452,9 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
         _widget_translate_3D(P * V, num_lights, light_positions_world, light_colors);
 
         gui_printf("");
-        gui_slider("k_ambient", &k_ambient, 0.0, 2.0);
-        gui_slider("k_diffuse", &k_diffuse, 0.0, 2.0);
-        gui_slider("k_specular", &k_specular, 0.0, 2.0);
+        gui_slider("ambientStrength", &ambientStrength, 0.0, 2.0);
+        gui_slider("diffuseStrength", &diffuseStrength, 0.0, 2.0);
+        gui_slider("specularStrength", &specularStrength, 0.0, 2.0);
         gui_slider("shininess", &shininess, 0.0, 256.0);
 
         shader_set_uniform(&shader, "P", P);
@@ -464,9 +464,9 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
         shader_set_uniform(&shader, "num_lights", num_lights);
         shader_set_uniform(&shader, "light_positions_world", num_lights, light_positions_world);
         shader_set_uniform(&shader, "light_colors", num_lights, light_colors);
-        shader_set_uniform(&shader, "k_ambient", k_ambient);
-        shader_set_uniform(&shader, "k_diffuse", k_diffuse);
-        shader_set_uniform(&shader, "k_specular", k_specular);
+        shader_set_uniform(&shader, "ambientStrength", ambientStrength);
+        shader_set_uniform(&shader, "diffuseStrength", diffuseStrength);
+        shader_set_uniform(&shader, "specularStrength", specularStrength);
         shader_set_uniform(&shader, "shininess", shininess);
         shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
         shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_normals);
