@@ -354,7 +354,7 @@
 <b>ii. color points NOT in the set according to escape time</b>
 - you may want a <a href="https://www.shadertoy.com/view/WlfXRN">color map</a> :)
 
-<b>🐚. creative coding (choose 0+ of the following  or equivalent)</b> 
+<b>(optional) iii. upgrade your viewer (choose 0+ of the following  or equivalent)</b> 
 - better colors
 - make it zoom into an interesting region
 - Camera2D-style mouse controls to pan around and zoom into the mandelbrodt
@@ -362,70 +362,15 @@
 for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3E%E2%9C%A8">solution</a>; you do NOT need to replicate it
 
 <hr color="black">
-<b>b. render the stanford bunny in a custom fragment shader using phong or blinn-phong lighting</b>
+<b>c. render the stanford bunny in a custom fragment shader using <a href="https://learnopengl.com/Lighting/Basic-Lighting">phong or blinn-phong lighting</a></b>
+- (optional) add a checkbox to render with toon shading
+- (optional) add a checkbox to distort the bunny into a corkscrew using a vertex shader (see <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3E%E2%9C%A8">here</a>)
 
-<details><summary>optional starter code (everything except fragment shader is done for you)</summary>
+<details><summary>optional starter code (everything except the fragment shader is set up for you)</summary>
 <code class="x">void hw7a() {
-    Camera3D camera = { 3.0, RAD(45) };
-
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
-
-    Shader shader = {}; {
-        char *vertex_shader_source = R""(
-            #version 330 core
-            uniform mat4 P;
-            uniform mat4 V;
-            uniform mat4 M;
-            layout (location = 0) in vec3 p_model;
-            out vec2 uv;
-            void main() {
-                uv = p_model.xy;
-                gl_Position = P * V * M * vec4(p_model, 1.0);
-            }
-        )"";
-
-        char *fragment_shader_source = R""(
-            #version 330 core
-            in vec2 uv;
-            out vec4 fragColor;
-            void main() {
-                float TAU = 6.283185307179586;
-                fragColor = vec4(sin(uv.x * 10.0 * TAU), sin(uv.y * 10.0 * TAU), 0.2, 1.0);
-            }
-        )"";
-
-        shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
-    }
-
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
-        shader_set_uniform(&shader, "P", P);
-        shader_set_uniform(&shader, "V", V);
-        shader_set_uniform(&shader, "M", M);
-        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
-        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
-    }
 }</code></details>
-
-
+<hr color="black">
+<b>(optional) 🐰. use custom shaders to make a scene of your choosing</b> 
 
 
 
