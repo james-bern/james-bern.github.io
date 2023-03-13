@@ -348,7 +348,7 @@
 <b>b. render the <a href="https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set">mandelbrodt set</a> using a fragment shader</b>
 
 <b>i. color it using just two colors</b>; e.g., black for points in the set and white for points NOT in the set
-- HINT: the <code>uv</code> in the tutorial covers the interval $[0.0, 1.0]$ in $x$ and $y$; from Wikipedia, you will need to make $x_0 \in [-2.00, 0.47]$ and $y_0 \in [-1.12, 1.12]$; because we're coding in a shader, we don't have access to <code>LINEAR_REMAP(...)</code> so you'll have to do it yourself :)
+- HINT: <code>uv</code> (as computed in the previous (tutorial) question) has both <code>uv.x</code> and <code>uv.y</code> in the interval $[0.0, 1.0]$; as per Wikipedia, you will need to make $x_0 \in [-2.00, 0.47]$ and $y_0 \in [-1.12, 1.12]$; because we're coding in a shader, we don't have access to <code>LINEAR_REMAP(...)</code> so you'll have to do it yourself :)
 
 <b>ii. color points NOT in the set according to escape time</b>
 - you may want a <a href="https://www.shadertoy.com/view/WlfXRN">color map</a> :)
