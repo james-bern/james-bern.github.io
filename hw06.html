@@ -95,7 +95,7 @@
         }
     }
 
-    Camera3D camera = { 3.0, RAD(45) };
+    Camera2D camera = { 3.0 };
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
@@ -147,7 +147,7 @@
         }
     }
 
-    Camera3D camera = { 3.0, RAD(45) };
+    Camera2D camera = { 3.0 };
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
@@ -206,7 +206,7 @@
         }
     }
 
-    Camera3D camera = { 3.0, RAD(45) };
+    Camera2D camera = { 3.0 };
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
@@ -266,7 +266,7 @@
         }
     }
 
-    Camera3D camera = { 3.0, RAD(45) };
+    Camera2D camera = { 3.0 };
     while (cow_begin_frame()) {
         camera_move(&camera);
         mat4 P = camera_get_P(&camera);
@@ -327,7 +327,7 @@
         }
     }
 
-    Camera3D camera = { 3.0, RAD(45) };
+    Camera2D camera = { 3.0 };
     real time = 0.0;
     while (cow_begin_frame()) {
         time += 0.0167;
@@ -355,7 +355,6 @@
 <b>(optional) iii. upgrade your viewer (choose 0+ of the following  or equivalent)</b> 
 - better colors
 - make it zoom into an interesting region
-- Camera2D-style mouse controls to pan around and zoom into the mandelbrodt
 
 for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3E%E2%9C%A8">solution</a>; you do NOT need to replicate it
 
@@ -368,7 +367,7 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
 <details><summary>recommended starter code (everything except part of the fragment shader's main() is set up for you)</summary>
 <code class="x">void hw6c() {
     Shader shader; {
-        char *vert = R""(
+        char *vertex_shader_source = R""(
             #version 330 core
             layout (location = 0) in vec3 _p_model;
             layout (location = 1) in vec3 _n_model;
@@ -384,7 +383,7 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
             }
         )"";
 
-        char *frag = R""(
+        char *fragment_shader_source = R""(
             #version 330 core
 
             uniform vec3 o_camera_world; // camera position
@@ -415,7 +414,7 @@ for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3
             }
         )"";
 
-        shader = shader_create(vert, 2, frag);
+        shader = shader_create(vertex_shader_source, 2, fragment_shader_source);
     }
 
     #define MAX_NUM_LIGHTS 6
