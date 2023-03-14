@@ -20,6 +20,11 @@
 - have fun
 
 <hr color="black">
+<b>reading.</b>
+
+note: as you read, please cross-reference the docs for cow's shader API
+
+<hr color="black">
 <b>a. (tutorial) get familiar with cow's shader API</b>
 
 <details><summary>let's start with a simple app that mesh_draw's a two triangle mesh of a square
@@ -357,7 +362,9 @@
 
 <b>(optional) iii. upgrade your viewer (choose 0+ of the following  or equivalent)</b> 
 - fancy time-dependent infinite zooming colors (ooh!)
-- add anti-aliasing (see <a href="https://www.shadertoy.com/view/4df3Rn">iq's approach</a> (average over AA * AA subpixels) for info)
+- add anti-aliasing; see <a href="https://www.shadertoy.com/view/4df3Rn">iq's approach</a> (average over AA * AA subpixels)
+-- note: anti-aliasing will only make the jagged bits smoother/blurrier; it will not make the hard steps between colors into a smooth gradient (this is a whole other thing iq is doing in the shader i linked)
+-- you will need <code>window_get_size()</code> from cow, which returns the windows width and height in pixels as a <code>vec2</code>
 - make it zoom into an interesting region (automatically) -- feel free to do this on the GPU (shader) or the CPU (Camera2D) 
 
 for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3E%E2%9C%A8">solution</a>; you do NOT need to replicate it
