@@ -364,7 +364,9 @@ note: as you read, please cross-reference the docs for cow's shader API
 - fancy time-dependent infinite zooming colors (ooh!)
 - add anti-aliasing; see <a href="https://www.shadertoy.com/view/4df3Rn">iq's approach</a> (average over AA * AA subpixels)
 -- note: anti-aliasing will only make the jagged bits smoother/blurrier; it will not make the hard steps between colors into a smooth gradient (this is a whole other thing iq is doing in the shader i linked)
--- you will need <code>window_get_size()</code> from cow, which returns the windows width and height in pixels as a <code>vec2</code>
+-- note: you will need to pass some additional uniforms to the fragment shader
+--- you will need <code>window_get_size()</code> from cow, which returns the windows width and height in pixels as a <code>vec2</code>
+--- you will also need <code>camera.screen_height_World</code>
 - make it zoom into an interesting region (automatically) -- feel free to do this on the GPU (shader) or the CPU (Camera2D) 
 
 for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3E%E2%9C%A8">solution</a>; you do NOT need to replicate it
