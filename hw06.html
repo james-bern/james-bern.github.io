@@ -362,8 +362,9 @@ note: as you read, please cross-reference the docs for cow's shader API
 
 <b>(optional) iii. upgrade your viewer (choose 0+ of the following  or equivalent)</b> 
 - fancy time-dependent infinite zooming colors (ooh!)
+- use smooth <a href="https://iquilezles.org/articles/msetsmooth/">iteration count</a>
 - add anti-aliasing; see <a href="https://www.shadertoy.com/view/4df3Rn">iq's approach</a> (average over AA * AA subpixels)
--- note: anti-aliasing will only make the jagged bits smoother/blurrier; it will not make the hard steps between colors into a smooth gradient (this is a whole other thing iq is doing in the shader i linked)
+-- note: anti-aliasing will only make the jagged bits smoother/blurrier; it will not make the hard steps between colors into a smooth gradient (that's the job of the smooth iteration count)
 -- note: you will need to pass some additional uniforms to the fragment shader
 --- you will need <code>window_get_size()</code> from cow, which returns the windows width and height in pixels as a <code>vec2</code>
 --- you will also need <code>camera.screen_height_World</code>
