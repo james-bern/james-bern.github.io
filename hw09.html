@@ -9,484 +9,136 @@
 <center><b>hw09</b>
 <a href="https://docs.google.com/spreadsheets/d/1WaJkilThuOXpyYGPvUCOo2pz12IhGobCWyKco-HACGY/edit?usp=sharing">help hours</a> | <a href="https://github.com/james-bern/CSCI-371">codebase</a> | <a href="https://github.com/james-bern/CSCI-371/wiki">docs</a> | <a href="notes.html">notes</a> | <a href="https://glow.williams.edu/courses/3619655">glow</a>
 </center>
-<hr color="black">🚨 please pull a fresh copy of the codebase before starting this homework!--i probably changed some stuff over Spring Break without realizing it
+<hr color="black">🚨 please pull a fresh copy of the codebase before starting this homework!
 🗣️ you are highly encouraged to collaborate on homework provided you follow the spirit of the <a href="http://courses.cms.caltech.edu/cs171/materials/pdfs/50ft_policy.pdf">50 ft rule</a>
 👥 additionally, for this lab you may optionally choose to work with a partner
-🏎 <a href="https://youtu.be/ssNcg9trEJg">spoilers (sample solution)</a>
+🦍 this homework is tough
+📺 <a href="https://youtube.com/embed/2vbWqkx47QE?rel=0">sample solution</a>
 <hr color="black">
 <b>goals.</b>
 
-- understand ray tracing
+- get a first taste of ray tracing
+- understand ray marching distance shaders
+
+<hr color="lightblue">
+<b>optional. math review</b>
+
+the <a href="https://github.com/james-bern/CSCI-371/wiki">docs</a> now have a math review (in progress)
+please take a look if your linalg is feeling shaky
+
+<hr color="lightblue">
+<b>lecture summary. ray</b>
+
+a ray is parameterized by the equation $\mathbf{p}(t) = \mathbf{o} + t * \mathbf{d},$
++ $\mathbf{o}$ is the ray origin (i.e. the position of the camera)
++ $\mathbf{d}$ is the ray direction (i.e., a vector pointing from the camera origin to the pixel)
++ $t$ is "distance," i.e. how far we've travelled along the ray; $t > 0$
+
+please see the lecture slides for how to find $\mathbf{d}$ for a particular pixel
+
+<hr color="lightblue">
+<b>lecture summary. ray-triangle intersection</b>
+
+Consider ray with origin $\mathbf{o}$ and direction $\mathbf{d}$.
+Let's intersect the ray with some triangle $(\mathbf{a}, \mathbf{b}, \mathbf{c})$.
+For simplicity, say all these quantities are in world coordinates.
+
+Call the (possible) intersection point $\mathbf{p}$ and get pumped.
+Our approach is to express $\mathbf{p}$ in two different ways and set them equal.
+
+First, we can write down the definition of a ray
+$$ \begin{cases} \mathbf{p} = \mathbf{o} + t * \mathbf{d} \end{cases},$$and the condition for the $\mathbf{p}$ being <i>in front of the camera</i> (not behind it)
+$$\begin{cases} t > 0 \end{cases}.$$Second, we can write down the definition of barycentric coordinates
+$$\begin{cases} \mathbf{p} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1,\end{cases}$$and the condition for $\mathbf{p}$ being inside the triangle
+$$\begin{cases} \alpha,\beta,\gamma > 0 \end{cases}.$$Equating the different equations for $\mathbf{p}$ gives us the following <i>system of equations</i>
+$$\begin{cases} \mathbf{o} + t * \mathbf{d} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1.\end{cases}$$Taking on both conditions (in front of camera; inside of triangle) gives us the <i>condition for a "hit"</i>
+$$\begin{cases} \alpha,\beta,\gamma,t > 0.\end{cases}$$We find $\alpha,\beta,\gamma,t$ by bashing with a matrix solve :)
+$$\begin{cases} \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c} - t * \mathbf{d} = \mathbf{o}\\ \alpha + \beta + \gamma = 1 \end{cases}$$You are the One, Neo.
+$$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 1 & 0 \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ t \end{bmatrix} = \begin{bmatrix} \mathbf{o} \\ 1 \end{bmatrix} $$
+<hr color="black">
+<b>a. implement a software raytracer</b>
+- this hw is written to follow a similar structure to the rasterization homework :)
+- initially, we will be working entirely inside of the <code>raytrace(...)</code> function
+-- eventually, you will want to add your own function immediately above it
+
+
+<b>i. set up the rays properly</b>
+- add a checkbox to draw them using <code>eso_begin(PV_for_debug_drawing_rays, SOUP_LINES)</code>
+-- once you're confident the rays are set up right, you're welcome to delete this functionality
+
+
+<b>ii. draw the triangles in the right place in a single color (say, blue)</b>
+
+<details><summary>(readme) sample code to iterate over the mesh</summary><code class="x">for (int tri = 0; tri < mesh->num_triangles; ++tri) {
+    vec3 a = mesh->vertex_positions[mesh->triangle_indices[tri][0]];
+    vec3 b = mesh->vertex_positions[mesh->triangle_indices[tri][1]];
+    vec3 c = mesh->vertex_positions[mesh->triangle_indices[tri][2]];
+    ...
+}</code></details>
+
+<b>iii. draw the triangles in the right color (no shadows; no lighting)</b>
+
+
+<b>iv. get overlap correct</b>
+
+
+<b>v. add shadows</b>
+- to get shadows up and running, i would just make the color be <code>(0.5 * color)</code> if the pixel is in shadow
+-- a pixel is in shadow if its shadow raw hits a triangle OR its normal is facing away from the light
+--- (two vectors face away from each other if their dot product is negative)
+--- the "its normal is facing away from the light" check will stops being necessary if you properly implement lighting
+- your code should NOT contain large amounts of repetition (i.e., no copy and pasting 50 lines)
+-- first, make it work; then, let a function (and a struct) spring forth organically! 🌱
+
+<details><summary>(hint / spoilers) my ray casting API</summary><code class ="x">struct CastRayHit {
+    real t;  // t at the hit point; recall ray equation is p(t) = o + (t * d)
+
+    int tri; // index of triangle that was hit; -1 if no triangles were hit
+    bool hit_any_triangles() { return (tri != -1); }
+
+    vec3 p;     // position of hitpoint
+    vec3 n;     // normal at hitpoint
+    vec3 color; // color at hitpoint
+
+    // barycentric coordinates of hit
+    real alpha;
+    real beta;
+    real gamma;
+};
+
+CastRayHit cast_ray(IndexedTriangleMesh3D *mesh, vec3 o, vec3 d) {
+    ...
+}</code></details>
+
+<b>vi. add Blinn-Phong lighting (or something vaguely similar)</b>
+
+
+<b>🔆. make the last two triangles perfectly-reflective mirrors</b>
+- i.e., <code>if ((tri == mesh->num_triangles - 2) || (tri == mesh->num_triangles - 1)) { ... }</code>
+-- (these are the floor for the teapot scene)
+- you'll need to pick a color for the sky
+
 
 <hr color="black">
-<b>reading.</b>
+<b>b. (Creative Coding) ray march something nice :)</b> 
+- include a one-two sentence writeup explaining what you did in your glow comment
+- you may copy and paste code from <a href="https://iquilezles.org/articles/distfunctions/">https://iquilezles.org/articles/distfunctions/</a>.
+- you may browse shadertoy for inspiration, but you may _not_ copy and paste code (the 50 ft rule applies)
+-- if you are heavily inspired by a shader, please link it in your glow comment
 
-note: as you read, please cross-reference the docs for cow's shader API
+<b>😎. add blinn-phong lighting (or something similar)</b>
+- you will need to google around for how to approximate the surface normal using finite differences :)
 
-<hr color="black">
-<b>a. (tutorial) get familiar with cow's shader API</b>
 
-<details><summary>let's start with a simple app that mesh_draw's a two triangle mesh of a square
-- if you don't know how to "fold code" to hide stuff in between curly braces, please let me know!</summary>
-<code class="x">void hw6a() {
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
 
-    Camera3D camera = { 3.0, RAD(45) };
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
 
-        mesh.draw(P, V, M);
-    }
-}</code></details>
-<details><summary>let's make a shader
-- note: we aren't actually doing anything with it yet</summary>
-<code class="x">void hw6a() {
-    Shader shader = {}; {
-        char *vertex_shader_source = R""(
-            #version 330 core
-            uniform mat4 P;
-            uniform mat4 V;
-            uniform mat4 M;
-            layout (location = 0) in vec3 p_model;
-            void main() {
-                gl_Position = P * V * M * vec4(p_model, 1.0);
-            }
-        )"";
 
-        char *fragment_shader_source = R""(
-            #version 330 core
-            out vec4 fragColor;
-            void main() {
-                fragColor = vec4(1.0, 1.0, 0.0, 1.0);
-            }
-        )"";
 
-        shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
-    }
 
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
 
-    Camera2D camera = { 3.0 };
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
 
-        mesh.draw(P, V, M);
-    }
-}</code></details>
-<details><summary>let's draw the mesh with our shader</summary>
-<code class="x">void hw6a() {
-    Shader shader = {}; {
-        char *vertex_shader_source = R""(
-            #version 330 core
-            uniform mat4 P;
-            uniform mat4 V;
-            uniform mat4 M;
-            layout (location = 0) in vec3 p_model;
-            void main() {
-                gl_Position = P * V * M * vec4(p_model, 1.0);
-            }
-        )"";
 
-        char *fragment_shader_source = R""(
-            #version 330 core
-            out vec4 fragColor;
-            void main() {
-                fragColor = vec4(1.0, 1.0, 0.0, 1.0);
-            }
-        )"";
 
-        shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
-    }
-
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
-
-    Camera2D camera = { 3.0 };
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
-
-        shader_set_uniform(&shader, "P", P);
-        shader_set_uniform(&shader, "V", V);
-        shader_set_uniform(&shader, "M", M);
-        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
-        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
-    }
-}</code></details>
-<details><summary>let's pass the vertex positions to our fragment shader, and use them to determine pixel color</summary>
-<code class="x">void hw6a() {
-    Shader shader = {}; {
-        char *vertex_shader_source = R""(
-            #version 330 core
-            uniform mat4 P;
-            uniform mat4 V;
-            uniform mat4 M;
-            layout (location = 0) in vec3 p_model;
-            out vec2 uv;
-            void main() {
-                uv = p_model.xy;
-                gl_Position = P * V * M * vec4(p_model, 1.0);
-            }
-        )"";
-
-        char *fragment_shader_source = R""(
-            #version 330 core
-            in vec2 uv;
-            out vec4 fragColor;
-            void main() {
-                fragColor = vec4(uv.x, uv.y, 0.0, 1.0);
-            }
-        )"";
-
-        shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
-    }
-
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
-
-    Camera2D camera = { 3.0 };
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
-
-        shader_set_uniform(&shader, "P", P);
-        shader_set_uniform(&shader, "V", V);
-        shader_set_uniform(&shader, "M", M);
-        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
-        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
-    }
-}</code></details>
-<details><summary>let's mess about in the fragment shader</summary>
-<code class="x">void hw6a() {
-    Shader shader = {}; {
-        char *vertex_shader_source = R""(
-            #version 330 core
-            uniform mat4 P;
-            uniform mat4 V;
-            uniform mat4 M;
-            layout (location = 0) in vec3 p_model;
-            out vec2 uv;
-            void main() {
-                uv = p_model.xy;
-                gl_Position = P * V * M * vec4(p_model, 1.0);
-            }
-        )"";
-
-        char *fragment_shader_source = R""(
-            #version 330 core
-            in vec2 uv;
-            out vec4 fragColor;
-            void main() {
-                float TAU = 6.283185307179586;
-                fragColor = vec4(sin(uv.x * 10.0 * TAU), sin(uv.y * 10.0 * TAU), 0.2, 1.0);
-            }
-        )"";
-
-        shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
-    }
-
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
-
-    Camera2D camera = { 3.0 };
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
-
-        shader_set_uniform(&shader, "P", P);
-        shader_set_uniform(&shader, "V", V);
-        shader_set_uniform(&shader, "M", M);
-        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
-        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
-    }
-}</code></details>
-<details><summary>let's add a uniform variable for time</summary>
-<code class="x">void hw6a() {
-    Shader shader = {}; {
-        char *vertex_shader_source = R""(
-            #version 330 core
-            uniform mat4 P;
-            uniform mat4 V;
-            uniform mat4 M;
-            layout (location = 0) in vec3 p_model;
-            out vec2 uv;
-            void main() {
-                uv = p_model.xy;
-                gl_Position = P * V * M * vec4(p_model, 1.0);
-            }
-        )"";
-
-        char *fragment_shader_source = R""(
-            #version 330 core
-            uniform float time;
-            in vec2 uv;
-            out vec4 fragColor;
-            void main() {
-                float TAU = 6.283185307179586;
-                fragColor = vec4(sin(-10.0 * time + uv.x * 10.0 * TAU), sin(uv.y * 10.0 * TAU), 0.2, 1.0);
-            }
-        )"";
-
-        shader = shader_create(vertex_shader_source, 1, fragment_shader_source);
-    }
-
-    IndexedTriangleMesh3D mesh = {}; {
-        mesh.num_triangles = 2;
-        mesh.triangle_indices = (int3 *) malloc(mesh.num_triangles * sizeof(int3)); {
-            int k = 0;
-            mesh.triangle_indices[k++] = { 0, 1, 2 };
-            mesh.triangle_indices[k++] = { 0, 2, 3 };
-        }
-        mesh.num_vertices = 4;
-        mesh.vertex_positions = (vec3 *) malloc(mesh.num_vertices * sizeof(vec3)); {
-            int k = 0;
-            mesh.vertex_positions[k++] = { 0.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 0.0, 0.0 };
-            mesh.vertex_positions[k++] = { 1.0, 1.0, 0.0 };
-            mesh.vertex_positions[k++] = { 0.0, 1.0, 0.0 };
-        }
-    }
-
-    Camera2D camera = { 3.0 };
-    real time = 0.0;
-    while (cow_begin_frame()) {
-        time += 0.0167;
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
-
-        shader_set_uniform(&shader, "P", P);
-        shader_set_uniform(&shader, "V", V);
-        shader_set_uniform(&shader, "M", M);
-        shader_set_uniform(&shader, "time", time);
-        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
-        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
-    }
-}</code></details>
-<hr color="black">
-<b>b. render the <a href="https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set">mandelbrodt set</a> using a fragment shader</b>
-
-<b>i. color it using just two colors</b>; e.g., black for points in the set and white for points NOT in the set
-- HINT: <code>uv</code> (as computed in the previous (tutorial) question) has both <code>uv.x</code> and <code>uv.y</code> in the interval $[0.0, 1.0]$; as per Wikipedia, you will need to make $x_0 \in [-2.00, 0.47]$ and $y_0 \in [-1.12, 1.12]$; because we're coding in a shader, we don't have access to <code>LINEAR_REMAP(...)</code> so you'll have to do it yourself :)
-- HINT: in shaders, we use <code>float</code> instead of <code>real</code>
-- HINT: if <code>iteration</code> is an int but you need it as a float, you can cast like <code>float(iteration)</code>
-
-<b>ii. color points NOT in the set according to escape time</b>
-- you may want a <a href="https://www.shadertoy.com/view/WlfXRN">color map</a> :)
-
-<b>(optional) iii. upgrade your viewer (choose 0+ of the following  or equivalent)</b> 
-- fancy time-dependent infinite zooming colors (ooh!)
-- use smooth <a href="https://iquilezles.org/articles/msetsmooth/">iteration count</a>
-- add anti-aliasing; see <a href="https://www.shadertoy.com/view/4df3Rn">iq's approach</a> (average over AA * AA subpixels)
--- note: anti-aliasing will only make the jagged bits smoother/blurrier; it will not make the hard steps between colors into a smooth gradient (that's the job of the smooth iteration count)
--- note: you will need to pass some additional uniforms to the fragment shader
---- you will need <code>window_get_size()</code> from cow, which returns the windows width and height in pixels as a <code>vec2</code>
---- you will also need <code>camera.screen_height_World</code>
-- make it zoom into an interesting region (automatically) -- feel free to do this on the GPU (shader) or the CPU (Camera2D) 
-
-for inspo, here is my <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3E%E2%9C%A8">solution</a>; you do NOT need to replicate it
-
-<hr color="black">
-<b>c. world-space <a href="https://learnopengl.com/Lighting/Basic-Lighting">phong or blinn-phong lighting</a></b>
-- (optional) add a checkbox to render with toon shading
-- (optional) add a checkbox to distort the bunny into a corkscrew using the vertex shader (see <a href="https://www.youtube.com/embed/z2ka2rAIqXM?rel=0%3E%E2%9C%A8">here</a>)
-- (optional) implement <a href="https://learnopengl.com/Lighting/Light-casters">attenuation</a>
-
-<details><summary>recommended starter code (everything except part of the fragment shader's main() is set up for you)</summary>
-<code class="x">void hw6c() {
-    Shader shader; {
-        char *vertex_shader_source = R""(
-            #version 330 core
-            layout (location = 0) in vec3 _p_model;
-            layout (location = 1) in vec3 _n_model;
-            uniform mat4 P, V, M;
-
-            out vec3 p_world;
-            out vec3 _n_world;
-
-            void main() {
-                p_world = (M * vec4(_p_model, 1.0)).xyz;
-                _n_world = mat3(transpose(inverse(M))) * _n_model;
-                gl_Position = P * V * vec4(p_world, 1.0);
-            }
-        )"";
-
-        char *fragment_shader_source = R""(
-            #version 330 core
-
-            uniform vec3 o_camera_world; // camera position
-            uniform int  num_lights;
-            uniform vec3 light_positions_world[16];
-            uniform vec3 light_colors[16];
-            uniform float ambientStrength;
-            uniform float diffuseStrength;
-            uniform float specularStrength;
-            uniform float shininess; 
-
-            in vec3 p_world; // fragment position
-            in vec3 _n_world;
-
-            out vec4 fragColor;
-
-            void main() {
-                vec3 n_world = normalize(_n_world); // fragment normal
-
-                vec3 color = vec3(ambientStrength);
-                for (int i = 0; i < num_lights; ++i) {
-                    // TODO add diffuse  contribution
-                    // TODO add specular contribution
-
-                }
-
-                fragColor = vec4(color, 1);
-            }
-        )"";
-
-        shader = shader_create(vertex_shader_source, 2, fragment_shader_source);
-    }
-
-    #define MAX_NUM_LIGHTS 6
-    int num_lights = 1;
-    vec3 light_positions_world[MAX_NUM_LIGHTS] = {};
-    vec3 light_colors[MAX_NUM_LIGHTS] = { monokai.red, monokai.orange, monokai.yellow, monokai.green, monokai.blue, monokai.purple };
-    {
-        int k = 0;
-        light_positions_world[k++] = {  0.0,  0.0,  3.0 };
-        light_positions_world[k++] = {  0.0,  0.0, -3.0 };
-        light_positions_world[k++] = {  0.0,  3.0,  0.0 };
-        light_positions_world[k++] = {  0.0, -3.0,  0.0 };
-        light_positions_world[k++] = {  3.0,  0.0,  0.0 };
-        light_positions_world[k++] = { -3.0,  0.0,  0.0 };
-    }
-
-    IndexedTriangleMesh3D mesh = library.meshes.bunny;
-
-    real ambientStrength = 0.1;
-    real diffuseStrength = 0.6;
-    real specularStrength = 1.0;
-    real shininess = 12.0;
-
-    Camera3D camera = { 10.0, RAD(45) };
-    while (cow_begin_frame()) {
-        camera_move(&camera);
-        mat4 P = camera_get_P(&camera);
-        mat4 V = camera_get_V(&camera);
-        mat4 M = globals.Identity;
-        mat4 PV = P * V;
-
-        gui_slider("num_lights", &num_lights, 0, MAX_NUM_LIGHTS, 'j', 'k');
-        soup_draw(PV, SOUP_POINTS, num_lights, light_positions_world, light_colors);
-        _widget_translate_3D(P * V, num_lights, light_positions_world, light_colors);
-
-        gui_printf("");
-        gui_slider("ambientStrength", &ambientStrength, 0.0, 2.0);
-        gui_slider("diffuseStrength", &diffuseStrength, 0.0, 2.0);
-        gui_slider("specularStrength", &specularStrength, 0.0, 2.0);
-        gui_slider("shininess", &shininess, 0.0, 256.0);
-
-        shader_set_uniform(&shader, "P", P);
-        shader_set_uniform(&shader, "V", V);
-        shader_set_uniform(&shader, "M", M);
-        shader_set_uniform(&shader, "o_camera_world", camera_get_origin(&camera));
-        shader_set_uniform(&shader, "num_lights", num_lights);
-        shader_set_uniform(&shader, "light_positions_world", num_lights, light_positions_world);
-        shader_set_uniform(&shader, "light_colors", num_lights, light_colors);
-        shader_set_uniform(&shader, "ambientStrength", ambientStrength);
-        shader_set_uniform(&shader, "diffuseStrength", diffuseStrength);
-        shader_set_uniform(&shader, "specularStrength", specularStrength);
-        shader_set_uniform(&shader, "shininess", shininess);
-        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_positions);
-        shader_pass_vertex_attribute(&shader, mesh.num_vertices, mesh.vertex_normals);
-        shader_draw(&shader, mesh.num_triangles, mesh.triangle_indices);
-    }
-}</code></details>
-<hr color="black">
-<b>(optional) 🐰. use custom shaders to make a scene of your choosing</b> 
 
 
 
