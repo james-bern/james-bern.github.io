@@ -84,10 +84,10 @@ $$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 
 
 
 <b>v. add shadows</b>
-- to get shadows up and running, i would just make the color be <code>(0.5 * color)</code> if the pixel is in shadow
+- to get shadows up and running as quickly as possible, i would fornow make the color be <code>(0.5 * color)</code> if the pixel is in shadow
 -- a pixel is in shadow if its shadow raw hits a triangle OR its normal is facing away from the light
 --- (two vectors face away from each other if their dot product is negative)
---- the "its normal is facing away from the light" check will stops being necessary if you properly implement lighting
+--- the "its normal is facing away from the light" check will no longer being necessary if you properly implement lighting in vi.
 - your code should NOT contain large amounts of repetition (i.e., no copy and pasting 50 lines)
 -- first, make it work; then, let a function (and a struct) spring forth organically! 🌱
 
