@@ -29,7 +29,7 @@ here is a quick <a href="https://github.com/james-bern/CSCI-371/wiki/Linear-Alge
 <hr color="lightblue">
 <b>lecture summary. ray</b>
 
-a ray is parameterized by the equation $\mathbf{p}(t) = \mathbf{o} + t * \mathbf{d},$
+a ray is parameterized by the equation $\mathbf{p}(t) = \mathbf{o} + t\mathbf{d},$
 + $\mathbf{o}$ is the ray origin (i.e. the position of the camera)
 + $\mathbf{d}$ is the ray direction (i.e., a vector pointing from the camera origin to the pixel)
 + $t$ is "distance," i.e. how far we've travelled along the ray; $t > 0$
@@ -47,13 +47,13 @@ Call the (possible) intersection point $\mathbf{p}$ and get pumped.
 Our approach is to express $\mathbf{p}$ in two different ways and set them equal.
 
 First, we can write down the definition of a ray
-$$ \begin{cases} \mathbf{p} = \mathbf{o} + t * \mathbf{d} \end{cases},$$and the condition for the $\mathbf{p}$ being <i>in front of the camera</i> (not behind it)
+$$ \begin{cases} \mathbf{p} = \mathbf{o} + t\mathbf{d} \end{cases},$$and the condition for the $\mathbf{p}$ being <i>in front of the camera</i> (not behind it)
 $$\begin{cases} t > 0 \end{cases}.$$Second, we can write down the definition of barycentric coordinates
 $$\begin{cases} \mathbf{p} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1,\end{cases}$$and the condition for $\mathbf{p}$ being inside the triangle
 $$\begin{cases} \alpha,\beta,\gamma > 0 \end{cases}.$$Equating the different equations for $\mathbf{p}$ gives us the following <i>system of equations</i>
-$$\begin{cases} \mathbf{o} + t * \mathbf{d} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1.\end{cases}$$Taking on both conditions (in front of camera; inside of triangle) gives us the <i>condition for a "hit"</i>
+$$\begin{cases} \mathbf{o} + t\mathbf{d} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1.\end{cases}$$Taking on both conditions (in front of camera; inside of triangle) gives us the <i>condition for a "hit"</i>
 $$\begin{cases} \alpha,\beta,\gamma,t > 0.\end{cases}$$We find $\alpha,\beta,\gamma,t$ by bashing with a matrix solve :)
-$$\begin{cases} \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c} - t * \mathbf{d} = \mathbf{o}\\ \alpha + \beta + \gamma = 1 \end{cases}$$You are the One, Neo.
+$$\begin{cases} \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c} - t\mathbf{d} = \mathbf{o}\\ \alpha + \beta + \gamma = 1 \end{cases}$$You are the One, Neo.
 $$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 1 & 0 \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ t \end{bmatrix} = \begin{bmatrix} \mathbf{o} \\ 1 \end{bmatrix} $$
 <hr color="black">
 <b>a. implement a software raytracer</b>
