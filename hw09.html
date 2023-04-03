@@ -27,14 +27,27 @@
 here is a quick <a href="https://github.com/james-bern/CSCI-371/wiki/Linear-Algebra-Crash-Course">linear algebra crash course</a>
 
 <hr color="lightblue">
-<b>lecture summary. ray</b>
+<b>lecture summary. a ray</b>
 
 a ray is parameterized by the equation $\mathbf{p}(t) = \mathbf{o} + t\mathbf{d},$
-+ $\mathbf{o}$ is the ray origin (i.e. the position of the camera)
-+ $\mathbf{d}$ is the ray direction (i.e., a vector pointing from the camera origin to the pixel)
-+ $t$ is "distance," i.e. how far we've travelled along the ray; $t > 0$
+&bull; $\mathbf{o}$ is the ray's <i>origin</i> (e.g, the camera position/origin)
+&bull; $\mathbf{d}$ is a ray's <i>direction</i> (a vector pointing from, e.g., the camera origin to a particular pixel)
+&bull; $t$ is "distance," i.e. how far we've travelled along the ray; note that for a ray, $t > 0$
 
-please see the lecture slides for how to find $\mathbf{d}$ for a particular pixel
+<hr color="lightblue">
+<b>lecture summary. basic ray tracing</b>
+
+for each given pixel, a <i>primary ray</i> is shot (cast, traced, etc.) from the camera origin toward the pixel
+- please see the lecture slides for help calculating the ray's direction $\mathbf{d}$ in code
+
+if the ray <i>hits</i> the mesh, then a <i>shadow ray</i> is shot from the position of the first hit to the position of the light source
+- if the shadow ray makes it to the light source without hitting anything else, then the surface patch at the hit position is <i>lit</i>
+- otherwise it is in <i>shadow</i>
+
+lit surface patches get the full Blinn-Phong lighting model
+surface patches in shadow get only the ambient term
+- for this assignment, the ambient color should be something like <code>0.4 * color</code>, where <code>color</code> is the barycentric interpolation of the hit triangle's vertex colors (NOT, e.g., <code>vec3(0.4)</code> like we used in the shader assignment)
+-- note: everything is in world coordinates, so $\mathbf{color} = \alpha{\mathbf{color}_a} + \beta{\mathbf{color}_b} + \gamma{\mathbf{color}_c}$ is perfectly correct
 
 <hr color="lightblue">
 <b>lecture summary. ray-triangle intersection</b>
@@ -60,11 +73,10 @@ Using our handy dandy <a href="https://github.com/james-bern/CSCI-371/wiki/Linea
 $$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d}\end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ t \end{bmatrix} = \begin{bmatrix} \mathbf{o} \end{bmatrix},$$onto which we tack on the second equation to yield our final system
 $$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 1 & 0 \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ t \end{bmatrix} = \begin{bmatrix} \mathbf{o} \\ 1 \end{bmatrix}.$$You are the One, Neo
 <hr color="black">
-$$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 1 & 0 \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ t \end{bmatrix} = \begin{bmatrix} \mathbf{o} \\ 1 \end{bmatrix} $$
 <b>a. implement a software raytracer</b>
 - this hw is written to follow a similar structure to the rasterization homework :)
 - initially, we will be working entirely inside of the <code>raytrace(...)</code> function
--- eventually, you will want to add your own function immediately above it
+-- eventually, you will want to add your own function immediately above it that casts a single ray
 
 
 <b>i. set up the rays properly</b>
