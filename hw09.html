@@ -51,10 +51,11 @@ $$ \begin{cases} \mathbf{p} = \mathbf{o} + t\mathbf{d} \end{cases},$$and the con
 $$\begin{cases} t > 0 \end{cases}.$$Second, we can write down the definition of barycentric coordinates
 $$\begin{cases} \mathbf{p} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1,\end{cases}$$and the condition for $\mathbf{p}$ being inside the triangle
 $$\begin{cases} \alpha,\beta,\gamma > 0 \end{cases}.$$Equating the different equations for $\mathbf{p}$ gives us the following <i>system of equations</i>
-$$\begin{cases} \mathbf{o} + t\mathbf{d} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1.\end{cases}$$Taking on both conditions (in front of camera; inside of triangle) gives us the <i>condition for a "hit"</i>
-$$\begin{cases} \alpha,\beta,\gamma,t > 0.\end{cases}$$We find $\alpha,\beta,\gamma,t$ by bashing with a matrix solve :)
-$$\begin{cases} \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c} - t\mathbf{d} = \mathbf{o}\\ \alpha + \beta + \gamma = 1 \end{cases}$$You are the One, Neo.
-$$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 1 & 0 \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ t \end{bmatrix} = \begin{bmatrix} \mathbf{o} \\ 1 \end{bmatrix} $$
+$$\tag{1}\begin{cases} \mathbf{o} + t\mathbf{d} = \alpha\mathbf{a} + \beta\mathbf{b} + \gamma\mathbf{c}\\ \alpha + \beta + \gamma = 1.\end{cases}$$Taking on both conditions (in front of camera; inside of triangle) gives us the <i>condition for a "hit"</i>
+$$\begin{cases} \alpha,\beta,\gamma,t > 0.\end{cases}$$We will solve Equation 1 for $\alpha,\beta,\gamma,t.$ For a change, let's bash with a matrix solve :)
+Using our handy dandy <a href="https://github.com/james-bern/CSCI-371/wiki/Linear-Algebra-Crash-Course#linear-combination-of-vectors---matrix-vector-product">linear algebra trick</a>, the first equation in Equation 1 becomes
+$$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d}\end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ t \end{bmatrix} = \begin{bmatrix} \mathbf{o} \end{bmatrix},$$onto which we tack on the second equation to yield our final system
+$$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 1 & 0 \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ t \end{bmatrix} = \begin{bmatrix} \mathbf{o} \\ 1 \end{bmatrix}.$$You are the One, Neo
 <hr color="black">
 <b>a. implement a software raytracer</b>
 - this hw is written to follow a similar structure to the rasterization homework :)
