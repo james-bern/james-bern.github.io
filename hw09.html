@@ -112,7 +112,15 @@ $$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 
 };
 
 CastRayHit cast_ray(IndexedTriangleMesh3D *mesh, vec3 o, vec3 d) {
-    ...
+    CastRayHit hit = {};
+    hit.t = INFINITY;
+    hit.tri = -1;
+
+    for (int tri = 0; tri < mesh->num_triangles; ++tri) {
+        ...
+    }
+
+    return hit;
 }</code></details>
 
 <b>vi. add Blinn-Phong lighting (or something vaguely similar)</b>
