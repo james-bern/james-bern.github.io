@@ -80,9 +80,23 @@ $$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 
 
 
 <b>i. set up the rays properly</b>
-- add a checkbox to draw them using <code>eso_begin(PV_for_debug_drawing_rays, SOUP_LINES)</code>
+- add a checkbox to draw them using <code>eso_begin(PV_for_debug_drawing_rays, SOUP_LINES, 1.0)</code>
 -- once you're confident the rays are set up right, you're welcome to delete this functionality
 
+<details><summary>(hint / spoilers) drawing rays with eso</summary>
+Here's a way to do it with only a single call to <code>eso_begin(...)</code> and <code>eso_end(...)</code>.
+
+<code class ="x">vec3 o = ...
+eso_begin(PV_for_debug_drawing_rays, SOUP_LINES);
+eso_color(monokai.white);
+for (int i = 0; i < side_length_in_pixels; ++i) {
+    for (int j = 0; j < side_length_in_pixels; ++j) {
+        vec3 d = ...
+        eso_vertex(o);
+        eso_vertex(o + d);
+    }
+}
+eso_end();</code></details>
 
 <b>ii. draw the triangles in the right place in a single color (say, blue)</b>
 
@@ -96,7 +110,7 @@ $$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 
 <b>iii. draw the triangles in the right color (no shadows; no lighting)</b>
 
 
-<b>iv. get overlap correct</b>
+<b>iv. get overlap correct if you haven't already (i.e., color the pixel according to its ray's first (minimum $t$) hit)</b>
 
 
 <b>v. add shadows</b>
@@ -144,8 +158,8 @@ determine the pixel color similarly to your fragment shader from hw6c, with this
 note: we are NOT using a shader this time; all on the CPU (vroom vroom 🐢) :)
 
 
-<b>🔆. make the last two triangles perfectly-reflective mirrors</b>
-- i.e., <code>if ((tri == mesh->num_triangles - 2) || (tri == mesh->num_triangles - 1)) { ... }</code>
+<b>🔆. make some of the triangles perfectly-reflective mirrors</b>
+- e.g., <code>if ((tri == mesh->num_triangles - 2) || (tri == mesh->num_triangles - 1)) { ... }</code>
 -- (these are the floor for the teapot scene)
 - you'll need to pick a color for the sky
 
