@@ -137,9 +137,11 @@ CastRayHit cast_ray(IndexedTriangleMesh3D *mesh, vec3 o, vec3 d) {
 
 <b>vi. add Blinn-Phong lighting (or Phong, or something vaguely similar)</b>
 
-Determine the pixel color similarly to your fragment shader from hw6c, with this modification:
+determine the pixel color similarly to your fragment shader from hw6c, with this modification:
 - lit surface patches get the full lighting model
 - surface patches in shadow get only the ambient term
+
+note: we are NOT using a shader this time; all on the CPU (vroom vroom 🐢) :)
 
 
 <b>🔆. make the last two triangles perfectly-reflective mirrors</b>
