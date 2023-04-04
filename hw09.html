@@ -152,7 +152,7 @@ CastRayHit cast_ray(IndexedTriangleMesh3D *mesh, vec3 o, vec3 d) {
 <b>vi. add Blinn-Phong lighting (or something vaguely similar)</b>
 
 
-<b>🔆. make the last two triangles perfectly-reflective mirrors</b>
+<b>🔆. make, e.g., the last two triangles perfectly-reflective mirrors</b>
 - i.e., <code>if ((tri == mesh->num_triangles - 2) || (tri == mesh->num_triangles - 1)) { ... }</code>
 -- (these are the floor for the teapot scene)
 - you'll need to pick a color for the sky
