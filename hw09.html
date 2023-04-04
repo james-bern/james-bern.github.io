@@ -98,6 +98,15 @@ for (int i = 0; i < side_length_in_pixels; ++i) {
 }
 eso_end();</code></details>
 
+<b>ii. draw the triangles in the right place in a single color (say, blue)</b>
+
+<details><summary>(readme) sample code to iterate over the mesh</summary><code class="x">for (int tri = 0; tri < mesh->num_triangles; ++tri) {
+    vec3 a = mesh->vertex_positions[mesh->triangle_indices[tri][0]];
+    vec3 b = mesh->vertex_positions[mesh->triangle_indices[tri][1]];
+    vec3 c = mesh->vertex_positions[mesh->triangle_indices[tri][2]];
+    ...
+}</code></details>Vkk
+
 <b>iii. draw the triangles in the right color (no shadows; no lighting)</b>
 
 
