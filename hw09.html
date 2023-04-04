@@ -83,15 +83,20 @@ $$\begin{bmatrix} \mathbf{a} & \mathbf{b} & \mathbf{c} & -\mathbf{d} \\ 1 & 1 & 
 - add a checkbox to draw them using <code>eso_begin(PV_for_debug_drawing_rays, SOUP_LINES)</code>
 -- once you're confident the rays are set up right, you're welcome to delete this functionality
 
+<details><summary>(hint / spoilers) drawing rays with eso</summary>
+Here's a way to do it with only a single call to <code>eso_begin(...)</code> and <code>eso_end(...)</code>.
 
-<b>ii. draw the triangles in the right place in a single color (say, blue)</b>
-
-<details><summary>(readme) sample code to iterate over the mesh</summary><code class="x">for (int tri = 0; tri < mesh->num_triangles; ++tri) {
-    vec3 a = mesh->vertex_positions[mesh->triangle_indices[tri][0]];
-    vec3 b = mesh->vertex_positions[mesh->triangle_indices[tri][1]];
-    vec3 c = mesh->vertex_positions[mesh->triangle_indices[tri][2]];
-    ...
-}</code></details>
+<code class ="x">vec3 o = ...
+eso_begin(PV_for_debug_drawing_rays, SOUP_LINES);
+eso_color(monokai.white);
+for (int i = 0; i < side_length_in_pixels; ++i) {
+    for (int j = 0; j < side_length_in_pixels; ++j) {
+        vec3 d = ...
+        eso_vertex(o);
+        eso_vertex(o + d);
+    }
+}
+eso_end();</code></details>
 
 <b>iii. draw the triangles in the right color (no shadows; no lighting)</b>
 
