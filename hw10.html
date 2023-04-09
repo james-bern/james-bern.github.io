@@ -1,0 +1,219 @@
+<html> <head> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> <meta http-equiv="Pragma" content="no-cache"> <meta http-equiv="Expires" content="0"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="robots" content="noindex"> <title></title>
+<style> { box-sizing: border-box; } .content { max-width:780; margin:auto; } .content_no_max_width { max-width:1000000000; margin:auto; } a {color:#C0F;} p {color:black;margin-top:.5em;margin-bottom:.5em;margin-left:0;margin-right:0;} img { max-width:780; display: block; margin-left: auto; margin-right: auto;} .comment { background-color:black;color:white; } body {font-family:serif,Menlo,monospace;font-size:1em;margin:24;background-color:white;color:black;white-space:pre-wrap;} math {white-space:normal;font-family:serif;}  code {
+  color: purple;
+  background-color: #f5f1f5;
+  padding: 0px;
+  font-family:Menlo,monospace;
+}
+.video-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<script> MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } }; </script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+</head><body><div class="content">
+
+<a href="csci-371.html"><b><- back</b></a> <button onClick="window.print()" style="float:right;">print this page</button>
+
+<center><b>hw10</b>
+upload hw.cpp to <a href="https://glow.williams.edu/courses/3490435">glow</a>
+<a href = "https://github.com/james-bern/CSCI-371">codebase</a>
+<a href="https://youtu.be/JJvJafSXkI0">reference solution</a>
+</center>
+<b>a. pendulum</b>
+Let's learn about simulation by simulating a pendulum forward in time.
+(Ignore the fact that for this particular case we can solve for $\theta(t)$ analytically.)
+
+Consider a 2D pendulum with length $L$ and mass $m$ concentrated at the bottom.
+Call the pendulum's angular position $\theta$.
+Let's work in SI units and consider the gravitational acceleration to be $g=-9.81$.
+
+<img src="pendulum.png">
+
+Note that the spatial position of the pendulum's mass (endpoint) is $\mathbf{p} = L\begin{bmatrix}\sin(\theta)\\ -\cos(\theta)\end{bmatrix}.$
+
+<hr>
+
+The pendulum's dynamics are governed Newton's second law (torque form) $$\tau = I\alpha,$$where $\tau$ is the torque about the axis of rotation (origin), $I$ is the moment of inertia, and $\alpha$ is the angular acceleration.
+
+Recall that the gravitational force is $mg$, and note the length of the perpendicular lever arm is $L\sin\theta$.
+Therefore the torque about the axis of rotation is $\tau=mgL\sin\theta$.
+
+Recall (via Google) that the moment of inertia of a point mass distance $L$ from its axis of rotation is $I = mL^2$.
+
+✨ Warmup: Solve the above equations for $\alpha$.
+
+✅ $m$ drops out. What does this *mean*?
+
+<hr>
+Choose the state of our system to $\xi = (\theta, \omega)^T$, where $\theta$ is the pendulum's angular position, and $\omega$ is its angular velocity.
+Recall that $\omega = \dot\theta$ and $\alpha = \dot\omega = \ddot\theta$, where the "dot notation" just denotes the number of time derivatives.
+I.e., $\dot\theta = \frac{d\theta}{dt}$ and $\ddot\theta = \frac{d^2\theta}{dt^2}$.
+
+To simulate, we're going to discretize our physics in time.
+Call $h$ the simulation time step.
+The very useful notation $\xi_k$ means "$\xi$ at time $t_k$"
+
+✅ "If the state of the system at time $t_k$ is $\xi_{k}$, then $\xi_{k+1}$ is the state of the system $h$ seconds later, i.e. the state of the system at time $t_{k+1} = t_k + h$."
+
+<hr>
+Here are three of the simplest approaches for integrating our simulation forward in time.
+
+⭐ Forward Euler is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k}$
+I.e., $
+\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix}
+=
+\begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
++
+h\begin{bmatrix}\dot\theta_{k}\\\dot\omega_{k}\end{bmatrix},
+$ which we can rewrite as $
+\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix}
+=
+\begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
++
+h\begin{bmatrix}\omega_{k}\\\alpha_{k}\end{bmatrix}.
+$
+
+
+⭐Semi-implicit Euler can be written as $
+\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix}
+=
+\begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
++
+h\begin{bmatrix}\omega_{k + 1}\\\alpha_{k}\end{bmatrix}.
+$
+
+
+⭐Implicit Euler can be written as $
+\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix}
+=
+\begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
++
+h\begin{bmatrix}\omega_{k + 1}\\\alpha_{k + 1}\end{bmatrix}.
+$
+Note that for Implicit Euler, $\theta_{k+1}$ will show up on both sides of the equation!
+To simulate using Implicit Euler we need to <b>solve a nonlinear equation</b> every timestep.
+We will cover one approach to this (fixed point iteration) in class on Thursday.
+
+
+<hr>
+Simulate the pendulum.
+- angular acceleration
+- potential energy (just used for plotting) -- $\text{PE} = -mgy$  (or, technically speaking, $-mg(y-y_0),$ where $y_0$ is any constant)
+  NOTE $g$ is _negative_
+- kinetic energy (just used for plotting) -- $\text{KE} = mv^2/2 = m(L\omega)^2/2$
+- explicit euler integration
+- semi-implicit euler integration
+- (harder) implicit euler integration
+  HINT: eliminate $\omega_{k+1}$ so you just have an equation of $\theta_{k+1}$.
+  HINT: fixed point iteration is probably the easiest way to solve the resulting equation.
+        ?HINT: if you would like, you can eliminate $\omega_{k+1}$ from the Implicit Euler rule by substitution.
+        ?HINT: you can also get rid of $\alpha_{k+1}$ by recalling that you have $\alpha(\theta)$, a function for $\alpha$ as a function of $\theta$ (true at all time). choose to evaluate it at $t_{k+1}$ and substitute your equation for $\alpha_{k+1}=\alpha(\theta_{k+1})$ into the equation to eliminate $\alpha$
+
+In your glow comment, explain the general behavior (i.e. what happens to the total energy of the system) of the three methods.
+✅ Feel free to check your work <a href="http://courses.cms.caltech.edu/cs171/assignments/hw6/hw6-notes/notes-hw6.html#NotesSection1.1">here</a>. 🚨 Warning: this resource uses a different sign convention for $g$.
+
+
+
+
+<b>b. linear blend skinning</b>
+Let's learn about skinning by implementing it all on the CPU.
+(In practice, we would probably use a <a href="http://graphics.cs.cmu.edu/courses/15-466-f17/notes/skinning.html">vertex shader</a>.)
+
+👇 I highly recommend drawing a diagram of the setup as you read through this explanation.
+
+Consider a skeleton consisting of a chain of $n$ bones.
+Call the $L_j$ the length of each bone.
+Call the $\theta_j$ the angle of each bone <b>relative</b> to the previous bone.
+
+Let's adopt some convenient conventions.
+Call the position of a bone the spatial position of its left endpoint.
+Assume the skeleton's rest pose has it lying along the positive $x$-axis, with the zeroth bone positioned at the origin.
+I.e., the $j$-th bone has rest position $\mathbf{B}_j = (X_j, 0)^T,$ and the zeroth bone's position $\mathbf{B}_0 = (0, 0)^T$.
+For simplicity, notate the position of the far end of the last bone in the skeleton $\mathbf{B}_n = \sum_{j=0}^{n-1}L_j.$
+
+✅ $\mathbf{B}_0 = (0,0)^T$ and $\mathbf{B}_1 = (L_0,0)^T.$
+
+<hr>
+Forward kinematics is the problem of mapping from (relative) joint angles $\theta_0,...,\theta_{n-1}$ to joint positions $\mathbf{b}_0,...,\mathbf{b}_n$.
+
+<details><summary>👩‍🔬 Optional General-Purpose 3D Derivation</summary>
+The general solution to forward kinematics is quite elegant, though a bit overkill for this particular 2D problem. For completeness, I include it here, but feel free to skip it. We'll use the horrifying notation from the transforms week :D
+
+Call $\mathbf{F}_j$ the coordinate system of the $j$-th bone.
+Recall ${}_{j-1}\mathbf{F}_{j}$ is the coordinate system of the $j$-th bone <i>written in the coordinate system of the $j-1$-th bone.</i>
+Say the <i>relative</i> rotation of the $j$-th bone is encoded in $\mathbf{R}_j$.
+Say the $i$-th bone has length $L_j$.
+Then ${}_{j-1}\mathbf{F}_j = \mathbf{T}_j\mathbf{R}_j,$ where $\mathbf{T}_j$ is a translation by $(L_j, 0, 0)^T$.
+
+This notation had the property that ${}_{\text{World}}\mathbf{F}_{j+1} = {}_{\text{World}}\mathbf{F}_{j}\ {}_{j}\mathbf{F}_{j+1}.$
+This is a recurrence, which implies
+$${}_{\text{World}}\mathbf{F}_{j} = {}_{\text{World}}\mathbf{F}_{0}\ {}_{0}\mathbf{F}_{1} \cdots  {}_{j-1}\mathbf{F}_{j}.$$ Broken down into translations and rotations, the $j$-th coordinate system written in world coordinates is 
+$${}_{\text{World}}\mathbf{F}_j = \mathbf{R}_0\mathbf{T}_1\mathbf{R}_1 \cdots \mathbf{T}_j\mathbf{R}_j.$$
+</details>
+For our particular 2D problem, let's define the <i>absolute</i> orientation of the $j$-th bone to be $\phi_j$.
+Note that $\phi_j = \sum_{k = 0}^j\theta_k.$
+
+By convention the zeroeth bone $\mathbf{b}_0 = (0,0)^T$ is positioned at the origin.
+The world position of the $(j+1)$-th bone is given by $\mathbf{b}_{j+1}$ = $\mathbf{b}_{j}$ + $L_{j}\begin{bmatrix}\cos(\phi_j)\\\sin(\phi_j)\end{bmatrix}.$
+
+✅ $\mathbf{b}_0 = (0, 0)^T$ and $\mathbf{b}_1 = L_0\begin{bmatrix}\cos(\theta_0)\\\sin(\theta_0)\end{bmatrix}.$
+
+<hr>
+Skinning involves binding the nodes (vertices of the skin mesh) to the bones through weights.
+We can think of the weights being stored in a big matrix $\mathbf{W}.$
+The entry $W_{ij}$ is the $i$-th node's weighting of the $j$-th bone.
+
+Given $\mathbf{W}$ and the joint angles, our job is to compute the node's current position.
+The notation is going to get gross regardless, so we might as well go all in 🤷‍♂️
+
+Call ${}_j\mathbf{S}_i$ the rest position of the $i$-th node <i>written in the rest coordinate system of the $j$-th bone</i>.
+
+The $j$-th bone has current (absolute) coordinate system $\mathbf{M}_j=\mathbf{T}_{\mathbf{b}_j}\mathbf{R}_{\phi_j}$.
+✅ Note that this is just the typical "rotation by absolute orientation followed by translation to absolute position."
+
+Linear blend skinning calculates the $i$-th node's current position as $\mathbf{s}_i = \sum_{j=0}^{n-1}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}.$
+✅ Note that $\mathbf{M}_j\ {{}_j\mathbf{S}_i}$ can be thought of as...
+       - "gluing" the $i$-th node to the $j$-th bone (when both are in their rest positions),
+       - rotating and translating the bone according to $\mathbf{M}_j$,
+       - measuring where the node ends up.
+✅ $\sum_{j=0}^{n-1}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}$ repeats the above operation for all $n$ bones and takes the weighted average of the results.
+
+
+<details><summary>✨ HINT (${}_{j}\mathbf{S}_i$)</summary>
+Notate ${}_{\text{World}}\mathbf{S}_i$ the rest position of the $i$-th node in world coordinates.
+Say the $j$-th bone has rest position (coordinate system origin) $\mathbf{B}_j$.
+Then ${}_{j}\mathbf{S}_i = {}_{\text{World}}\mathbf{S}_i - \mathbf{B}_j.$
+</details>
+<hr>
+Implement skeletal animation.
+- forward kinematics (skeleton should show up)
+- skinning (skin should show up)
+  🌟🌟 HINT To access the weights, use <code>weights[mode][node_i][bone_i]</code>.
+              (mode is which approach to skinning we're using (i.e. RIGID or SMOOTH))
+- (harder) smooth weight selection (press 'k' to switch to smooth mode; should look reasonable -- i.e. skin is smooth, does not self-intersect except at extreme angles, etc.)
+  HINT the graph of weights (drawn in the top left of the app) should be nice and continuous. 🚨 i did _not_ use sin or cos.
+
+
+✅ Forward kinematics and skinning require very little code.
+
+
+
+
+<!--
+<b>b. boids (creative coding)</b>
+Using the <a href="https://team.inria.fr/imagine/files/2014/10/flocks-hers-and-schools.pdf">original 1987 paper</a> (and Google) as inspiration, write an $\mathcal{O}(n^2)$ flocking simulation.
+A bare bones solution might simulate ~100 2D boids and draw them as POINTS.
+
+Possible extensions:
+- Make the boids follow your mouse.
+- Draw the boids as isosceles TRIANLGES, with the tip indicating direction.
+- Simulate 3D boids, and drawn them as tets.
+- Implement a basic spatial data structure to simulate a *bunch* of boids.
+  - E.g., repopulate a naive grid at the start of each frame.
+    Instead of querying every other boid in the world...
+    ...a given boid would just query boids in its grid cell and maybe also the neighboring cells.
+-->
+
+
+<center>🐄</center>
+
+</div></body></html>
