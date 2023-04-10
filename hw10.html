@@ -54,18 +54,17 @@ In order to simulate, we need to discretize our physics in time. The very useful
 
 <hr color="lightblue">
 
-We can calculate the time derivative of a vector one component at a time, i.e., $$\dot\xi_k = \begin{bmatrix}\dot\theta_{k}\\\dot\omega_{k}\end{bmatrix}$$
+We can calculate the time derivative of a vector one component at a time, i.e., $$\dot\xi_k = \begin{bmatrix}\dot\theta_{k}\\\dot\omega_{k}\end{bmatrix} = \begin{bmatrix}\omega_{k}\\\alpha_{k}\end{bmatrix}$$
 <hr color="lightblue">
 <b>Implement the following integration methods.</b>
 
 <i>Forward Euler</i> is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k}$
 It should gain energy.
 
-<i>Semi-implicit Euler</i>, for our problem, is $\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix}
-=
-\begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
+<i>Semi-implicit Euler</i>, for our problem, is $\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix} = \begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
 +
-h\begin{bmatrix}\omega_{k + 1}\\\alpha_{k}\end{bmatrix}$
+h\begin{bmatrix}\omega_{k + 1}\\\alpha_{k}\end{bmatrix}
+$
 It should preserve energy.
 
 <i>Implicit Euler</i> is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k + 1}$
