@@ -98,14 +98,38 @@ while (true) {
 
 <b>b. linear blend skinning</b>
 
-<b>Implement forward kinematics in <code>update_skeleton(...)</code>.
+This problem is about the toy skeletal animation setup in <code>hw10b(...)</code>.
+Please read through the comments at the top before going any further.
 
-<b>Implement skinning in <code>update_skin(...)</code>.
+<hr color="lightblue">
+(More notes coming Tuesday.)
 
-<b>Implement rigid weights in <code>initialize_weights(...)</code>.
+<hr color="lightblue">
+These snail functions may be convenient:
+- <code>vec2 rotated(vec2 a, real theta);</code> returns the result of rotating a vector (or point) <code>a</code> counter-clockwise by <code>theta</code>.
+- <code>vec2 e_theta(real theta);</code> returns a unit vector with angle <code>theta</code>
+Note that <code>e_theta(theta)</code> returns the same thing as <code>rotated(V2(1.0, 0.0), theta)</code>.
 
-<b>Implement smooth weights in <code>initialize_weights(...)</code>.
+Additionally, you are given a useful function <code>real point_segment_distance(vec2 p, vec2 a, vec2 b);</code>.
 
+<hr color="lightblue">
+<b>Implement forward kinematics in <code>update_skeleton(...)</code>.</b>
+
+<details><summary>(Spoiler)</summary><code class="x">    b[0] = {};
+    for (int j = 0; j < NUM_BONES; ++j ) {
+        b[j + 1] = b[j] + L[j] * e_theta(theta[j]);
+    }</code></details>
+<b>Implement skinning in <code>update_skin(...)</code>.</b>
+
+<details><summary>(Spoiler)</summary><code class="x">    for (int i = 0; i < NUM_NODES; ++i) {
+        s[i] = {};
+        for (int j = 0; j < NUM_BONES; ++j) {
+            s[i] += weights[i][j] * (b[j] + rotated(s_bind[i] - b_bind[j], theta[j]));
+        }
+    }</code></details>
+<b>Implement rigid weights in <code>initialize_weights(...)</code>.</b>
+
+<b>Implement smooth weights in <code>initialize_weights(...)</code>.</b>
 
 <hr color="lightblue">
 
@@ -115,7 +139,8 @@ while (true) {
 <hr color="black">
 
 <b>c. final project proposal</b>
-In the glow comment for this homework, please answer final project questions 0-4 from the course website.
+
+In the glow comment for this hw, please answer final project questions 0-4 from the <a href="csci-371.html">course homepage</a>.
 
 
 
