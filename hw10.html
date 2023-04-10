@@ -74,7 +74,7 @@ It should lose energy.
 Note that $\xi_{k + 1}$ shows up on both sides of the Implicit Euler update rule. For our problem, this will make the update rule impossible to solve analytically for $\xi_{k + 1}$. We can instead solve for $\xi_{k + 1}$ numerically. <i><a href="https://en.wikipedia.org/wiki/Fixed-point_iteration">Fixed-point iteration</a></i> works well for our problem.
 
 For our problem, note that the time derivative of the next state is a function of the next state $\dot\xi_{k+1} = \mathbf{f}(\xi_{k + 1}).$
-<details><summary>(Spoilers) Specifically,</summary>$$\mathbf{f}(\xi_{k + 1}) = \begin{bmatrix}\omega_{k + 1}\\\alpha_{k + 1}\end{bmatrix} = \begin{bmatrix}\omega_{k + 1}\\\frac{g}{L}\sin\theta_{k+1}\end{bmatrix}$$</details>
+<details><summary>(Hint / Concept Check) Specifically,</summary>$$\mathbf{f}(\xi_{k + 1}) = \begin{bmatrix}\omega_{k + 1}\\\alpha_{k + 1}\end{bmatrix} = \begin{bmatrix}\omega_{k + 1}\\\frac{g}{L}\sin\theta_{k+1}\end{bmatrix}$$</details>
 Let's estimate the next state.
 We can initialize our estimate of the next state with, e.g., the current state $\xi_{k + 1}^{est} \leftarrow \xi_k$
 We can iteratively refine this estimate of the next state by applying the update rule
