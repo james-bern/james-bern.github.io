@@ -43,7 +43,7 @@ The dynamics of a rotating system are governed by (the torque form of) Newton's 
 
 For our particular problem, the gravitational force on the pendulum's mass is $mg$, and the length of the perpendicular lever arm is $L\sin\theta$. Therefore, the torque about the axis of rotation is $\tau=mgL\sin\theta$. Additionally, recall (via Google or ChatGPT) that the moment of inertia of a point mass at distance $L$ from the axis of rotation is $I = mL^2$.
 
-Substituting these facts into Newton's second law yields $$mgL\sin\theta=mL^2\alpha$$This implies $$\boxed{\alpha = \frac{g}{L}\sin\theta}$$✅ Note that $\alpha$ does not depend on $m$. What does this *mean*?
+Substituting these facts into Newton's second law yields $$mgL\sin\theta=mL^2\alpha$$This implies $${\alpha = \frac{g}{L}\sin\theta}$$✅ Note that $\alpha$ does not depend on $m$. What does this *mean*?
 
 <hr color="lightblue">
 Call the <i>state</i> of the system$$\xi = \begin{bmatrix}\theta\\ \omega\end{bmatrix}$$
@@ -98,14 +98,36 @@ while (true) {
 
 <b>b. linear blend skinning</b>
 
-This problem is about the toy skeletal animation setup in <code>hw10b(...)</code>.
-Please read through the comments at the top before going any further.
+<hr color="lightblue">
+<b>Note:</b> We won't actually write coordiante systems as homogeneous matrices to solve the homework problem.
+However, the following derivation will give you a concise, general understanding of linear blend skinning.
+I recommend drawing pictures as you read.
 
 <hr color="lightblue">
-(More notes coming Tuesday.)
+Consider a skeleton made of bones.
+Call $\mathbf{B}_j$ the coordinate system attached to the j-th bone in the skeleton, in world coordinates.
 
+Consider a skin made of nodes.
+Call $\mathbf{s}_i$ the position of the i-th node in the skin, in world coordinates.
+
+Consider the sekeleton and skin in a choice of <i>binding pose</i> (e.g., "T-pose", i.e., arms stuck straight out).
+Formally, the $j$-th bone is at $\mathbf{B}_j^{\text{bind}}$ and the $i$-th node is at $\mathbf{s}_i^{\text{bind}}$, all in world coordinates.
+
+Call ${}_j{\mathbf{s}_i} = \left(\mathbf{B}_j^{\text{bind}}\right)^{-1} \mathbf{s}_i^{\text{bind}}$ the $i$-th node's position in the $j$-th bone's coordinate system.
+Call $\mathbf{t}_{ij} = \mathbf{B}_j\ {}_j{\mathbf{s}_i}$ the position of the $i$-th node if we had bolted it to the $j$-th bone when everything was in the bind pose.
+Note that $\mathbf{t}_{ij}$ is in world coordinates.
+
+In practice, rather than attach the node to a single bone, we will blend the result of attaching it to all of bones by means of a weighted sum (i.e., linear combination). Call $W_{ij}$ the <i>weight</i> of the $j$-th bone on the $i$-th node.
+
+This is <i>linear blend skinning</i>:$$\boxed{\mathbf{s_i} = \sum_{j} W_{ij} \mathbf{t}_{ij}}$$
 <hr color="lightblue">
-(More notes coming Tuesday.)
+In 2D, the matrix solution might be overkill. 
+
+Rather than consider the bones coordinate systems, we'll say that each has a <i>position</i> $\mathbf{b}_j$ and an <i>angle</i> $\theta_j$.
+
+TODO: position of b_j
+
+TODO: t_ij
 
 <hr color="lightblue">
 These snail functions may be convenient:
