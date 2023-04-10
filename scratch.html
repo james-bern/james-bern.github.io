@@ -1,0 +1,77 @@
+
+Let's learn about skinning by implementing it all on the CPU.
+
+👇 I highly recommend drawing a diagram of the setup as you read through this explanation.
+
+Consider a skeleton consisting of a chain of $n$ bones.
+Call the $L_j$ the length of each bone.
+Call the $\theta_j$ the angle of each bone <b>relative</b> to the previous bone.
+
+Let's adopt some convenient conventions.
+Call the position of a bone the spatial position of its left endpoint.
+Assume the skeleton's rest pose has it lying along the positive $x$-axis, with the zeroth bone positioned at the origin.
+I.e., the $j$-th bone has rest position $\mathbf{B}_j = (X_j, 0)^T,$ and the zeroth bone's position $\mathbf{B}_0 = (0, 0)^T$.
+For simplicity, notate the position of the far end of the last bone in the skeleton $\mathbf{B}_n = \sum_{j=0}^{n-1}L_j.$
+
+✅ $\mathbf{B}_0 = (0,0)^T$ and $\mathbf{B}_1 = (L_0,0)^T.$
+
+<hr>
+Forward kinematics is the problem of mapping from (relative) joint angles $\theta_0,...,\theta_{n-1}$ to joint positions $\mathbf{b}_0,...,\mathbf{b}_n$.
+
+<details><summary>👩‍🔬 Optional General-Purpose 3D Derivation</summary>
+The general solution to forward kinematics is quite elegant, though a bit overkill for this particular 2D problem. For completeness, I include it here, but feel free to skip it. We'll use the horrifying notation from the transforms week :D
+
+Call $\mathbf{F}_j$ the coordinate system of the $j$-th bone.
+Recall ${}_{j-1}\mathbf{F}_{j}$ is the coordinate system of the $j$-th bone <i>written in the coordinate system of the $j-1$-th bone.</i>
+Say the <i>relative</i> rotation of the $j$-th bone is encoded in $\mathbf{R}_j$.
+Say the $i$-th bone has length $L_j$.
+Then ${}_{j-1}\mathbf{F}_j = \mathbf{T}_j\mathbf{R}_j,$ where $\mathbf{T}_j$ is a translation by $(L_j, 0, 0)^T$.
+
+This notation had the property that ${}_{\text{World}}\mathbf{F}_{j+1} = {}_{\text{World}}\mathbf{F}_{j}\ {}_{j}\mathbf{F}_{j+1}.$
+This is a recurrence, which implies
+$${}_{\text{World}}\mathbf{F}_{j} = {}_{\text{World}}\mathbf{F}_{0}\ {}_{0}\mathbf{F}_{1} \cdots  {}_{j-1}\mathbf{F}_{j}.$$ Broken down into translations and rotations, the $j$-th coordinate system written in world coordinates is 
+$${}_{\text{World}}\mathbf{F}_j = \mathbf{R}_0\mathbf{T}_1\mathbf{R}_1 \cdots \mathbf{T}_j\mathbf{R}_j.$$
+</details>
+For our particular 2D problem, let's define the <i>absolute</i> orientation of the $j$-th bone to be $\phi_j$.
+Note that $\phi_j = \sum_{k = 0}^j\theta_k.$
+
+By convention the zeroeth bone $\mathbf{b}_0 = (0,0)^T$ is positioned at the origin.
+The world position of the $(j+1)$-th bone is given by $\mathbf{b}_{j+1}$ = $\mathbf{b}_{j}$ + $L_{j}\begin{bmatrix}\cos(\phi_j)\\\sin(\phi_j)\end{bmatrix}.$
+
+✅ $\mathbf{b}_0 = (0, 0)^T$ and $\mathbf{b}_1 = L_0\begin{bmatrix}\cos(\theta_0)\\\sin(\theta_0)\end{bmatrix}.$
+
+<hr>
+
+Skinning involves binding the nodes (vertices of the skin mesh) to the bones through weights.
+We can think of the weights being stored in a big matrix $\mathbf{W}.$
+The entry $W_{ij}$ is the $i$-th node's weighting of the $j$-th bone.
+
+Given $\mathbf{W}$ and the joint angles, our job is to compute the node's current position.
+The notation is going to get gross regardless, so we might as well go all in 🤷‍♂️
+
+Call ${}_j\mathbf{S}_i$ the rest position of the $i$-th node <i>written in the rest coordinate system of the $j$-th bone</i>.
+
+The $j$-th bone has current (absolute) coordinate system $\mathbf{M}_j=\mathbf{T}_{\mathbf{b}_j}\mathbf{R}_{\phi_j}$.
+✅ Note that this is just the typical "rotation by absolute orientation followed by translation to absolute position."
+
+Linear blend skinning calculates the $i$-th node's current position as $\mathbf{s}_i = \sum_{j=0}^{n-1}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}.$
+✅ Note that $\mathbf{M}_j\ {{}_j\mathbf{S}_i}$ can be thought of as...
+       - "gluing" the $i$-th node to the $j$-th bone (when both are in their rest positions),
+       - rotating and translating the bone according to $\mathbf{M}_j$,
+       - measuring where the node ends up.
+✅ $\sum_{j=0}^{n-1}W_{ij}\ \mathbf{M}_j\ {{}_j\mathbf{S}_i}$ repeats the above operation for all $n$ bones and takes the weighted average of the results.
+
+
+<details><summary>✨ HINT (${}_{j}\mathbf{S}_i$)</summary>
+Notate ${}_{\text{World}}\mathbf{S}_i$ the rest position of the $i$-th node in world coordinates.
+Say the $j$-th bone has rest position (coordinate system origin) $\mathbf{B}_j$.
+Then ${}_{j}\mathbf{S}_i = {}_{\text{World}}\mathbf{S}_i - \mathbf{B}_j.$
+</details>
+<hr>
+Implement skeletal animation.
+- forward kinematics (skeleton should show up)
+- skinning (skin should show up)
+  🌟🌟 HINT To access the weights, use <code>weights[mode][node_i][bone_i]</code>.
+              (mode is which approach to skinning we're using (i.e. RIGID or SMOOTH))
+- (harder) smooth weight selection (press 'k' to switch to smooth mode; should look reasonable -- i.e. skin is smooth, does not self-intersect except at extreme angles, etc.)
+  HINT the graph of weights (drawn in the top left of the app) should be nice and continuous. 🚨 i did _not_ use sin or cos.
