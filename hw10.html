@@ -120,7 +120,7 @@ Call ${}_j{\mathbf{s}_i} = \left(\mathbf{B}_j^{\text{bind}}\right)^{-1} \mathbf{
 
 Now we move the skeleton around.
 
-We can calculate $\mathbf{t}_{ij} = \mathbf{B}_j\ {}_j{\mathbf{s}_i}$ the position of the $i$-th node <i>if we had bolted it to the $j$-th bone when everything was in the bind pose</i>. Note that $\mathbf{t}_{ij}$ is back in world coordinates.
+We can calculate $\mathbf{t}_{ij} = \mathbf{B}_j\ {}_j{\mathbf{s}_i}$ the position of the $i$-th node <i>if we had bolted it to the $j$-th bone when everything was in the bind pose</i>. Note that $\mathbf{t}_{ij}$ is in world coordinates.
 
 In practice, rather than attach the node to a single bone, we <i>blend</i> the result of attaching it to each of the bones by means of a weighted average (a special kind of <i>linear combination</i> where the sum of the weights/coefficients is 1). Call $W_{ij}$ the <i>weight</i> of the $j$-th bone on the $i$-th node, where we are careful to ensure $\sum_j W_{ij} = 1.$
 
