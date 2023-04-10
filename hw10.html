@@ -59,16 +59,16 @@ We can calculate the time derivative of a vector one component at a time, i.e., 
 <b>Implement the following integration methods.</b>
 
 <i>Forward Euler</i> is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k}$
-It should gain energy.
+It should gain energy over time.
 
 <i>Semi-implicit Euler</i>, for our problem, ends up being $\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix} = \begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
 +
 h\begin{bmatrix}\omega_{k + 1}\\\alpha_{k}\end{bmatrix}
 $
-It should preserve energy.
+It should preserve energy over time.
 
 <i>Implicit Euler</i> is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k + 1}$
-It should lose energy.
+It should lose energy over time.
 
 <hr color="lightblue">
 Note that $\xi_{k + 1}$ shows up on both sides of the Implicit Euler update rule. For our problem, this will make the update rule impossible to solve analytically for $\xi_{k + 1}$. We can instead solve for $\xi_{k + 1}$ numerically. <i><a href="https://en.wikipedia.org/wiki/Fixed-point_iteration">Fixed-point iteration</a></i> works well for our problem.
