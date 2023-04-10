@@ -104,37 +104,51 @@ However, the following derivation will give you a concise, general understanding
 I recommend drawing pictures as you read.
 
 <hr color="lightblue">
+First, here is a general purpose 3D derivation.
+
 Consider a skeleton made of bones.
 Call $\mathbf{B}_j$ the coordinate system attached to the j-th bone in the skeleton, in world coordinates.
+(We write $\mathbf{B}_j$ as a 4x4 matrix.)
 
 Consider a skin made of nodes.
 Call $\mathbf{s}_i$ the position of the i-th node in the skin, in world coordinates.
 
-Consider the sekeleton and skin in a choice of <i>binding pose</i> (e.g., "T-pose", i.e., arms stuck straight out).
-Formally, the $j$-th bone is at $\mathbf{B}_j^{\text{bind}}$ and the $i$-th node is at $\mathbf{s}_i^{\text{bind}}$, all in world coordinates.
+Consider the skeleton and skin in a choice of <i>binding pose</i> (e.g., "T-pose", with the character's arms stuck straight out).
+In the binding pose, we say that the $j$-th bone's coordinate system is $\mathbf{B}_j^{\text{bind}}$ and the $i$-th node's position is $\mathbf{s}_i^{\text{bind}}$, all in world coordinates.
 
 Call ${}_j{\mathbf{s}_i} = \left(\mathbf{B}_j^{\text{bind}}\right)^{-1} \mathbf{s}_i^{\text{bind}}$ the $i$-th node's position in the $j$-th bone's coordinate system.
-Call $\mathbf{t}_{ij} = \mathbf{B}_j\ {}_j{\mathbf{s}_i}$ the position of the $i$-th node if we had bolted it to the $j$-th bone when everything was in the bind pose.
-Note that $\mathbf{t}_{ij}$ is in world coordinates.
 
-In practice, rather than attach the node to a single bone, we will blend the result of attaching it to all of bones by means of a weighted sum (i.e., linear combination). Call $W_{ij}$ the <i>weight</i> of the $j$-th bone on the $i$-th node.
+Now we move the skeleton around.
 
-This is <i>linear blend skinning</i>:$$\boxed{\mathbf{s_i} = \sum_{j} W_{ij} \mathbf{t}_{ij}}$$
+We can calculate $\mathbf{t}_{ij} = \mathbf{B}_j\ {}_j{\mathbf{s}_i}$ the position of the $i$-th node <i>if we had bolted it to the $j$-th bone when everything was in the bind pose</i>. Note that $\mathbf{t}_{ij}$ is back in world coordinates.
+
+In practice, rather than attach the node to a single bone, we <i>blend</i> the result of attaching it to each of the bones by means of a weighted average (a special kind of <i>linear combination</i> where the sum of the weights/coefficients is 1). Call $W_{ij}$ the <i>weight</i> of the $j$-th bone on the $i$-th node, where we are careful to ensure $\sum_j W_{ij} = 1.$
+
+This way of calculating the position of the skin is called <i>linear blend skinning</i>:$$\boxed{\mathbf{s_i} = \sum_{j} W_{ij} \mathbf{t}_{ij}}$$
 <hr color="lightblue">
 For our simple 2D setup, the general-purpose matrix solution might be overkill.
+Instead, we'll start from the idea that each (2D) bone has a <i>position</i> $\mathbf{b}_j$ and an <i>angle</i> $\theta_j$, both in world coordinates.
+I recommend trying to figure how this approach works on paper; there are spoilers below if you get stuck or would like to see my particular solution.
 
-Instead, we'll start from the idea that each (2D) bone has a <i>position</i> $\mathbf{b}_j$ and an <i>angle</i> $\theta_j$.
-
-TODO: position of b_j
-
-TODO: t_ij
-
+<details><summary>(Hint / Spoilers) How to compute $\mathbf{b}_j$</summary>
+We place the left side of the zeroth bone at the origin, i.e., $\mathbf{b}_j = \mathbf{0}$.
+Then $\mathbf{b}_{j + 1} = \mathbf{b}_j + L_j \hat{\mathbf{e}}_\theta,$ where $\hat{\mathbf{e}}_\theta=\begin{bmatrix}\cos\theta\\\sin\theta\end{bmatrix}.$</details>
+<details><summary>(Hint / Spoilers) How to compute ${}_j{\mathbf{s}_i}$</summary>
+We have ${}_j{\mathbf{s}_i} = \mathbf{s}_i^{\text{bind}} - \mathbf{b}_j$.</details>
+<details><summary>(Hint / Spoilers) How to compute $\mathbf{t}_{ij}$</summary>
+Finally $\mathbf{t}_{ij} = \mathbf{b}_j + \mathbf{R}_{\theta_j}\ {}_j{\mathbf{s}_i}$.</details>
 <hr color="lightblue">
 These snail functions may be convenient:
-- <code>vec2 rotated(vec2 a, real theta);</code> returns the result of rotating a vector (or point) <code>a</code> counter-clockwise by <code>theta</code>.
-- <code>vec2 e_theta(real theta);</code> returns a unit vector with angle <code>theta</code>
-Note that <code>e_theta(theta)</code> returns the same thing as <code>rotated(V2(1.0, 0.0), theta)</code>.
 
+<code>vec2 rotated(vec2 a, real theta);</code>
+returns the result of rotating a vector (or point) <code>a</code> counter-clockwise by <code>theta</code>, i.e., $\mathbf{R}_\theta\ \mathbf{a} = \begin{bmatrix}\cos\theta & -\sin\theta \\ \sin\theta & \cos\theta\end{bmatrix}\begin{bmatrix}a_x\\a_y\end{bmatrix}$
+
+<code>vec2 e_theta(real theta);</code>
+returns a unit vector with angle <code>theta</code>, i.e., $\hat{\mathbf{e}}_\theta = \begin{bmatrix}\cos\theta\\\sin\theta\end{bmatrix}$.
+
+✅ <code>e_theta(theta)</code> returns the same thing as <code>rotated(V2(1.0, 0.0), theta)</code>.
+
+<hr color="lightblue">
 Additionally, you are given a useful function <code>real point_segment_distance(vec2 p, vec2 a, vec2 b);</code>.
 
 <hr color="lightblue">
