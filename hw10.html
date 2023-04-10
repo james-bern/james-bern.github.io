@@ -127,7 +127,7 @@ In practice, rather than attach the node to a single bone, we <i>blend</i> the r
 This way of calculating the position of the skin is called <i>linear blend skinning</i>:$$\boxed{\mathbf{s_i} = \sum_{j} W_{ij} \mathbf{t}_{ij}}$$
 <hr color="lightblue">
 For our simple 2D setup, the general-purpose matrix solution might be overkill.
-Instead, we'll start from the idea that each (2D) bone has a <i>position</i> $\mathbf{b}_j$ and an <i>angle</i> $\theta_j$, both in world coordinates.
+Instead, we'll start from the idea that each (2D) bone has a 2D <i>position</i> $\mathbf{b}_j$ and a 1D <i>angle</i> $\theta_j$, both in world coordinates.
 I recommend trying to figure how this approach works on paper; there are spoilers below if you get stuck or would like to see my particular solution.
 
 <details><summary>(Hint / Spoilers) How to compute $\mathbf{b}_j$</summary>
