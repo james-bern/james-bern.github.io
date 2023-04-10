@@ -121,9 +121,9 @@ In practice, rather than attach the node to a single bone, we will blend the res
 
 This is <i>linear blend skinning</i>:$$\boxed{\mathbf{s_i} = \sum_{j} W_{ij} \mathbf{t}_{ij}}$$
 <hr color="lightblue">
-In 2D, the matrix solution might be overkill. 
+For our simple 2D setup, the general-purpose matrix solution might be overkill.
 
-Rather than consider the bones coordinate systems, we'll say that each has a <i>position</i> $\mathbf{b}_j$ and an <i>angle</i> $\theta_j$.
+Instead, we'll start from the idea that each (2D) bone has a <i>position</i> $\mathbf{b}_j$ and an <i>angle</i> $\theta_j$.
 
 TODO: position of b_j
 
