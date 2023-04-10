@@ -152,13 +152,13 @@ returns a unit vector with angle <code>theta</code>, i.e., $\hat{\mathbf{e}}_\th
 Additionally, you are given a useful function <code>real point_segment_distance(vec2 p, vec2 a, vec2 b);</code>.
 
 <hr color="lightblue">
-<b>Implement forward kinematics in <code>update_skeleton(...)</code>.</b>
+<b>Implement forward kinematics (calculate $\mathbf{b}_j$ for $j=0,1,...,\text{NUM_BONES}$) in <code>update_skeleton(...)</code>.</b>
 
 <details><summary>(Spoiler)</summary><code class="x">    b[0] = {};
     for (int j = 0; j < NUM_BONES; ++j ) {
         b[j + 1] = b[j] + L[j] * e_theta(theta[j]);
     }</code></details>
-<b>Implement skinning in <code>update_skin(...)</code>.</b>
+<b>Implement skinning (calculate $\mathbf{s}_i$ for $i = 0,1,...,\text{NUM_NODES} - 1$) in <code>update_skin(...)</code>.</b>
 
 <details><summary>(Spoiler)</summary><code class="x">    for (int i = 0; i < NUM_NODES; ++i) {
         s[i] = {};
