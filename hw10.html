@@ -58,7 +58,7 @@ We can calculate the time derivative of a vector one component at a time, i.e., 
 <hr color="lightblue">
 <b>Implement the following integration methods.</b>
 
-<i>Forward Euler</i> is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k}$
+<i>Explicit (Forward) Euler</i> is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k}$
 It should gain energy over time.
 
 <i>Semi-implicit Euler</i>, for our problem, ends up being $\begin{bmatrix}\theta_{k+1}\\\omega_{k+1}\end{bmatrix} = \begin{bmatrix}\theta_{k}\\\omega_{k}\end{bmatrix}
@@ -67,7 +67,7 @@ h\begin{bmatrix}\omega_{k + 1}\\\alpha_{k}\end{bmatrix}
 $
 It should preserve energy over time.
 
-<i>Implicit Euler</i> is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k + 1}$
+<i>Implicit (Backward) Euler</i> is $\xi_{k + 1} = \xi_{k} + h \dot\xi_{k + 1}$
 It should lose energy over time.
 
 <hr color="lightblue">
@@ -92,7 +92,7 @@ while (true) {
 <hr color="lightblue">
 
 <a href="http://courses.cms.caltech.edu/cs171/assignments/hw6/hw6-notes/notes-hw6.html#NotesSection1.1">(Optional) Supplementary Reading</a>.
-🐧 Implement explicit euler integration for a double pendulum (you will want to take small timesteps).
+🐧 Implement explicit euler integration for a double pendulum (you will want to take very small timesteps). You can also try to implement semi-implicit euler and implicit euler if you would like.
 
 
 <hr color="black">
