@@ -160,7 +160,7 @@ Once you are done, you should be able to move the skeleton around by pressing <c
         b[j + 1] = b[j] + L[j] * e_theta(theta[j]);
     }</code></details>
 <b>Implement skinning (calculate $\mathbf{s}_i$ for $i = 0,1,...,\text{NUM_NODES} - 1$) in <code>update_skin(...)</code>.</b>
-Once you are done, you should see the skin around the skeleton. <b>Note:</b> the skin will NOT behave correctly when you move the skeleton. This is A-OK.
+Once you are done, you should see the skin around the skeleton. <b>Note:</b> the skin will NOT behave as you might expect when you move the skeleton. This is A-OK. I have implemented incorrect but educational approaches to initializing the weights $W_{ij}$. Take a look in the code for <code>initialize_weights(...)</code> and see if you can figure out what is going on for mode 0 (only-zeroth) and mode 1 (all-equal). Does the skin behave as you would expect now? Cool! Let's implement some proper skinning modes.
 
 <details><summary>(Spoiler)</summary><code class="x">    for (int i = 0; i < NUM_NODES; ++i) {
         s[i] = {};
