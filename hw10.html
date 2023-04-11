@@ -153,12 +153,14 @@ Additionally, you are given a useful function <code>real point_segment_distance(
 
 <hr color="lightblue">
 <b>Implement forward kinematics (calculate $\mathbf{b}_j$ for $j=0,1,...,\text{NUM_BONES}$) in <code>update_skeleton(...)</code>.</b>
+Once you are done, you should be able to move the skeleton around by pressing <code>'p'</code> on the keyboard or by playing with the sliders.
 
 <details><summary>(Spoiler)</summary><code class="x">    b[0] = {};
     for (int j = 0; j < NUM_BONES; ++j ) {
         b[j + 1] = b[j] + L[j] * e_theta(theta[j]);
     }</code></details>
 <b>Implement skinning (calculate $\mathbf{s}_i$ for $i = 0,1,...,\text{NUM_NODES} - 1$) in <code>update_skin(...)</code>.</b>
+Once you are done, you should see the skin around the skeleton. <b>Note:</b> the skin will NOT behave correctly when you move the skeleton. This is A-OK.
 
 <details><summary>(Spoiler)</summary><code class="x">    for (int i = 0; i < NUM_NODES; ++i) {
         s[i] = {};
@@ -167,8 +169,10 @@ Additionally, you are given a useful function <code>real point_segment_distance(
         }
     }</code></details>
 <b>Implement rigid weights in <code>initialize_weights(...)</code>.</b>
+In order to test rigid weights, switch the mode to rigid either by moving the slider or pressing <code>'k'</code> twice on the keyboard. A correct implementation of rigid weights should look like a rigid robot (very "angular"). There will be some "artifacts" where triangles overlap each other.
 
 <b>Implement smooth weights in <code>initialize_weights(...)</code>.</b>
+In order to test smooth weights, switch the mode to smooth either by moving the slider of pressing <code>'k'</code> three times on the keyboard (if you're in a rush, you could instead press <code>'j'</code> once). A correct implementation of smooth weights should look like a snake ("smooth"). All artifacts should be gone. :)
 
 <hr color="lightblue">
 
