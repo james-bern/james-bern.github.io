@@ -73,6 +73,15 @@ It should lose energy over time.
 <hr color="lightblue">
 Note that $\xi_{k + 1}$ shows up on both sides of the Implicit Euler update rule. For our problem, this will make the update rule impossible to solve analytically for $\xi_{k + 1}$. We can instead solve for $\xi_{k + 1}$ numerically. A numerical technique called <i><a href="https://en.wikipedia.org/wiki/Fixed-point_iteration">fixed-point iteration</a></i> works well for our problem.
 
+Here is a simple (runnable) example of fixed-point iteration to solve the equation $x = cos(x)$. It initializes $x \leftarrow 0$.
+
+<code class="x">real x = 0.0;
+real prevEstimate;
+do {
+    prevEstimate = x;
+    x = cos(x);
+} while (!ARE_EQUAL(prevEstimate, x));
+printf("%x = cos(x) at lf\n", x);</code>
 For our problem, note that the time derivative of the next state is a function of the next state $\dot\xi_{k+1} = \mathbf{f}(\xi_{k + 1}).$
 <details><summary>(Hint / Concept Check) Specifically,</summary>$$\mathbf{f}(\xi_{k + 1}) = \begin{bmatrix}\omega_{k + 1}\\\alpha_{k + 1}\end{bmatrix} = \begin{bmatrix}\omega_{k + 1}\\\frac{g}{L}\sin\theta_{k+1}\end{bmatrix}$$</details>
 Let's estimate the next state.
