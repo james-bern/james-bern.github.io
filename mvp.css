@@ -52,12 +52,6 @@ html {
     }
 }
 
-iframe {
-    border: 1px solid var(--color-bg-secondary);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow) var(--color-shadow);
-}
-
 /* Layout */
 article aside {
     background: var(--color-secondary-accent);
@@ -621,3 +615,10 @@ blockquote footer {
     top: -18px;
     visibility: hidden;
 }
+
+iframe {
+    border: 1px solid var(--color-bg-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow) var(--color-shadow);
+}
+
