@@ -80,7 +80,7 @@ header,
 main {
     margin: 0 auto;
     max-width: var(--width-content);
-    padding: 1rem 1rem;
+    padding: 0.5rem 1rem;
 }
 
 hr {
@@ -613,4 +613,11 @@ blockquote footer {
     transform-origin: top left;
     width: 50%;
     display: flex;
+}
+
+.anchor {
+    display: block;
+    position: relative;
+    top: -18px;
+    visibility: hidden;
 }
