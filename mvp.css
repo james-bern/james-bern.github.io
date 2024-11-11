@@ -52,6 +52,12 @@ html {
     }
 }
 
+iframe {
+    border: 1px solid var(--color-bg-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow) var(--color-shadow);
+}
+
 /* Layout */
 article aside {
     background: var(--color-secondary-accent);
@@ -600,3 +606,10 @@ blockquote footer {
     background-color: var(--color-scrollbar);
     border-radius: 10px;
 }
+
+<div class="youtube-container">
+    <iframe src="https://www.youtube.com/embed/WhY7uyc56ms?autoplay=1&mute=1&loop=1&color=white&controls=0&modestbranding=1&playsinline=1&rel=0&enablejsapi=1&playlist=WhY7uyc56ms" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+/* https://stackoverflow.com/questions/18342536/how-to-hide-the-bar-at-the-top-of-youtube-even-when-mouse-hovers-over-it */
+
