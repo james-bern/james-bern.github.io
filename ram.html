@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IEEE RAM - Arts & Robotics Special Issue</title>
+  <style>
+* {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+}
+
+        :root {
+         --primary: #00ff88;
+         --secondary: #ff006e;
+         --accent: #00b4d8;
+         --dark: #0a0a0a;
+         --light: #f0f0f0;
+        }
+
+        body {
+         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+         background: var(--dark);
+         color: var(--light);
+         overflow-x: hidden;
+         scroll-behavior: smooth;
+        }
+
+        a {
+         color: var(--primary);
+         text-decoration: none;
+         position: relative;
+         transition: all 0.3s ease;
+         display: inline-block;
+        }
+
+        a::after {
+         content: '';
+         position: absolute;
+         bottom: -2px;
+         left: 0;
+         width: 0;
+         height: 2px;
+         background: linear-gradient(90deg, var(--primary), var(--secondary));
+         transition: width 0.3s ease;
+        }
+
+        a:hover {
+         color: var(--secondary);
+         text-shadow: 0 0 10px var(--secondary);
+        }
+
+        a:hover::after {
+         width: 100%;
+        }
+
+        /* Alternative glow style */
+        a.glow-link {
+         color: var(--primary);
+         text-decoration: none;
+         transition: all 0.3s ease;
+         padding: 0.2em 0.4em;
+         border-radius: 4px;
+        }
+
+        a.glow-link:hover {
+         color: var(--light);
+         background: linear-gradient(45deg, var(--primary), var(--secondary));
+         box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+         text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Animated background */
+        .bg-animation {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         z-index: -1;
+         opacity: 0.3;
+         background: 
+          radial-gradient(circle at 20% 80%, var(--primary) 0%, transparent 50%),
+         radial-gradient(circle at 80% 20%, var(--secondary) 0%, transparent 50%),
+         radial-gradient(circle at 40% 40%, var(--accent) 0%, transparent 50%);
+        animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+         0%, 100% { transform: scale(1) translateY(0); }
+         50% { transform: scale(1.1) translateY(-20px); }
+        }
+
+        /* Header */
+        header {
+         position: relative;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         text-align: center;
+         padding: 8rem 4rem 2rem 4rem;
+        }
+
+        .floating-shapes {
+         position: absolute;
+         width: 100%;
+         height: 100%;
+         overflow: hidden;
+        }
+
+        @keyframes float {
+         0%, 100% { transform: translate(0, 0) scale(1); }
+         33% { transform: translate(100px, -100px) scale(1.1); }
+         66% { transform: translate(-100px, 100px) scale(0.9); }
+        }
+
+        h1 {
+         font-size: clamp(3rem, 8vw, 6rem);
+         font-weight: 900;
+         background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         background-clip: text;
+         margin-bottom: 1rem;
+         z-index: 10;
+         position: relative;
+         animation: glow 3s ease-in-out infinite;
+        }
+
+
+
+
+        @keyframes glow {
+         0%, 100% { filter: brightness(1) drop-shadow(0 0 20px rgba(0, 255, 136, 0.5)); }
+         50% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(255, 0, 110, 0.7)); }
+        }
+
+        .subtitle {
+         font-size: clamp(1.4rem, 3vw, 2.0rem);
+         font-weight: 300;
+         opacity: 0.9;
+         margin-bottom: 2rem;
+         z-index: 10;
+         position: relative;
+        }
+
+        .cta-button {
+         display: inline-block;
+         padding: 0.5rem 2rem;
+         font-size: clamp(1.0rem, 2.5vw, 1.6rem);
+         font-weight: 600;
+         text-decoration: none;
+         color: var(--dark);
+         background: linear-gradient(45deg, var(--primary), var(--accent));
+         border-radius: 50px;
+         position: relative;
+         overflow: hidden;
+         transition: all 0.3s ease;
+         z-index: 10;
+         box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .cta-button:hover {
+         transform: translateY(-3px);
+         box-shadow: 0 15px 40px rgba(0, 255, 136, 0.5);
+        }
+
+        .cta-button::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: -100%;
+         width: 100%;
+         height: 100%;
+         background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+         transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+         left: 100%;
+        }
+
+        /* Sections */
+        section {
+         padding: 2rem 2rem;
+         max-width: 1200px;
+         margin: 0 auto;
+         position: relative;
+        }
+
+        .section-header {
+         font-size: clamp(2rem, 5vw, 3rem);
+         font-weight: 700;
+         margin-bottom: 1rem;
+         text-align: center;
+         background: linear-gradient(45deg, var(--primary), var(--secondary));
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         background-clip: text;
+        }
+
+        /* Glass cards */
+        .glass-card {
+         background: rgba(255, 255, 255, 0.05);
+         backdrop-filter: blur(10px);
+         border-radius: 20px;
+         padding: 2rem;
+         border: 1px solid rgba(255, 255, 255, 0.1);
+         transition: all 0.3s ease;
+         position: relative;
+         overflow: hidden;
+        }
+
+        .glass-card:hover {
+         transform: translateY(-5px);
+         box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
+         border-color: var(--primary);
+        }
+
+        .glass-card::before {
+         content: '';
+         position: absolute;
+         top: -50%;
+         left: -50%;
+         width: 200%;
+         height: 200%;
+         background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+         opacity: 0;
+         transition: opacity 0.3s ease;
+         pointer-events: none;
+        }
+
+        .glass-card:hover::before {
+         opacity: 0.1;
+        }
+
+        /* Topics grid */
+        .topics-grid {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+         gap: 0.5rem;
+         margin-top: 0rem;
+        }
+
+        .topic-item {
+         font-size: 0.9rem;
+         padding: 0.5rem;
+         background: rgba(255, 255, 255, 0.03);
+         border-radius: 15px;
+         border-left: 4px solid var(--primary);
+         transition: all 0.3s ease;
+        }
+
+        .topic-item:hover {
+         background: rgba(255, 255, 255, 0.08);
+         transform: translateX(10px);
+         border-left-color: var(--secondary);
+        }
+
+        /* Timeline */
+
+        .timeline-item {
+         font-size: 1.2rem;
+        }
+
+        .date {
+         font-weight: 700;
+         color: var(--primary);
+         margin-bottom: 0.5rem;
+         display:inline;
+         float:left;
+         padding-right: 0.5em;
+        }
+
+
+
+
+
+        /* Editors grid */
+        .editors-grid {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+         gap: 0.5rem;
+         margin-top: 0rem;
+        }
+
+        .editor-card {
+         background: rgba(255, 255, 255, 0.05);
+         backdrop-filter: blur(10px);
+         border-radius: 20px;
+         padding: 0.5rem;
+         text-align: center;
+         border: 1px solid rgba(255, 255, 255, 0.1);
+         transition: all 0.3s ease;
+         position: relative;
+         overflow: hidden;
+        }
+
+        .editor-card::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: 0;
+         right: 0;
+         height: 5px;
+         background: linear-gradient(90deg, var(--primary), var(--secondary));
+         transform: scaleX(0);
+         transition: transform 0.3s ease;
+        }
+
+        .editor-card:hover::before {
+         transform: scaleX(1);
+        }
+
+        .editor-card:hover {
+         transform: translateY(-10px);
+         box-shadow: 0 20px 40px rgba(0, 180, 216, 0.3);
+        }
+
+        .editor-avatar {
+         width: 100px;
+         height: 100px;
+         margin: 0 auto 0.5rem;
+         border-radius: 20%;
+         background: linear-gradient(135deg, var(--primary), var(--secondary));
+         position: relative;
+         overflow: hidden;
+         box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .editor-avatar::before {
+         content: '';
+         position: absolute;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         width: 94%;
+         height: 94%;
+         border-radius: 50%;
+         background: var(--dark);
+        }
+
+        .editor-name {
+         font-size: 1.2rem;
+         font-weight: 700;
+         margin-bottom: 0.3rem;
+         color: var(--primary);
+        }
+
+        .editor-affiliation {
+         font-size: 0.9rem;
+         opacity: 0.8;
+         margin-bottom: 0.0rem;
+        }
+
+        .editor-expertise {
+         font-size: 0.85rem;
+         color: var(--accent);
+         font-style: italic;
+        }
+
+
+        /* Footer */
+        footer {
+         text-align: center;
+         padding: 3rem 2rem;
+         background: rgba(0, 0, 0, 0.5);
+         backdrop-filter: blur(10px);
+        }
+
+        .contact-link {
+         font-size: 0.85rem;
+         color: var(--primary);
+         text-decoration: none;
+         transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+         color: var(--secondary);
+         text-shadow: 0 0 20px var(--secondary);
+        }
+  </style>
+ </head>
+ <body>
+  <div class="bg-animation"></div>
+
+  <header>
+   <h1>Arts & Robotics</h1>
+   <p class="subtitle">IEEE RAM Special Issue - June 2026</p>
+   <div>
+    <a target="_blank" href="http://ras.papercept.net/journals/ra-mag/scripts/login.pl" class="cta-button">Submit Paper<br>(RAM Papercept ↗)</a>
+    &nbsp;&nbsp;
+    <a target="_blank" href="https://www.ieee-ras.org/publications/ram/special-issues/open-call-special-issue-on-the-arts-and-robotics" class="cta-button">Call For Papers<br>(IEEE RAS ↗)</a>
+   </div>
+  </header>
+
+  <section id="submission">
+   <h2 class="section-header">Info</h2>
+   <div class="glass-card">
+    <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 0.0rem;">
+    This special issue invites both <a href="https://www.ieee-ras.org/publications/ram/information-for-authors-ram#preparingmanuscript">technical papers ↗</a> and <a href="https://www.ieee-ras.org/publications/ram/information-for-authors-ram#preparingmanuscript">column papers ↗</a> &mdash; column papers can include pieces of visual robotic arts with comments, and other forms of media not suitable for a print format can be hosted by IEEE XPlore.
+    </p>
+   </div>
+  </section>
+
+  <section id="timeline">
+   <h2 class="section-header">Timeline</h2>
+   <div class="glass-card">
+    <div class="timeline-item">
+     <div class="date">Aug 1, 2025</div>
+     <div>Deadline for manuscript submission</div>
+    </div>
+    <br>
+    <div class="timeline-item">
+     <div class="date">Nov 1, 2025</div>
+     <div>First decision to authors</div>
+    </div>
+    <br>
+    <div class="timeline-item">
+     <div class="date">Dec 15, 2025</div>
+     <div>Deadline for revised manuscript</div>
+    </div>
+    <br>
+    <div class="timeline-item">
+     <div class="date">Feb 1, 2026</div>
+     <div>Final decision</div>
+    </div>
+    <br>
+    <div class="timeline-item">
+     <div class="date">Mar 10, 2026</div>
+     <div>Final manuscript upload</div>
+    </div>
+    <br>
+    <div class="timeline-item">
+     <div class="date">Jun 10, 2026</div>
+     <div>Special Issue Publication</div>
+    </div>
+   </div>
+  </section>
+
+
+  <section id="topics">
+   <h2 class="section-header">Topics</h2>
+   <div class="topics-grid">
+    <div class="topic-item"><h3>AI-Generated Art</h3></div>
+    <div class="topic-item"><h3>Arts-Driven R&D & Education</h3></div>
+    <div class="topic-item"><h3>Co-Creation With Robotics</h3></div>
+    <div class="topic-item"><h3>Emotional & Expressive Robots</h3></div>
+    <div class="topic-item"><h3>Ethics & Society</h3></div>
+    <div class="topic-item"><h3>Expressive Robotics</h3></div>
+    <div class="topic-item"><h3>Historical Perspectives</h3></div>
+    <div class="topic-item"><h3>Human-Robot Co-creativity</h3></div>
+    <div class="topic-item"><h3>Installation Art X Robotics</h3></div>
+    <div class="topic-item"><h3>Kinetic & Mobile Art</h3></div>
+    <div class="topic-item"><h3>Traditional Art X Robotics</h3></div>
+    <div class="topic-item"><h3>Wearables & Performance</h3></div>
+   </div>
+  </section>
+
+
+  <section id="editors">
+   <h2 class="section-header">Guest Editors</h2>
+   <div class="editors-grid">
+    <div class="editor-card">
+     <div class="editor-avatar">
+      <img src="jean.jpg" alt="Jean H. Oh" class="editor-avatar" style="object-fit: cover;">
+     </div>
+     <h3 class="editor-name">Jean H. Oh</h3>
+     <p class="editor-affiliation">Carnegie Mellon University</p>
+     <p class="editor-expertise">Robot intelligence, creative robotics, social robot navigation</p>
+     <p><a href="mailto:jeanoh@cmu.edu" class="contact-link">jeanoh@cmu.edu</a></p>
+    </div>
+    <div class="editor-card">
+     <div class="editor-avatar">
+      <img src="ken.jpg" alt="Ken Goldberg" class="editor-avatar" style="object-fit: cover;">
+     </div>
+     <h3 class="editor-name">Ken Goldberg</h3>
+     <p class="editor-affiliation">UC Berkeley</p>
+     <p class="editor-expertise">Art and robot manipulation</p>
+     <p><a href="mailto:goldberg@berkeley.edu" class="contact-link">goldberg@berkeley.edu</a></p>
+    </div>
+    <div class="editor-card">
+     <div class="editor-avatar">
+      <img src="perla.png" alt="Perla Maiolino" class="editor-avatar" style="object-fit: cover;">
+     </div>
+     <h3 class="editor-name">Perla Maiolino</h3>
+     <p class="editor-affiliation">University of Oxford</p>
+     <p class="editor-expertise">Soft robotics, tactile sensing technologies</p>
+     <p><a href="mailto:perla.maiolino@eng.ox.ac.uk" class="contact-link">perla.maiolino@eng.ox.ac.uk</a></p>
+    </div>
+    <div class="editor-card">
+     <div class="editor-avatar">
+      <img src="james.png" alt="James M. Bern" class="editor-avatar" style="object-fit: cover;">
+     </div>
+     <h3 class="editor-name">James M. Bern</h3>
+     <p class="editor-affiliation">Williams College</p>
+     <p class="editor-expertise">Soft robotics, VR, computer graphics</p>
+     <p><a href="mailto:jmb15@williams.edu" class="contact-link">jmb15@williams.edu</a></p>
+    </div>
+    <div class="editor-card">
+     <div class="editor-avatar">
+      <img src="hugo.jpg" alt="Hugo Rodrigue" class="editor-avatar" style="object-fit: cover;">
+     </div>
+     <h3 class="editor-name">Hugo Rodrigue</h3>
+     <p class="editor-affiliation">Sungkyunkwan University</p>
+     <p class="editor-expertise">Soft robotics, actuation, sensing</p>
+     <p><a href="mailto:rodrigue@skku.edu" class="contact-link">rodrigue@skku.edu</a></p>
+    </div>
+    <div class="editor-card">
+     <div class="editor-avatar">
+      <img src="josie.jpg" alt="Josie A. E. Hughes" class="editor-avatar" style="object-fit: cover;">
+     </div>
+     <h3 class="editor-name">Josie A. E. Hughes</h3>
+     <p class="editor-affiliation">EPFL</p>
+     <p class="editor-expertise">Soft robotics, robot design, manipulation</p>
+     <p><a href="mailto:josie.hughes@epfl.ch" class="contact-link">josie.hughes@epfl.ch</a></p>
+    </div>
+   </div>
+  </section>
+
+
+  <footer>
+   <p style="margin-top: 0rem; opacity: 0.7;">IEEE RAM Special Issue on Arts & Robotics</p>
+  </footer>
+
+  <script>
+   // Smooth scroll for navigation
+   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+     e.preventDefault();
+     document.querySelector(this.getAttribute('href')).scrollIntoView({
+      behavior: 'smooth'
+     });
+    });
+   });
+
+   // Parallax effect on scroll
+   window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const shapes = document.querySelectorAll('.shape');
+    shapes.forEach((shape, index) => {
+     const speed = 0.5 + (index * 0.2);
+     shape.style.transform = `translateY(${scrolled * speed}px)`;
+    });
+   });
+
+   // Intersection Observer for fade-in animations
+   const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+   };
+
+   const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+     if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+     }
+    });
+   }, observerOptions);
+
+   // Apply observer to all sections and cards
+   document.querySelectorAll('section, .glass-card, .topic-item, .editor-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'all 0.6s ease-out';
+    observer.observe(el);
+   });
+  </script>
+ </body>
+</html>
