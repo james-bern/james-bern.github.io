@@ -262,22 +262,24 @@
         /* Timeline */
 
         .timeline {
-         font-size: 1.2rem;
          display: grid;
          grid-template-columns: auto 1fr;
-         gap: 1rem 1rem;
+         gap: 20px 30px;
          align-items: baseline;
         }
 
-        .timeline-date {
-         color: #4ade80;
-         font-weight: 600;
-         white-space: nowrap;
+        .description {
+         font-size: 1.2rem;
         }
 
-        .timeline-description {
-         color: #ffffff;
-         line-height: 1.4;
+        .date {
+         white-space: nowrap;
+         font-weight: 700;
+         color: var(--primary);
+         margin-bottom: 0.5rem;
+         display:inline;
+         float:left;
+         padding-right: 0.5em;
         }
 
 
@@ -417,19 +419,19 @@
     <div class="timeline">
      <div class="timeline-date">Aug 1, 2025</div>
      <div class="timeline-description">Deadline for manuscript submission</div>
-
+     <br>
      <div class="timeline-date">Nov 1, 2025</div>
      <div class="timeline-description">First decision to authors</div>
-
+     <br>
      <div class="timeline-date">Dec 15, 2025</div>
      <div class="timeline-description">Deadline for revised manuscript</div>
-
+     <br>
      <div class="timeline-date">Feb 1, 2026</div>
      <div class="timeline-description">Final decision</div>
-
+     <br>
      <div class="timeline-date">Mar 10, 2026</div>
      <div class="timeline-description">Final manuscript upload</div>
-
+     <br>
      <div class="timeline-date">Jun 10, 2026</div>
      <div class="timeline-description">Special Issue Publication</div>
     </div>
