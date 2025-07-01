@@ -31,7 +31,7 @@
          color: var(--primary);
          text-decoration: none;
          position: relative;
-         transition: all 0.3s ease;
+         transition: all 0.3s ease, font-size 0s;
          display: inline-block;
         }
 
@@ -53,22 +53,6 @@
 
         a:hover::after {
          width: 100%;
-        }
-
-        /* Alternative glow style */
-        a.glow-link {
-         color: var(--primary);
-         text-decoration: none;
-         transition: all 0.3s ease;
-         padding: 0.2em 0.4em;
-         border-radius: 4px;
-        }
-
-        a.glow-link:hover {
-         color: var(--light);
-         background: linear-gradient(45deg, var(--primary), var(--secondary));
-         box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-         text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         /* Animated background */
@@ -157,7 +141,6 @@
          border-radius: 50px;
          position: relative;
          overflow: hidden;
-         transition: all 0.3s ease;
          z-index: 10;
          box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
         }
