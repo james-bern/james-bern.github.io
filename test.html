@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>Conversation</title>
+  <style>
+
+html, body {
+ margin:0;
+ height:100%;
+ overflow:hidden;
+}
+
+canvas {
+ display:block;
+ width:100%;
+ height:100%;
+}
+
+  </style>
+ </head>
+
+ <body>
+  <canvas id="canvas"></canvas>
+  <script> var Module = { canvas: document.getElementById('canvas') }; </script>
+
+  <script>
+   Module.preRun = Module.preRun || [];
+   Module.preRun.push(() => {
+    document.addEventListener('mousemove', (e) => {
+     Module.mouseX = e.clientX;
+     Module.mouseY = e.clientY;
+    }, { once: true });
+   });
+  </script>
+
+  <script src="main.js"></script>
+ </body>
+
+</html>
