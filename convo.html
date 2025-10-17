@@ -23,17 +23,6 @@ canvas {
  <body>
   <canvas id="canvas"></canvas>
   <script> var Module = { canvas: document.getElementById('canvas') }; </script>
-
-  <script>
-   Module.preRun = Module.preRun || [];
-   Module.preRun.push(() => {
-    document.addEventListener('mousemove', (e) => {
-     Module.mouseX = e.clientX;
-     Module.mouseY = e.clientY;
-    }, { once: true });
-   });
-  </script>
-
   <script src="convo.js"></script>
  </body>
 
