@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
- <head>
-  <link rel="stylesheet" href="mvp.css"> 
-  <meta charset="utf-8">
-  <title>my tiny blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
+<head>
+<link rel="stylesheet" href="mvp.css"> 
+<meta charset="utf-8">
+<title>blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
 body {
  max-width: 42rem;
  margin: 3rem auto;
@@ -14,41 +14,51 @@ body {
  line-height: 1.6;
 }
 
-    time {
-     color: #666;
-     font-size: 0.9rem;
-    }
+time {
+ color: #666;
+ font-size: 0.9rem;
+}
 
-    pre {
-     background: #FEF0E0;
-     padding: 1rem;
-     overflow-x: auto;
-     border-radius: 10px;
-     font-size: 0.9rem;
-    }
+pre {
+ background: #FEF0E0;
+ padding: 1rem;
+ overflow-x: auto;
+ border-radius: 10px;
+ font-size: 0.9rem;
+}
 
-    pre {
-     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
+pre {
+ font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
 
-    h2 .permalink:hover::after {
-     content: " ¶";
-     font-size: 0.9em;
-    }
-  </style>
- </head>
- <body>
+h2 .permalink:hover::after {
+ content: " ¶";
+ font-size: 0.9em;
+}
+</style>
 
-  <h1>blog</h1>
-  <br>
 
-  <article>
-   <h2 id="0000"><a href="#0000" class="permalink">styling C for readability and editability</a></h2>
-   <time>wed, dec 17</time>
+</head>
+<body>
 
-   <p>here's how i write an else-if ladder</p>
+<h1>blog</h1>
+<p>
+</p>
+<br>
 
-   <pre>
+
+
+
+
+
+<article>
+<h2 id="0000"><a href="#0000" class="permalink">styling C for readability and editability</a></h2>
+<time>wed, dec 17</time>
+
+
+<p>here's how i write an else-if ladder</p>
+
+<pre>
 if (0) {
 } else if (...) {
  ...
@@ -56,22 +66,20 @@ if (0) {
  ...
 } else if (...) {
  ...
-}
-   </pre>
+}</pre>
 
-   <p>here's how i write an AND chain</p>
+<p>here's how i write an AND chain</p>
 
-   <pre>
+<pre>
 (1
  && ...
  && ...
  && ...
-)
-   </pre>
+)</pre>
 
-   <p>here's an example snippet from Conversation's source</p>
+<p>here's an example snippet from Conversation's source</p>
 
-   <pre>
+<pre>
 B32 is_prinicipal_frame = (1
  && R32_is_zero(part_projection->signed_distance_from_unprojected_origin_to_feature_plane) 
  && geom3d_vector_has_unit_length(part_projection->normal) 
@@ -82,11 +90,13 @@ if (0
  || (!is_prinicipal_frame)
 ) {
  ...
-}
-    </pre>
-  </article>
+}</pre>
+</article>
 
- </body>
+
+
+
+</body>
 </html>
 
 
