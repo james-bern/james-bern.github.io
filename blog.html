@@ -1,20 +1,22 @@
 <!doctype html>
 <html lang="en">
- <head>
-  <title>blog</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="mvp.css"> 
-  <style>
-body { max-width: 42rem; margin: 3rem auto; padding: 0 1rem; font-family: system-ui, sans-serif; line-height: 1.6; }
-time { color: #666; font-size: 0.9rem; }
-pre { background: #FEF0E0; padding: 1rem; overflow-x: auto; border-radius: 10px; font-size: 0.9rem; }
-pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-h2 .permalink:hover::after { content: " ¶"; font-size: 0.9em; }
-  </style>
 
- </head>
- <body>
+<head>
+ <title>blog</title>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="stylesheet" href="mvp.css"> 
+ <style>
+  body { max-width: 42rem; margin: 3rem auto; padding: 0 1rem; font-family: system-ui, sans-serif; line-height: 1.6; }
+  time { color: #666; font-size: 0.9rem; }
+  pre { background: #FEF0E0; padding: 1rem; overflow-x: auto; border-radius: 10px; font-size: 0.9rem; }
+  pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  h2 .permalink:hover::after { content: " ¶"; font-size: 0.9em; }
+ </style>
+</head>
+
+<body>
+<p style="text-align: right;"><a href="index.html">Jim ↗</a></p>
 
 <h1>blog</h1>
 <p>let's make a CAD program!</p>
@@ -104,7 +106,7 @@ B) bring your own printf</p>
 <article>
 <h2 id="0000"><a href="#0000" class="permalink">styling C99 for editability</a></h2>
 <time>wed, dec 17</time>
-<p><i>i like it being able to easily delete lines and swap lines without having to think about C's syntax;
+<p><i>i like being able to easily delete lines and swap lines without having to think about C's syntax;
  one useful family of tricks is to avoid syntactic "special cases" -- basically, the first and last of something should be styled just like the things in the middle</i></p>
 <p>here's how i initialize structs</p>
 <pre>{
