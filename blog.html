@@ -15,16 +15,64 @@
  </style>
 </head>
 
+
 <body>
 <p style="text-align: right;"><a href="index.html">Jim ↗</a></p>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tocList = document.querySelector('#toc ul');
+    if (!tocList) return;
+
+    // get all h2s with ids inside articles
+    const headers = document.querySelectorAll('article h2[id]');
+    headers.forEach(h2 => {
+        const id = h2.id;
+        const text = h2.textContent.trim();
+
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `#${id}`;
+        a.textContent = text;
+        li.appendChild(a);
+
+        tocList.appendChild(li);
+    });
+});
+</script>
+
 <h1>blog</h1>
 <p>let's make a CAD program!</p>
+<nav id="toc"><ul></ul></nav>
+<hr style="height:0.8em; visibility:hidden;" />
 
-<!-- TODO BYOprintf -->
+<!--
+<article>
+<h2 id="0003"><a href="#0003" class="permalink">early return is hot garbage, an illustrated primer</a></h2>
+<time>mon, dec 22</time>
+<p><i>i've tried a lot of ways of keeping track of my TODO's and so far only one has even sort of worked</i></p>
+<p>TODO: image of pipe branching off into two pipes (and either coming back together or not) then bolting a thing onto the end</p>
+</article>
+<br>
 
 <article>
-<h2 id="0000"><a href="#0000" class="permalink">BYOprintf</a></h2>
+<h2 id="0002"><a href="#0002" class="permalink">keeping track of TODO's</a></h2>
+<time>mon, dec 22</time>
+<p><i>i've tried a lot of ways of keeping track of my TODO's and so far only one has even sort of worked</i></p>
+<p>first, here's what didn't work<br>
+ 1) just putting the TODO's in the code -- they accumulate and become meaningles and overwhelming<br>
+ 2) GitHub issues (with and without categorization) -- way too much friction; requires Internet; end up just piling up as well<br>
+ 3) no TODO list (follow your heart 🥺) -- unfortunately, my heart is stupid (boring stuff never gets done, fun/stupid stuff always done)<br>
+ and on, and on, and on
+</p>
+<p>what i'm trying now is i have one file called <code>todo.x</code> and another file called <code>done.x</code></p>
+</article>
+<br>
+-->
+
+<article>
+<h2 id="0001"><a href="#0001" class="permalink">BYOprintf</a></h2>
 <time>sat, dec 20</time>
 <p><i>writing stuff from scratch is delightfully infective</i></p>
 <p>i started using <a href="https://x.com/vkrajacic/status/1730891609191981305">Vjekoslav Krajačić-style sliceable strings</a> a while back</p>
@@ -51,7 +99,7 @@ String _string_slice(String string, U32 start, U32 one_past_end) {
 String string_slice(String string, U32 start) {
  return _string_slice(string, start, string.length);
 }</pre>
-<p>the only downside i experienced using these String's was that the standard `printf` didn't know about them -- if you pass a non-null terminated one of these String's with `%s`, `printf` will just goes marching merrily off into the distance, looking for a 0 that may never come</p>
+<p>the only downside i experienced using these String's was that the standard <code>printf</code> didn't know about them -- if you pass a non-null terminated one of these String's with <code>%s</code>, <code>printf</code> will just goes marching merrily off into the distance, looking for a 0 that may never come</p>
 <p>i saw two ways around this (like always, there are probably more options than just these):<br>
 A) remember to add null-terminators whenever i wanted to print of sprint, or<br>
 B) bring your own printf</p>
@@ -71,7 +119,7 @@ B) bring your own printf</p>
 <p>that's it.</p>
 <p>and now we can do stuff like this...</p>
 <pre>printf("[gui_tracked_box] box->key_string clash: %S\n", box->key_string);</pre>
-<p>and since `snprintf` and `vsnprintf` also know about our String's now, we can use `%S` format specifiers in other functions, like...</p>
+<p>and since <code>snprintf</code> and <code>vsnprintf</code> also know about our String's now, we can use <code>%S</code> format specifiers in other functions, like...</p>
 <pre>GUIBox *box_field_buffer = gui_tracked_box(
  "buffer_%S%S%S",
  string_prefix,
@@ -79,7 +127,7 @@ B) bring your own printf</p>
  field->name
 );</pre>
 <p><center>:D</center></p>
-<p>sidenote: while i was in the neighborhood, i made a small change to `_internal_vsnprintf(...)` -- i prefer my functions to just crash the program when they fail, rather than returning some number i'll forget to check for and then spend hours trying to debug the downstream effects of</p>
+<p>sidenote: while i was in the neighborhood, i made a small change to <code>_internal_vsnprintf(...)</code> -- i prefer my functions to just crash the program when they fail, rather than returning some number i'll forget to check for and then spend hours trying to debug the downstream effects of</p>
 <pre>int _internal_vsnprintf(...) {
  ...
 
@@ -99,8 +147,7 @@ B) bring your own printf</p>
  return(result);
 }</pre>
 </article>
-
-
+<br>
 
 
 <article>
@@ -144,9 +191,28 @@ if (0
 ) {
 ...
 }</pre>
+<p>and here's another</p>
+<pre>Void gui2_separator(
+ Axis split_axis,
+ String prev_sibling_string,
+ String next_sibling_string
+) {
+ GUIBox *separator = gui_tracked_box(
+  "%S_separator_%S",
+  prev_sibling_string,
+  next_sibling_string
+ );
+ separator->flags = (0
+  | GUIBoxFlagRenderFill
+  | GUIBoxFlagLeftClickable
+  | GUIBoxFlagIsASeparator
+ );
+ ...
+}</pre>
 <p><i>it's a shame HolyC didn't catch on, because i think it allowed you to include a trailing comma in function calls and
  that would have been siiick</i></p>
 </article>
+<br>
 
 
 

@@ -81,7 +81,7 @@ hr {
     background-color: var(--color-bg-secondary);
     border: none;
     height: 1px;
-    margin: 4rem 0;
+    margin: 0rem 0;
     width: 100%;
 }
 
@@ -154,17 +154,19 @@ nav {
     display: flex;
     font-weight: bold;
     justify-content: space-between;
-    margin-bottom: 0rem;
+    margin-bottom: 1.0rem;
+    padding: 0rem;
 }
 
 nav ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 nav ul li {
     display: inline-block;
-    margin: 0 0.5rem;
+    margin: 0 1.0rem 0 0;
     position: relative;
     text-align: left;
 }
@@ -304,7 +306,6 @@ sup {
 /* Links */
 a {
     color: var(--color-link);
-    display: inline-block;
     font-weight: bold;
     text-decoration: none;
 }
