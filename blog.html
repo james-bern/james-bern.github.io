@@ -11,12 +11,56 @@
   time { color: #666; font-size: 0.9rem; }
   pre { background: #FEF0E0; padding: 1rem; overflow-x: auto; border-radius: 10px; font-size: 0.9rem; }
   pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-  h2 .permalink:hover::after { content: " ¶"; font-size: 0.9em; }
+  h2 .permalink:hover::after { content: " ¶"; }
+  img {
+   cursor: zoom-in; /* shows hand on hover */
+  }
+  img:hover {
+   -webkit-transform: scale(1.04);
+   transform: scale(1.04);
+   transition: none;
+  }
+  img:active {
+   // -webkit-transform: scale(2);
+   // transform: scale(2);
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%) scale(1); /* center on screen */
+   transition: none;
+   max-width: 100vw;
+   max-height: 100vh;
+   width: auto;
+   height: auto;
+   z-index: 9999;
+  }
+
+/* tiny full-screen overlay */
+#click-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,1.0);
+  pointer-events: none;  /* let clicks pass through */
+  display: none;          /* hidden by default */
+  z-index: 9998;
+}
  </style>
 </head>
 
 
 <body>
+<div id="click-overlay"></div>
+<script>
+const overlay = document.getElementById('click-overlay');
+document.addEventListener('mousedown', e => {
+if (e.target.tagName === 'IMG') overlay.style.display = 'block';
+});
+document.addEventListener('mouseup', e => {
+overlay.style.display = 'none';
+});
+</script>
+
 <p style="text-align: right;"><a href="index.html">Jim ↗</a></p>
 
 
@@ -93,8 +137,9 @@ and here's an approach that did work for me<br>
 - if i end up doing it, i replace <code>TODO</code> with <code>DONE</code> and move it to <code>done.x</code><br>
 </p>
 <p>
-that's pretty much it -- just a big ol' list, listed roughly from most to least pressing 🤷
+that's pretty much it, just a big 'ol list 🤷
 </p>
+<img src="blog00.png">
 <p>
 <b>one last thing:</b> since marking the TODO as done and moving it over by hand is kind of frictious, i wrote a Vim mapping
 </p>
