@@ -13,16 +13,17 @@
   pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
   h2 .permalink:hover::after { content: " ¶"; }
   img {
-   cursor: zoom-in; /* shows hand on hover */
+  cursor: zoom-in;
+  will-change: transform;
+  backface-visibility: hidden;
   }
   img:hover {
    -webkit-transform: scale(1.04);
    transform: scale(1.04);
    transition: none;
+   border: 1px solid #faad2f;
   }
   img:active {
-   // -webkit-transform: scale(2);
-   // transform: scale(2);
    position: fixed;
    top: 50%;
    left: 50%;
@@ -33,18 +34,19 @@
    width: auto;
    height: auto;
    z-index: 9999;
+   border: 0px;
   }
 
-/* tiny full-screen overlay */
-#click-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(0,0,0,1.0);
-  pointer-events: none;  /* let clicks pass through */
-  display: none;          /* hidden by default */
-  z-index: 9998;
-}
+  /* tiny full-screen overlay */
+  #click-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,1.0);
+    pointer-events: none;  /* let clicks pass through */
+    display: none;          /* hidden by default */
+    z-index: 9998;
+  }
  </style>
 </head>
 
@@ -121,6 +123,31 @@ document.addEventListener('DOMContentLoaded', () => {
 -->
 
 <article>
+<h2 id="0004"><a href="#0004" class="permalink">ezpz profiles for vim, etc.</a></h2>
+<time>mar 2026</time>
+<p><i>a simple, non-fragile solution for configuring vim and similar programs</i></p>
+<p>around the n-th time i got a new laptop and had to manually set up my vim, i realized that i was probably doing something wrong</p>
+<p>so, like professor muratorio before me, i <b>wrote the usage code first</b></p>
+<p><b>THE USAGE CODE (what i really want, in my heart of hearts):</b>  want to just run a single script called <code>vim_setup.sh</code> or whatever, and have it set up my vim (like a <code>build_and_run.bat</code>, but for setting up vim) so that i don't have to remind myself how vim's directory structure works or where i found that one plugin or AHHHHHHHH</code>
+<p>this script and all its dependencies should live in my github repo, so that when i get a new computer i can just 1) clone the repo, 2) run the script, and 3) get back to coding</p>
+<p>while this script might sound like some very magical, complicated thing that needs to <code>curl</code> and <code>git submodule</code> and <code>pathogen infect VimPlug puppet ???</code>, this is incorrect</code>
+<p>the reason it's incorrect is that on my laptop, "configure vim" literally just means "set the contents of the file <code>~/.vimrc</code> and the folder <code>~/.vim/</code>"</p>
+<p>that's it.</p>
+<p>period.</p>
+<p>the end.</p>
+<p>so, if my git repo contains my desired <code>.vimrc</code> and <code>.vim/</code></p>
+<p>(like, contains the literal contents of that file and that folder. <b>NOT</b> contains some other script or submodule hook or recipe or AHHHHHHH...</p>
+<p>...but no, i really mean the repo has <code>.vimrc</code> and <code>.vim/</code> and that file and that folder contain THE LITERAL CODE that vim will actually read)</p>
+<p>then all <code>vim_setup.sh</code> needs to do is force copy them into my computer's home directory</p>
+<img src="blog01.png">
+<p>hilariously (if you find this kind of thing funny), this extends immediately to multiple profiles</p>
+<p>i often partner code with one of my students, who has his own vim setup (basically mine, but with different colors, plus the ability to read pdf's or something)</p>
+<p>and both of our setups live in our shared repo, along with our own <code>vim_setup.sh</code>'s (technically, i think his is mine with a command-line argument, but the principle is the same)</p>
+<p>to make switching back and forth really easy, we can just add remap <code>&lt;leader&gt;P</code> to run my setup script and <code>&lt;leader&gt;N</code> to run his</p>
+<p><b>sidenote:</b> i don't know what problem pathogen or VimPlug are supposed to be solving. when i find a vim plugin i want, i just manually copy its files into my repo's copy of <code>.vim/</code>; i have no interest in updating any of my plugins ever</p>
+</article><br>
+
+<article>
 <h2 id="0003"><a href="#0003" class="permalink">keeping track of TODO's</a></h2>
 <time>feb 2026</time>
 <p><i>i've tried a lot of ways of keeping track of my TODO's and so far only one has even sort of worked</i></p>
@@ -141,12 +168,9 @@ that's pretty much it, just a big 'ol list 🤷
 </p>
 <img src="blog00.png">
 <p>
-<b>one last thing:</b> since marking the TODO as done and moving it over by hand is kind of frictious, i wrote a Vim mapping
+<b>one last thing:</b> since marking the TODO as done and moving it over by hand is frictious, i wrote a Vim mapping that marks the TODO as DONE and moves it over to <code>done.txt</code> also also pushes to github the body of the TODO as the commit message
 </p>
-<pre>noremap &lt;silent&gt; &lt;leader&gt;D0fTRDONE&lt;esc&gt;dd:vsplit done.x&lt;CR&gt;ggPfDf ly$:w&lt;cr&gt;&lt;c-w&gt;c:!./poosh.bat &quot;&lt;c-r&gt;&quot;&quot;&lt;cr&gt;</pre>
-<p>
-now i just can press a lil hotkey combo and the TODO gets marked done and moved over and also we push to github with the body of the TODO as the commit message
-</p>
+<pre>noremap &lt;silent&gt; &lt;leader&gt;D 0fTRDONE&lt;esc&gt;dd:vsplit done.x&lt;CR&gt;ggPfDf ly$:w&lt;cr&gt;&lt;c-w&gt;c:!./poosh.bat &quot;&lt;c-r&gt;&quot;&quot;&lt;cr&gt;</pre>
 <p>
 it's just that easy :)
 </p>
