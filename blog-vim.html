@@ -8,18 +8,18 @@
 </head>
 <body>
 
-<h1>make your codebase a home base</h2>
+<h1>make your code base a home base</h2>
 <h2>non-fragile vim-setup</h2>
 <h3>solve the problem of having to set up vim whenever you get a new laptop</h3><br>
-the most recent time i got a new computer, and found myself for the n-th time struggling to manually set up vim (where is my <code>.vimrc</code>? where is my colorscheme file? where am i supposed to put these files? where do i download my packages? how do i install my packages? etc. etc. etc.)...<br>
+this last time i got a new computer, i found myself struggling to set up vim for the n-th time ("where is my <code>.vimrc</code>?" "where is my colorscheme file?" "where am i supposed to put these files?" "where do i download my packages?" "how do i install my packages?" etc. etc. etc.)...<br>
 <br>
-i realized that i was probably doing something wrong.<br>
+...i realized that i was probably doing something wrong.<br>
 <br>
 so, as recommended by Casey Muratori, i <b>wrote the usage code first</b> (i.e., i asked myself "what do i really want?")<br>
 <br>
 <b>the dream:</b> when i get a new computer, i want to (1) clone my codebase (which has all my code, including some file called <code>vim_setup.sh</code>), and (2) run <code>vim_setup.sh</code> and have it perfectly sets up my vim (like a <code>build_and_run.bat</code>, but for vim setup)<br>
 <br>
-ideally, i would also like to be able to run this file again at any time when i make changes to my <code>.vimrc</code> or colorscheme file or whatever<br>
+i would also like to be able to run this file whenever i make changes to my <code>.vimrc</code> or colorscheme file or whatever<br>
 <br>
 such a vim setup script is possible! :D<br>
 <br>
@@ -27,7 +27,7 @@ one might think this script is some very magical, complicated thing that needs t
 <br>
 the reason it's incorrect is that, at least on all my Macbooks, "configure vim" literally means "set the contents of file <code>~/.vimrc</code> and folder <code>~/.vim/</code>"<br>
 <br>
-so, if my codebase contains my <code>.vimrc</code> and <code>.vim/*</code>... (i just stick them in a folder called <code>vim</code>)<br>
+so, if my codebase contains my <code>.vimrc</code> file and <code>.vim/</code> folder...
 <br>
 ("contains their literal contents" <b>NOT</b> "contains some script or submodule hook or recipe or etc. etc. etc.")<br>
 <br>
