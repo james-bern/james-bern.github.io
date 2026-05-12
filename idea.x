@@ -1,0 +1,254 @@
+  <style>
+   img {
+   cursor: zoom-in;
+   will-change: transform;
+   backface-visibility: hidden;
+   }
+   img:hover {
+    -webkit-transform: scale(1.04);
+    transform: scale(1.04);
+    transition: none;
+    border: 1px solid #faad2f;
+   }
+   img:active {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1); /* center on screen */
+    transition: none;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: auto;
+    height: auto;
+    z-index: 9999;
+    border: 0px;
+   }
+   /* tiny full-screen overlay */
+   #click-overlay {
+     position: fixed;
+     top: 0; left: 0;
+     width: 100vw; height: 100vh;
+     background: rgba(0,0,0,1.0);
+     pointer-events: none;  /* let clicks pass through */
+     display: none;          /* hidden by default */
+     z-index: 9998;
+   }
+  </style>
+
+
+
+<!-- article ideas
+- fast unoptimized builds (linalg.c, stb_easy_font)
+- write your own printf
+- a simple vim IndentExpr()
+- using curly braces to scope and indent
+- the pros and cons of using an off-the-shelf general-purpose solution/framework
+ <p>max specificity: let's imagine there was already a function called yourPerfectProgram() (not granular at all)</p>
+ <p>max generality: something like QT</p>
+- early return is hot garbage, an illustrated primer
+-->
+
+<!--
+<article>
+<h2 id="000X"><a href="#000X" class="permalink"></a></h2>
+<time>mon, dec 22</time>
+<p><i>TODO</i></p>
+<p>TODO</p>
+</article><br>
+-->
+
+<!--
+<article>
+<h2 id="000X"><a href="#000X" class="permalink">comments on comments</a></h2>
+<time>mon, dec 22</time>
+<p><i>the idea for this re</i></p>
+<p>TODO: image of pipe branching off into two pipes (and either coming back together or not) then bolting a thing onto the end</p>
+</article><br>
+-->
+
+
+
+
+
+
+
+
+<article>
+<h2 id="0003"><a href="#0003" class="permalink">keeping track of TODO's</a></h2>
+<time>feb 2026</time>
+<p><i>i've tried a lot of ways of keeping track of my TODO's and so far only one has even sort of worked</i></p>
+<p>first, here's some approaches that didn't work for me<br>
+a) scattering the TODO's throughout the code -- they accumulate and become meaningless and overwhelming; plus they distract from explanatory comments<br>
+b) curating the TODO's in GitHub issues -- way too much friction; requires me to be connected to the internet; end up piling up and becoming meaningless<br>
+c) no TODO list (follow your heart 🥺) -- unfortunately, my heart is a dumb dumb (boring ideas never gets done, fun/stupid ideas always get started but rarely get finished)<br>
+</p>
+<p>
+and here's an approach that did work for me<br>
+- i have one file called <code>todo.x</code> and another file called <code>done.x</code><br>
+- if i have an idea for something to do, i add it to <code>todo.x</code>, for example...
+<pre>// TODO make a less exciting test_eso that doesn't require transforms, etc. (just draw the primitives yo)</pre>
+- if i end up doing it, i replace <code>TODO</code> with <code>DONE</code> and move it to <code>done.x</code><br>
+</p>
+<p>
+that's pretty much it, just a big 'ol list 🤷
+</p>
+<img src="blog00.png">
+<p>
+<b>one last thing:</b> since marking the TODO as done and moving it over by hand is frictious, i wrote a Vim mapping that marks the TODO as DONE and moves it over to <code>done.txt</code> also also pushes to github the body of the TODO as the commit message
+</p>
+<pre>noremap &lt;silent&gt; &lt;leader&gt;D 0fTRDONE&lt;esc&gt;dd:vsplit done.x&lt;CR&gt;ggPfDf ly$:w&lt;cr&gt;&lt;c-w&gt;c:!./poosh.bat &quot;&lt;c-r&gt;&quot;&quot;&lt;cr&gt;</pre>
+<p>
+it's just that easy :)
+</p>
+</article><br>
+
+<article>
+<h2 id="0001"><a href="#0001" class="permalink">BYOprintf</a></h2>
+<time>dec 2025</time>
+<p><i>writing stuff from scratch is delightfully infective</i></p>
+<p>i started using <a href="https://x.com/vkrajacic/status/1730891609191981305">Vjekoslav Krajačić-style sliceable strings</a> a while back</p>
+<pre>
+STRUCT {
+ U8 *_; // NOTE i usually name this kind of thing `_`; you could also use `data` or `v` or whatever
+ U64 length;
+} String;</pre>
+<p>they're great. you can slice in O(1) and you don't need to null-terminate them</p>
+<pre>// NOTE analogous to Python's string[start:one_past_end]
+String _string_slice(String string, U32 start, U32 one_past_end) {
+ // NOTE we allow empty slices
+ ASSERT(start <= string.length);
+ ASSERT(start <= one_past_end);
+ ASSERT(one_past_end <= string.length);
+
+ String result;
+ result._ = &string._[start];
+ result.length = (one_past_end - start);
+ return(result);
+}
+
+// NOTE analogous to Python's string[start:]
+String string_slice(String string, U32 start) {
+ return _string_slice(string, start, string.length);
+}</pre>
+<p>the only downside i experienced using these String's was that the standard <code>printf</code> didn't know about them -- if you pass a non-null terminated one of these String's with <code>%s</code>, <code>printf</code> will just goes marching merrily off into the distance, looking for a 0 that may never come</p>
+<p>i saw two ways around this (like always, there are probably more options than just these):<br>
+A) remember to add null-terminators whenever i wanted to print of sprint, or<br>
+B) bring your own printf</p>
+<p>conventional wisdom has that option (B) is Bad and Hard, but conventional wisdom is basically always wrong, so let's go with option (B)</p>
+<p><a href="https://x.com/rfleury/status/1902138409365467439">like many Hard things</a>, it ended up taking about 5 minutes:<br>
+1) borrow <a href="https://github.com/mpaland/printf">Marco Paland's tiny printf from GitHub</a>, and<br>
+2) add ~20 mostly copy-and-pasted lines to it<p>
+<pre>case 'S' : { // our custom String struct
+ String string = va_arg(va, String);
+ const char *p = string._;
+ unsigned int l = (unsigned int) string.length;
+ if (l) {
+  // NOTE this block (mostly) copy and pasted from case 's' i did need to
+  // change / add one important thing or else it did bad things beware copypasta
+  ...
+ }
+}</pre>
+<p>that's it.</p>
+<p>and now we can do stuff like this...</p>
+<pre>printf("[gui_tracked_box] box->key_string clash: %S\n", box->key_string);</pre>
+<p>and since <code>snprintf</code> and <code>vsnprintf</code> also know about our String's now, we can use <code>%S</code> format specifiers in other functions, like...</p>
+<pre>GUIBox *box_field_buffer = gui_tracked_box(
+ "buffer_%S%S%S",
+ string_prefix,
+ command->string,
+ field->name
+);</pre>
+<p><center>:D</center></p>
+<p><b>sidenote:</b> while i was in the neighborhood, i made a small change to <code>_internal_vsnprintf(...)</code> -- i prefer my functions to just crash the program when they fail, rather than returning some number i'll forget to check for and then spend hours trying to debug the downstream effects of</p>
+<pre>int _internal_vsnprintf(...) {
+ ...
+
+ // // NOTE (copied from the printf docs)                                                                        
+ // \return The number of characters that COULD have been written into the buffer, not counting the terminating  
+ //         null character. A value equal or larger than count indicates truncation. Only when the returned value
+ //         is non-negative and less than count, the result has been completely written.                         
+
+ B32 success = (1
+  && (result >= 0)
+  && ((size_t) result < maxlen)
+ );
+ if (!success) {
+  *((volatile S32 *) 0) = 0; // (crash)
+ }
+
+ return(result);
+}</pre>
+</article><br>
+
+<article>
+<h2 id="0000"><a href="#0000" class="permalink">styling C99 for editability</a></h2>
+<time>dec 2025</time>
+<p><i>i like being able to easily delete lines and swap lines without having to think about C's syntax;
+ one useful family of tricks is to avoid syntactic "special cases" -- basically, the first and last of something should be styled just like the things in the middle</i></p>
+<p>here's how i initialize structs</p>
+<pre>{
+ a,
+ b,
+ c, // <- i put a comma here (NOTE trailing comma in struct-initialization is valid C)
+}</pre>
+<p>here's how i write an else-if ladder</p>
+<pre>
+if (0) { // <- i put an `if (0)` here (NOTE 0 is false)
+} else if (...) {
+ ...
+} else if (...) {
+ ...
+} else if (...) {
+ ...
+}</pre>
+<p>here's how i write an AND chain</p>
+<pre>
+(1 // <- i put a `1` here (NOTE 1 is true)
+ && ...
+ && ...
+ && ...
+)</pre>
+<p>here's an example snippet from Conversation's source</p>
+<pre>
+B32 is_prinicipal_frame = (1
+ && R32_is_zero(part_projection->signed_distance_from_unprojected_origin_to_feature_plane) 
+ && geom3d_vector_has_unit_length(part_projection->normal) 
+ && R32_are_equal(1.0F, vec3_max(part_projection->normal))
+);
+if (0
+ || (!part_projection->is_active)
+ || (!is_prinicipal_frame)
+) {
+ ...
+}</pre>
+<p>and here's another</p>
+<pre>Void gui2_separator(
+ Axis split_axis,
+ String prev_sibling_string,
+ String next_sibling_string
+) {
+ GUIBox *separator = gui_tracked_box(
+  "%S_separator_%S",
+  prev_sibling_string,
+  next_sibling_string
+ );
+ separator->flags = (0
+  | GUIBoxFlagRenderFill
+  | GUIBoxFlagLeftClickable
+  | GUIBoxFlagIsASeparator
+ );
+ ...
+}</pre>
+<p><i>it's a shame HolyC didn't catch on, because i think it allowed you to include a trailing comma in function calls and
+ that would have been siiick</i></p>
+</article>
+<br>
+
+
+
+
+</body>
+</html>
+
+
+
