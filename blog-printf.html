@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Coding as Self-Care</title>
+<link rel="stylesheet" href="css.css"> 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<h1>make your code base a home base</h2>
+<h2>BYOprintf</h2>
+<h3>writing stuff from scratch is delightfully infective</h3>
+i started using <a href="https://x.com/vkrajacic/status/1730891609191981305">Vjekoslav Krajačić-style sliceable strings</a> a while back:
+
+<code class="block">STRUCT {
+ U8 *_; // NOTE you could also name this `data`, `v`, etc.
+ U64 length;
+} String;</code>
+they're great. you can slice in O(1) and you don't need to null-terminate
+
+<code class="block">// NOTE analogous to Python's string[start:one_past_end]
+String _string_slice(String string, U32 start, U32 one_past_end) {
+ ASSERT(start <= string.length);
+ ASSERT(start <= one_past_end); // NOTE we allow empty slices
+ ASSERT(one_past_end <= string.length);
+ String result;
+ result._ = &string._[start];
+ result.length = (one_past_end - start);
+ return(result);
+}
+
+// NOTE analogous to Python's string[start:]
+String string_slice(String string, U32 start) {
+ return _string_slice(string, start, string.length);
+}</code>
+the only downside i've experienced with using these String's is that the standard <code>printf</code> doesn't know about them -- pass an unterminated String as <code>%s</code>, and <code>printf</code> will just march merrily off into the distance, looking for a <code>0</code> that may never come
+
+i saw two ways forward (like always, there are probably more options than just these two):
+(a) remember to add null-terminators whenever i wanted to print (or sprint), or...
+(b) bring my own printf
+
+conventional wisdom has that option (b) is Bad and Hard, but conventional wisdom is basically always wrong, so let's go with option (b) :)
+
+<a href="https://x.com/rfleury/status/1902138409365467439">like many Hard things</a>, it ended up taking about 5 minutes:
+<b>(1)</b> copy and paste <a href="https://github.com/mpaland/printf">Marco Paland's tiny printf from GitHub</a><sup>1</sup>, and
+<b>(2)</b> add ~20 lines to it:
+<code class="block">case 'S' : { // our custom String struct
+ String string = va_arg(va, String);
+ const char *p = string._;
+ unsigned int l = (unsigned int) string.length;
+ if (l) {
+  // NOTE this block (mostly) copy and pasted from case 's'
+  //      (be sure to change / add one tiny thing)
+  ...
+ }
+}</code>
+that's it.
+
+and now we can do stuff like this...
+
+<code>printf("[gui_tracked_box] box->key_string clash: %S\n", box->key_string);</code>
+
+and since <code>snprintf</code> and <code>vsnprintf</code> also know about our String's now, we can use <code>%S</code> format specifiers in other functions, like...
+
+<code class="block">GUIBox *box_field_buffer = gui_tracked_box(
+ "buffer_%S%S%S",
+ string_prefix,
+ command->string,
+ field->name
+);</code>
+<center>:D</center>
+<b>sidenote:</b> while i was in the neighborhood, i made a small change to <code>_internal_vsnprintf(...)</code> -- i prefer my functions to just crash the program when they fail, rather than returning some number i'll forget to check for and then spend hours trying to debug the downstream effects of
+
+so...
+
+<code class="block">int _internal_vsnprintf(...) {
+ ...
+
+ // // NOTE (copied from the printf docs)
+ // \return The number of characters that COULD have been written
+ //         into the buffer, not counting the terminating null character.
+ //         A value equal or larger than count indicates truncation.
+ //         Only when the returned value is non-negative and
+ //         less than count, the result has been completely written.
+
+ B32 success = (1
+  && (result >= 0)
+  && ((size_t) result < maxlen)
+ );
+
+ if (!success) {
+  *((volatile S32 *) 0) = 0; // (crash)
+ }
+
+ return(result);
+}</code>
+
+<hr>
+<sup>1</sup> after writing this blog post, i went ahead and just rolled my own <code>printf</code> from scratch -- it knows about my vector types ( <code>%r3</code> for <code>Real3</code>, etc. )
+
+
+
+
+
+</body>
+</html>

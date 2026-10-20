@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head> <title>Coding as Self-Care</title>
+<link rel="stylesheet" href="css.css"> 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<h1>make your code base a home base</h1>
+<h2>a reasonable api for debug drawing with OpenGL</h2>
+<h3>actually enjoy drawing points, lines, triangles, and quads</h3>
+when i learned graphics in college, we used the legacy OpenGL <code>glBegin(...)</code> / <code>glEnd()</code> api
+
+this was a good api for "debug drawing" -- not trying to draw stuff beautifully, just visualizing where data is in space :)
+
+the <i>implementation</i> might have been slow because something something submitting vertices to the gpu one by one... -- but i'm talking about the api.
+
+and this was a good api!
+
+just look how easy it was to make a rainbow triangle!
+
+<code class="block">glBegin(GL_TRIANGLES);
+glColor3f(1.0f, 0.0f, 0.0f);
+glVertex3f(-0.5f, -0.5f, 0.0f);
+glColor3f(0.0f, 1.0f, 0.0f);
+glVertex3f(0.5f, -0.5f, 0.0f);
+glColor3f(0.0f, 0.0f, 1.0f);
+glVertex3f(0.0f, 0.5f, 0.0f);
+glEnd();</code>
+<b>sidenote:</b> add a little macro fun<sup>1</sup>, and you could even be living this life: 
+
+<code class="block">BOOKEND(glBegin(GL_TRIANGLES), glEnd()) {
+ glColor3f(1.0f, 0.0f, 0.0f);
+ glVertex3f(-0.5f, -0.5f, 0.0f);
+ glColor3f(0.0f, 1.0f, 0.0f);
+ glVertex3f(0.5f, -0.5f, 0.0f);
+ glColor3f(0.0f, 0.0f, 1.0f);
+ glVertex3f(0.0f, 0.5f, 0.0f);
+}</code>
+unfortunately, modern OpenGL deprecated/removed this api and didn't provide anything similarly ergonomic to use to take its place. <a href="https://learnopengl.com/code_viewer_gh.php?code=src/1.getting_started/2.2.hello_triangle_indexed/hello_triangle_indexed.cpp">hello triangle</a> ballooned to 196 lines and now required two different languages<sup>2</sup>
+
+( and want to draw points? lines? line <i>strips</i>?? -- glhf :( )
+
+this decision was, in my opinion, pedagogically disastrous; Khronos upgraded the ladder but forgot to include the bottom 10 rungs.
+
+in my opinion, the old api had real value! it was sufficient for making Quake! plus a whole bunch of people (students) just want to draw <i>something</i>!
+
+luckily, you can implement your own, even better version of the legacy OpenGL <code>glBegin(...)</code> / <code>glEnd()</code> api
+
+i call mine eso, which stands for "Easy SOup" :)
+
+like implementing your own printf, or defeating the machines, this primary barrier to implementing your own debug drawing api is believing such a thing is possible
+
+luckily,
+
+<img class="center" src="believe.gif">
+a simple reference implementation is available <a href="https://github.com/james-bern/CSCI-371/wiki">here</a>, but the really important thing is the <i>usage code</i>
+
+here is usage code of my current api ( it includes a hello triangle :D )
+
+<code class="block">Void main(Void) {
+ ...
+ while (begin_frame()) {
+  BOOKEND(<mark>eso_begin(...)</mark>, <mark>eso_end()</mark>) {
+   <mark>eso_primitive(EsoPrimitiveTriangles);</mark>
+   <mark>eso_color_rgb(1.0, 0.0, 0.0);</mark>
+   <mark>eso_vertex_xyz(-0.5, -0.5, 0.0);</mark>
+   <mark>eso_color_rgb(0.0, 1.0, 0.0);</mark>
+   <mark>eso_vertex_xyz(0.5, -0.5, 0.0);</mark>
+   <mark>eso_color_rgb(0.0, 0.0, 1.0);</mark>
+   <mark>eso_vertex_xyz(0.0, 0.5, 0.0);</mark>
+
+   eso_sim(&sim, &state);
+  }
+ }
+}</code>
+note that the function <code>eso_sim(...)</code> -- which draws my soft robot simulation -- is written so it can be called in the <i>middle</i> of an <code>eso_begin(...)</code> { ... } <code>eso_end()</code> block
+
+<code class="block">Void eso_sim(Sim *sim, State *state) {
+ ...
+ if (u64_is_on(state->enabled, SimTermCables)) {
+  <mark>eso_primitive(EsoPrimitiveLines);</mark>
+  <mark>eso_size(2.0);</mark>
+
+  VIEW_FOR(View_Uint *, cable, &sim->cables.outer) {
+   ...
+   BOOKEND(<mark>eso_compound_begin(EsoCompoundLineStrip)</mark>, <mark>eso_compound_end()</mark>) {
+    <mark>eso_color_r3(color_pastel_hot_purple);</mark>
+    VIEW_FOR(Uint *, i, cable) {
+     Real2 p_i = ...;
+     <mark>eso_vertex_r2(p_i);</mark>
+    }
+   }
+  }
+ }
+
+ if (u64_is_on(state->enabled, SimTermGravity)) {
+  <mark>eso_primitive(EsoPrimitivePoints);</mark>
+  <mark>eso_color_r3(color_monokai_orange);</mark>
+  <mark>eso_size(2.0);</mark>
+  VIEW_FOR(Real2 *, x, x_) {
+   <mark>eso_vertex_r2(*x);</mark>
+  }
+ }
+
+ ...
+
+}</code>
+in summary, in a single <code>eso_begin / eso_end</code>-block, we can
+- draw multiple different primitives -- e.g., <code>GL_TRIANGLES</code> and <code>GL_POINTS</code>
+- draw multiple "compound primitives" -- e.g., <code>GL_LINE_STRIP</code>
+
+the only important implementation note is that nothing gets sent to the gpu until <code>eso_end()</code>
+
+rather, <code>eso_vertex*(...)</code> buffers data in massive global arrays on the cpu
+
+<code class="block">GL_Uint  vertex_primitives[ESO_MAX_GL_VERTICES];
+GL_Uint  vertex_inner_indices[ESO_MAX_GL_VERTICES];
+GL_Real3 vertex_positions[ESO_MAX_GL_VERTICES];
+GL_Real4 vertex_colors[ESO_MAX_GL_VERTICES];
+...</code>
+and <code>eso_end()</code> makes one massive <code>glDrawArrays(GL_TRIANGLES, ...);</code> call
+
+<b>final note:</b> when drawing points, lines, and quads, <code>eso_vertex*(...)</code> duplicates data on the cpu -- duplicated vertex positions get offset later in a single combined vertex shader (to support compiling to wasm, i avoid geometry shaders)
+
+<hr>
+<sup>1</sup> Ryan Fleury calls this construct a "defer loop"; it executes <code>BEFORE(...); { ... } AFTER(...);</code> using a for loop with a comma expression
+
+<code class="block">#define BOOKEND(BEFORE, AFTER) \
+for ( \
+ int XCONCAT(_, __LINE__) = (BEFORE, 0); \
+ XCONCAT(_, __LINE__) == 0; \
+ (AFTER, XCONCAT(_, __LINE__) = 1) \
+)</code>
+<b>note:</b> i'm naming the indexing variable using a typical two-layer "extended" concat macro
+
+<code class="block">#define CONCAT(a, b) a ## b
+#define XCONCAT(a, b) CONCAT(a, b)</code>
+
+<sup>2</sup> unfortunately, Vulkan continued this trend, bringing a <a href="https://gist.github.com/Overv/7ac07356037592a121225172d7d78f2d">1379 line hello triangle</a> that requires 7 standard libraries headers plus the external glm math library D: ( the "hello world" of graphics programming is now longer than the longest program many undergrads ever write )
+
+
+
+
+
+</body>
+</html>

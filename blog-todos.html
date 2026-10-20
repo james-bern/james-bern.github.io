@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Coding as Self-Care</title>
+<link rel="stylesheet" href="css.css"> 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<h1>make your code base a home base</h2>
+<h2>keeping track of TODO's</h2>
+<h3>i've tried a lot of ways of keeping track of my TODO's and so far only one has even sort of worked</h3>
+first, here's some approaches that didn't work for me
+
+<b>(a)</b> scattering my TODO's throughout my codebase -- they accumulate and become meaningless and overwhelming; plus they distract from my actual explanatory comments
+
+<b>(b)</b> curating my TODO's in a GitHub issues -- way too much friction for me; requires me to be connected to the internet; TODO's end up piling up D:
+
+<b>(c)</b> no TODO list, just follow your heart („• ֊ •„) -- unfortunately, my heart is bad at planning projects. ( boring ideas never get done, fun / shiny ideas always get started but rarely get finished )
+
+here's the approach that did work for me:
+- i have one file called <code>todo.x</code> and another file called <code>done.x</code>
+- if i have an idea for something to do, i add it to <code>todo.x</code>, for example...
+  <code>// TODO make a less exciting test_eso (just draw the primitives)</code>
+- if i end up doing the todo, i replace its <code>TODO</code> with <code>DONE</code> and move it to <code>done.x</code>
+aaand, that's pretty much it, just two giant lists ヽ(ヅ)ノ
+
+<img src="blog00.png">
+<center><i>oh my.</i></center>
+<b>one last thing:</b> since marking the TODO as done and moving it over by hand is frictious, i wrote a Vim mapping that marks the TODO as DONE and moves it over to <code>done.txt</code> also also pushes to github the body of the TODO as the commit message
+
+<code class="block">noremap &lt;silent&gt; &lt;leader&gt;D 0fTRDONE&lt;esc&gt;dd:vsplit done.x&lt;CR&gt;ggPfDf ly$:w&lt;cr&gt;&lt;c-w&gt;c:!./poosh.bat &quot;&lt;c-r&gt;&quot;&quot;&lt;cr&gt;</code>
+this part is optional. (•˕ •マⳊ
+
+
+
+
+</body>
+</html>
+

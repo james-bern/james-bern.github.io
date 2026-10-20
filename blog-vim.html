@@ -10,43 +10,43 @@
 
 <h1>make your code base a home base</h2>
 <h2>non-fragile vim-setup</h2>
-<h3>solve the problem of having to set up vim whenever you get a new laptop</h3><br>
-this last time i got a new computer, and i found myself struggling to set up vim again ("where is my <code>.vimrc</code>?" "where is my colorscheme file?" "where am i supposed to put these files?" "where do i download my packages?" "how do i install my packages?" etc. etc. etc.)...<br>
-<br>
-...i realized that i was probably doing something wrong.<br>
-<br>
-so, as recommended by Casey Muratori, i <b>wrote the usage code first</b> (i.e., i asked myself "what do i really want?")<br>
-<br>
-<b>the dream:</b> when i get a new computer, i want to (1) clone my codebase (which has all my code, including some file called <code>vim_setup.sh</code>), and (2) run <code>vim_setup.sh</code> and have it perfectly set up my vim (like a <code>build_and_run.bat</code>, but for vim setup)<br>
-<br>
-i would also like to be able to run this file whenever i make changes to my <code>.vimrc</code> or colorscheme file or whatever<br>
-<br>
-such a vim setup script is possible! :D<br>
-<br>
-one might think this script is some very magical, complicated thing that needs to <code>curl</code> and <code>git submodule</code> and <code>pathogen infect VimPlug puppet ???</code>, but this would be incorrect</code><br>
-<br>
-the reason it's incorrect is that, at least on all my Macbooks, "configure vim" literally means "set the contents of file <code>~/.vimrc</code> and folder <code>~/.vim/</code>"<br>
-<br>
+<h3>solve the problem of having to set up vim whenever you get a new laptop</h3>
+this last time i got a new computer, and i found myself struggling to set up vim again ("where is my <code>.vimrc</code>?" "where is my colorscheme file?" "where am i supposed to put these files?" "where do i download my packages?" "how do i install my packages?" etc. etc. etc.)...
+
+...i realized that i was probably doing something wrong.
+
+so, as recommended by <a href="https://caseymuratori.com/blog_0025">Casey Muratori</a>, i <b>wrote the usage code first</b> (i.e., i asked myself "what do i really want?")
+
+<b>the dream:</b> when i get a new computer, i want to (1) clone/download my codebase ( which has all my code, including some file called <code>vim_setup.sh</code> ), and (2) run <code>vim_setup.sh</code> and have it perfectly set up my vim ( like a <code>build_and_run.bat</code>, but for vim setup )
+
+i would also like to be able to run this file whenever i make changes to my <code>.vimrc</code> or colorscheme file or whatever
+
+and i am here to say that such a vim setup script is possible! :D
+
+one might think this script is some very magical, complicated thing that needs to <code>curl</code> and <code>git submodule</code> and <code>pathogen infect VimPlug puppet ???</code>, but this would be incorrect</code>
+
+the reason it's incorrect is that, at least on all my Macbooks, "configure vim" literally means "set the contents of file <code>~/.vimrc</code> and folder <code>~/.vim/</code>"
+
 so, if my codebase contains my <code>.vimrc</code> file and <code>.vim/</code> folder...
-<br>
-("contains their literal contents" <b>NOT</b> "contains some script or submodule hook or recipe or etc. etc. etc.")<br>
-<br>
-...then all <code>vim_setup.sh</code> needs to do is copy the contents of my repo's vim folder into my computer's home directory; behold!<br>
-<br>
-<img src="blog01.png"><br>
-<br>
-<b>note:</b> this idea extends immediately to multiple profiles (you can give <code>vim_setup.sh</code> command line arguments, or just have multiple <code>vim_setup.sh</code>'s)<br>
-<br>
+
+<sub>( "contains their literal contents" <b>NOT</b> "contains some script or submodule hook or recipe or etc. etc. etc." )</sub>
+
+...then all <code>vim_setup.sh</code> needs to do is copy the contents of my repo's vim folder into my computer's home directory -- behold!
+
+<img src="blog01.png">
+
+<b>note:</b> this idea extends immediately to multiple profiles (you can give <code>vim_setup.sh</code> command line arguments, or just have multiple <code>vim_setup.sh</code>'s)
+
 <b>note:</b> for me personally, pathogen, vundle, and vim-plug don't solve a real world problem.
 when i find a vim plugin i want, i just manually copy its files into my codebase.
-i have no interest in updating any of my plugins ever<br>
-<br>
-<b>note:</b> it scares me that the typical approach to solving this problem (e.g., vim-plug) requires (1) me to have an internet connection, (2) every plugin author to leave their GitHub repos up publicly forever and never make breaking changes, and (3) GitHub itself to be up --
-why are we solving such a trivial problem with so many dependencies?
+i have no interest in updating any of my plugins ever (•̀ - •́ )
 
-<br><br>
-<br><br>
-<br><br>
+<b>final note:</b> it worries me that the typical approach to solving this problem ( e.g., vim-plug ) requires (1) me to have an internet connection, (2) every plugin author to leave their GitHub repos up publicly forever and never make breaking changes, and (3) GitHub itself to be up --
+why are we solving such a trivial problem with so many dependencies? \(˚☐˚”)/  
+
+
+
+
 
 </body>
 </html>

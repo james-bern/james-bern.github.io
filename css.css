@@ -1,53 +1,72 @@
 body {
- background: #000;
- color: #fff;
- font-family: Consolas, monospace;
+ white-space: pre-wrap;
+ background: #fff;
+ color: #000;
+ font-family: Helvetica, sans-serif;
  line-height: 1.5;
- margin: 2rem auto;
- overflow-x: hidden;
- max-width: 720px;
+ width: min(720px, calc(100% - 4rem));
+ margin: 0 auto;
 }
 
 a {
- color: #ABFFCF;
+ // color: #ABFFCF;
+ color: #763DFF;
  text-decoration: none;
 }
 a:hover { filter: brightness(1.2); }
 a:active { filter: brightness(0.8); }
 
-h1 {
+h1, h2, h3 {
+ margin: 0;
  text-wrap: balance;
- margin: 0.0rem 0 0.2rem 0;
+}
+
+h1 {
  font-size: 2.0rem;
  font-weight: bold;
 }
 
 h2 {
- text-wrap: balance;
- margin: 1.0rem 0 0.2rem 0;
  font-size: 1.4em;
  font-weight: bold;
 }
 
 h3 {
- text-wrap: balance;
  font-size: 1.0em;
  font-style: italic;
  font-weight: normal;
- color: #fff;
- margin: 0;
 }
 
 b {
- color: #FEF0E0;
+ // color: #FEF0E0;
+ color: #010F1F;
+}
+
+sup {
+ // color: #FEF0E0;
+ color: #010F1F;
 }
 
 
 code {
- // text-wrap: balance;
+ padding: 0.15rem;
  font-size: 1.0rem;
  color: #abffcf;
- background: #23342b;
+ background: #23342B;
+ font-family: Consolas, monospace;
+}
+
+code mark {
+ background-color: #23342B;
+ color: #FFF9AB;
+}
+
+.pink {
+ color: #FFABDB;
+}
+
+.block {
+ display: block;
 }
 
 img {
@@ -55,3 +74,18 @@ img {
  border: 1px solid #666;
 }
 
+.center {
+ display: block;
+ margin-left: auto;
+ margin-right: auto;
+}
+
+.no-border {
+ border: 0px;
+}
+
+hr {
+  border: none;
+  height: 2px;
+  background-color: black;
+}

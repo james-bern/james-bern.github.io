@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Coding as Self-Care</title>
+<link rel="stylesheet" href="css.css"> 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<h1>make your code base a home base</h2>
+<h2>styling C99 for editability</h2>
+<h3>avoiding syntactic special cases</h3>
+i like being able to easily delete lines and swap lines without having to think about C's syntax;
+ one useful family of tricks involves avoiding "syntactic special cases" -- basically, the first and last of something should be styled just like the things in the middle
+
+i initialize structs with a trailing comma:
+
+<code class="block">{
+ a,
+ b,
+ c,
+}</code>
+i sometimes write an else-if ladder with a leading <code>if (0)</code> block (recall <code>0</code> is <code>false</code>):
+
+<code class="block">if (0) {
+} else if (...) {
+ ...
+} else if (...) {
+ ...
+} else if (...) {
+ ...
+}</code>
+here's how i write long AND chains (recall <code>1</code> is <code>true</code>):
+
+<code class="block">(1
+ && ...
+ && ...
+ && ...
+)</code>
+and OR chains:
+
+<code class="block">(0
+ || ...
+ || ...
+ || ...
+)</code>
+here's a snippet of real code from Conversation's source
+
+<code class="block">B32 is_prinicipal_frame = (1
+ && R32_is_zero(part_projection->signed_distance_to_feature_plane) 
+ && geom3d_vector_has_unit_length(part_projection->normal) 
+ && R32_are_equal(1.0F, vec3_max(part_projection->normal))
+);
+if (0
+ || !part_projection->is_active
+ || !is_prinicipal_frame
+) {
+ ...
+}</code>
+and here's another :)
+
+<code class="block">Void gui2_separator(
+ Axis split_axis,
+ String prev_sibling_string,
+ String next_sibling_string
+) {
+ GUIBox *separator = gui_tracked_box(
+  "%S_separator_%S",
+  prev_sibling_string,
+  next_sibling_string
+ );
+ separator->flags = (0
+  | GUIBoxFlagRenderFill
+  | GUIBoxFlagLeftClickable
+  | GUIBoxFlagIsASeparator
+ );
+ ...
+}</code>
+it's a shame HolyC didn't catch on, because i think it allowed you to include a trailing comma in function calls and that would have been siiick
+
+
+</body>
+</html>
+
+
