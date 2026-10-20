@@ -125,7 +125,7 @@ and <code>eso_end()</code> makes one massive <code>glDrawArrays(GL_TRIANGLES, ..
 <b>final note:</b> when drawing points, lines, and quads, <code>eso_vertex*(...)</code> duplicates data on the cpu -- duplicated vertex positions get offset later in a single combined vertex shader (to support compiling to wasm, i avoid geometry shaders)
 
 <hr>
-<sup>1</sup> Ryan Fleury calls this construct a "defer loop"; it executes <code>BEFORE(...); { ... } AFTER(...);</code> using a for loop with a comma expression
+<sup>1</sup> Ryan Fleury calls this construct a "defer loop"; it executes <code>BEFORE(...); { ... } AFTER(...);</code> using a for loop and comma expressions
 
 <code class="block">#define BOOKEND(BEFORE, AFTER) \
 for ( \
