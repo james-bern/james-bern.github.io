@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>cow99</title>
+  <link rel="stylesheet" href="cow.css?v=1.0.2""> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ </head>
+ <body>
+
+
+
+<h2 class="radio-parent"><label><input type="radio" name="theme" id="theme-light" checked>light</label><label><input type="radio" name="theme" id="theme-dark">dark</label><label><input type="checkbox" name="show" id="show-examples" checked>show examples</label></h2>
+<h1>cow99</h1>
+<h2>build and run</h2>
+<h3>woo.sh</h3>
+<code class="terminal">> ./woo.sh 
+unoptimized build and run: ./woo.sh hwXX.c 
+  optimized build and run: ./woo.sh hwXX.c -o
+</code>
+<h3>UNUSED</h3>
+<code class="example"><span class="type">Void</span> <span class="func">foo</span>(<span class="type">Uint</span> arg1, <span class="type">Void *</span>arg2) {
+ <span class="type">Real</span> local = <span class="num">42.0</span>;
+}
+
+<span class="type">Sint</span> <span class="func">main</span>(<span class="type">Void</span>) { <span class="snip">...</span> }</code>
+<code class="terminal">>./woo.sh example.c
+[woo.sh] building example.c with no compiler optimization
+In file included from example.c:41:
+./test_cow.c:10:7: error: unused variable 'local' [-Werror,-Wunused-variable]
+./test_cow.c:9:15: error: unused parameter 'arg1' [-Werror,-Wunused-parameter]
+./test_cow.c:9:27: error: unused parameter 'arg2' [-Werror,-Wunused-parameter]
+clang: error: no such file or directory: 'tmp.o'</code>
+<code class="example"><span class="type">Void</span> <span class="func">foo</span>(<span class="type">Uint</span> arg1, <span class="type">Void *</span>arg2) {
+ <span class="type">Real</span> local = <span class="num">42.0</span>;
+ <span class="macro">UNUSED</span>(arg1, arg2, local); <span class="comment">// <b>NOTE:</b> UNUSED(...) takes variable number of arguments</span>
+}
+
+<span class="type">Sint</span> <span class="func">main</span>(<span class="type">Void</span>) { <span class="snip">...</span> }</code>
+<code class="terminal">>./woo.sh example.c
+[woo.sh] building example.c with no compiler optimization
+[woo.sh] running executable</code>
+<h3>ASSERT</h3>
+<code class="example"><span class="type">Void</span> <span class="func">bar</span>(<span class="type">Void</span>) {
+ <span class="macro">ASSERT</span>(<span class="num">2</span> + <span class="num">2</span> == <span class="num">5</span>);
+}
+
+<span class="type">Sint</span> <span class="func">main</span>(<span class="type">Void</span>) {
+ <span class="func">cow_init</span>(<span class="snip">...</span>);
+ <span class="func">bar</span>();
+}
+</code>
+<code class="terminal">>./woo.sh example.c
+[woo.sh] building example.c with no compiler optimization
+[woo.sh] running executable
+
+<span class="error">(╯°□°)╯︵ ┻━┻ </span>
+<span class="error">ASSERT(2 + 2 == 5); // <- Line 4 in ./test_cow.c</span>
+<span class="error">- bar</span>
+<span class="error">- main</span>
+
+./woo.sh: line 72: 26142 Segmentation fault: 11  ./executable</code>
+
+<h2>basics</h2>
+<h3>about zero</h3>
+<code class="example"><span class="comment">// different types as zero</span>
+<span class="type">Real</span> real_number = <span class="num">0.0</span>;
+<span class="type">Uint</span> unsigned_integer = <span class="num">0U</span>;
+<span class="type">Sint</span> signed_integer = <span class="num">0</span>;
+<span class="type">Char</span> character = <span class="num">'\0'</span>;
+<span class="type">Bool</span> boolean = <span class="num">false</span>;
+<span class="type">Void *</span>pointer = <span class="num">NULL</span>;</code>
+<code class="example"><span class="comment">// clear chunk of memory to zero</span>
+<span class="func">memset</span>(pointer_to_start, <span class="num">0</span>, size_in_bytes);</code>
+<code class="example"><span class="comment"><b>NOTE:</b> globals are automatically cleared to zero before main()</span>
+<span class="type">Bool</span> b; <span class="comment">// false</span>
+<span class="type">Real2</span> p; <span class="comment">// { 0.0, 0.0 }</span>
+<span class="type">Sint</span> array[<span class="num">5</span>]; <span class="comment">// { 0, 0, 0, 0, 0 }</span>
+<span class="type">Sint</span> <span class="func">main</span>(<span class="type">Void</span>) {
+ <span class="snip">...</span>
+}</code>
+<h3>local variable struct initialization and assignment</h3>
+<code class="example"><span class="type">Real3</span> garbage; <span class="comment">// { ???, ???, ??? }</span>
+<span class="type">Real3</span> zero = {<span class="num">0</span>}; <span class="comment">// { 0.0, 0.0, 0.0 }</span>
+<span class="error">Real3 invalid = {};</span> <span class="error_comment">// <b>NOTE:</b> COMPILER ERROR</span>
+<span class="type">Real3</span> partial = { <span class="num">2.0</span> }; <span class="comment">// { 2.0, 0.0, 0.0 }</span>
+<span class="type">Real3</span> full = { <span class="num">5.0</span>, <span class="num">6.0</span>, <span class="num">7.0</span> }; <span class="comment">// { 5.0, 6.0, 7.0 }</span></code>
+<code class="example"><span class="type">Real3</span> p; <span class="comment">// { ???, ???, ??? }</span>
+<span class="snip">...</span>
+p = (<span class="type">Real3</span>) { <span class="num">2.0</span> }; <span class="comment">// { 2.0, 0.0, 0.0 }</span></code>
+<h2>keyboard and mouse input</h2>
+<h3>keyboard input functions</h3>
+<code><span class="type">Bool</span> <span class="func">key_pressed</span>(<span class="type">Char</span> key); <span class="comment">// true on first frame after key is pressed</span>
+
+<span class="comment">// true starting first frame after key pressed until key released</span>
+<span class="comment">// <b>NOTE:</b> if key_pressed(key) is true, key_held(key) is also true </span>
+<span class="type">Bool</span> <span class="func">key_held</span>(<span class="type">Char</span> key);
+
+<span class="type">Bool</span> <span class="func">key_released</span>(<span class="type">Char</span> key); <span class="comment">// true on first frame after key released</span>
+
+<span class="comment">// false is key has been released even number of times; true if odd</span>
+<span class="type">Bool</span> <span class="func">key_toggled</span>(<span class="type">Char</span> key);</code>
+<h3>mouse input globals</h3>
+<code><span class="type">Bool</span> <span class="global">mouse_pressed</span>;
+<span class="type">Bool</span> <span class="global">mouse_held</span>;
+<span class="type">Bool</span> <span class="global">mouse_released</span>;
+<span class="type">Real2</span> <span class="global">mouse_position_World</span>;
+<span class="type">Real2</span> <span class="global">mouse_position_Screen</span>;
+<span class="type">Real2</span> <span class="global">mouse_position_NDC</span>; <span class="comment">// Normalized Device Coordinates</span></code>
+<h2>misc</h2>
+<h3>time globals</h3>
+<code><span class="type">Real</span> <span class="global">time_elapsed_s</span>; <span class="comment">// elapsed time since app start in seconds</span></code>
+<h3>random</h3>
+<code>real_random(Real a, Real b)</code>
+<h2>math</h2>
+<h3>real3 "constructors"</h3>
+<code><span class="type">Real3</span> <span class="func">real3_new_xyz</span>(<span class="type">Real</span> x, <span class="type">Real</span> y, <span class="type">Real</span> z); <span class="comment">// { x, y, z }</span>
+<span class="type">Real3</span> <span class="func">real3_new_xxx</span>(<span class="type">Real</span> x); <span class="comment">// { x, x, x }</span>
+</code>
+
+<h2>arena</h2>
+<h3>global arenas</h3>
+<code><span class="type">Arena *</span><span class="global">arena_permanent</span>; <span class="comment">// memory never freed</span>
+<span class="type">Arena *</span><span class="global">arena_frame_scratch</span>; <span class="comment">// memory freed at start of every frame</span></code>
+<h3>allocation</h3>
+<code><span class="type">Void *</span><span class="func">arena_calloc</span>(<span class="type">Arena *</span>arena, <span class="type">Uint</span> num_elements, <span class="type">Uint</span> size_of_element_in_bytes);
+<span class="type">Void *</span><span class="func">arena_malloc</span>(<span class="type">Arena *</span>arena, <span class="type">Uint</span> size_in_bytes);</code>
+<code class="example"><span class="type">Uint</span> num_balls = <span class="num">99999</span>;
+<span class="type">Real2 *</span>positions = <span class="func">arena_calloc</span>(<span class="global">arena_permanent</span>, num_balls, <span class="func">sizeof</span>(positions[<span class="num">0</span>]));</code>
+
+<h2>easy soup</h2>
+<h3>primitive types</h3>
+<code><span class="type">Uint</span> <span class="global">EsoPrimitiveTypePoints</span>;
+<span class="type">Uint</span> <span class="global">EsoPrimitiveTypeLines</span>;
+<span class="type">Uint</span> <span class="global">EsoPrimitiveTypeTriangles</span>;
+<span class="type">Uint</span> <span class="global">EsoPrimitiveTypeQuads</span>;</code>
+<h3>functions</h3>
+<code><span class="comment">// set primitive</span>
+<span class="type">Void</span> <span class="func">eso_primitive</span>(<span class="type">Uint</span> primitive_type);
+</span><span class="comment">// set color of following verticies</span>
+<span class="type">Void</span> <span class="func">eso_color_rgba</span>(<span class="type">Real</span> r, <span class="type">Real</span> g, <span class="type">Real</span> b, <span class="type">Real</span> a); </span><span class="comment">// { r, g, b, a }</span>
+<span class="type">Void</span> <span class="func">eso_color_rgb</span>(<span class="type">Real</span> r, <span class="type">Real</span> g, <span class="type">Real</span> b); </span><span class="comment">// { r, g, b, 1.0 }</span>
+<span class="type">Void</span> <span class="func">eso_color_r3</span>(<span class="type">Real3</span> c); </span><span class="comment">// { c.x, c.y, c.z, 1.0 }</span>
+<span class="type">Void</span> <span class="func">eso_color_r3a</span>(<span class="type">Real3</span> c, <span class="type">Real</span> a); </span><span class="comment">// { c.x, c.y, c.z, a }</span>
+<span class="type">Void</span> <span class="func">eso_color_r4</span>(<span class="type">Real4</span> c); </span><span class="comment">// { c.x, c.y, c.z, c.w }</span>
+<span class="type">Void</span> <span class="func">eso_color_rrr</span>(<span class="type">Real</span> r); </span><span class="comment">// { r, r, r, 1.0 }</span>
+
+</span><span class="comment">// submit vertex</span>
+<span class="type">Void</span> <span class="func">eso_vertex_xyz</span>(<span class="type">Real</span> x, <span class="type">Real</span> y, <span class="type">Real</span> z); </span><span class="comment">// { x, y, z }</span>
+<span class="type">Void</span> <span class="func">eso_vertex_xy</span>(<span class="type">Real</span> x, <span class="type">Real</span> y);</span> </span><span class="comment">// { x, y, 0.0 }</span>
+<span class="type">Void</span> <span class="func">eso_vertex_r3</span>(<span class="type">Real3</span> p);</span> </span><span class="comment">// { p.x, p.y, p.z }</span>
+<span class="type">Void</span> <span class="func">eso_vertex_r2</span>(<span class="type">Real2</span> p);</span> </span><span class="comment">// { p.x, p.y, 0.0 }</span>
+<span class="type">Void</span> <span class="func">eso_vertex_r2z</span>(<span class="type">Real2</span> p, <span class="type">Real</span> z);</span> </span><span class="comment">// { p.x, p.y, z }</span>
+</code>
+
+<h2>gui</h2>
+<code><span class="type">Bool</span> <span class="func">gui_button</span>(<span class="type">Char </span>hotkey, <span class="type">Char *</span>name, <span class="snip">...</span>);
+</code>
+<code class="example">if <span class="func">gui_button</span>(<span class="num">'R'</span>, <span class="str">"reset"</span>) {
+ <span class="snip">...</span>
+}</code>
+
+<h3>hello world</h3>
+<code class="example"><span class="include">#include "cow.c"</span>
+<span class="type">Sint</span> <span class="func">main</span>(<span class="type">Void</span>) {
+ <span class="func">cow_init</span>(<span class="func">camera_new_Camera2D</span>(<span class="num">5.0</span>, <span class="global">real2_zero</span>, <span class="num">NULL</span>, <span class="num">NULL</span>));
+
+ <span class="type">Real2</span> p = {<span class="num">0</span>};
+
+ <span class="macro">COW_LOOP</span> {
+  <span class="func">gui_printf</span>(<span class="str">"hello world"</span>);
+
+  <span class="keyword">if</span> (<span class="func">key_held</span>(<span class="num">'W'</span>)) { p.y += <span class="num">0.1</span>; }
+  <span class="keyword">if</span> (<span class="func">key_held</span>(<span class="num">'A'</span>)) { p.x -= <span class="num">0.1</span>; }
+  <span class="keyword">if</span> (<span class="func">key_held</span>(<span class="num">'S'</span>)) { p.y -= <span class="num">0.1</span>; }
+  <span class="keyword">if</span> (<span class="func">key_held</span>(<span class="num">'D'</span>)) { p.x += <span class="num">0.1</span>; }
+
+  <span class="type">Real</span> size = <span class="num">12.0</span>;
+  <span class="keyword">if</span> (<span class="func">key_toggled</span>(<span class="num">' '</span>)) {
+   size = <span class="num">24.0</span>;
+  }
+
+  <span class="comment">// draw</span>
+  <span class="func">eso_primitive</span>(<span class="global">EsoPrimitivePoints</span>);
+  <span class="func">eso_size</span>(size);
+  <span class="func">eso_color_rgb</span>(<span class="num">1.0</span>, <span class="num">0.0</span>, <span class="num">0.0</span>);
+  <span class="func">eso_vertex_r2</span>(p);
+  <span class="func">eso_color_rgb</span>(<span class="num">0.0</span>, <span class="num">1.0</span>, <span class="num">0.0</span>);
+  <span class="func">eso_vertex_xy</span>(<span class="num">1.0</span>, <span class="func">real_sin</span>(<span class="global">time_elapsed_s</span>));
+  <span class="func">eso_color_rgb</span>(<span class="num">0.0</span>, <span class="num">0.0</span>, <span class="num">1.0</span>);
+  <span class="func">eso_vertex_r2</span>(<span class="global">mouse_position_World</span>);
+ }
+}
+</code>
+
+<h3>containers</h3>
+<h3>array list</h3>
+<code class="example"><span class="type">List_Uint</span> list = { arena_frame_scratch };
+<span class="macro">LIST_PUSH_BACK</span>(&list, <span class="num">5</span>);
+<span class="macro">LIST_PUSH_BACK</span>(&list, <span class="num">6</span>);
+<span class="macro">LIST_PUSH_BACK</span>(&list, <span class="num">7</span>);
+<span class="macro">LIST_FOR</span>(<span class="type">Uint *</span>, element, &list) {
+ *element += <span class="num">10</span>;
+}
+<span class="type">Uint *</span>ptr = <span class="macro">LIST_GET</span>(&list, <span class="num">0</span>);
+<span class="func">printf</span>(<span class="str">"%u\n"</span>, *ptr); <span class="comment">// 15</span></code>
+<h3>hash map</h3>
+<code class="example"><span class="type">Map_Sint_Real</span> map = { <span class="global">arena_frame_scratch</span> };
+<span class="type">Real *</span>value_ptr = <span class="macro">MAP_PUT</span>(&map, <span class="num">-67</span>, <span class="num">3.14</span>);
+<span class="func">printf</span>(<span class="str">"%r\n"</span>, *value_ptr); <span class="comment">// 3.14</span>
+<span class="type">Real *</span>contains = <span class="macro">MAP_GET</span>(&map, <span class="num">42</span>); <span class="comment">// NULL</span>
+<span class="macro">ASSERT</span>(!contains);</code>
+
+
+
+<code>Sint2
+Sint3
+Sint4
+Uint2
+Uint3
+Uint4
+Real2
+Real3
+Real4 
+Mat2
+Mat3
+Mat4</code> 
+
+
+ </body>
+</html>
+
+

@@ -1,0 +1,204 @@
+:root {
+ -webkit-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+
+ --bg-color: #f6f6f6;
+
+ --matte-color: #ffffff;
+ --example-matte-color: #ffffee;
+
+ --text-color: #000000;
+
+ --terminal-matte-color: #000000;
+ --terminal-text-color: #ffffff;
+
+ --border: 1.0px solid #000000;
+
+ --func-color: #5500bb;            
+ --global-color: #A54409;            
+ --include-color: #999999;         
+ --keyword-color: #0000ff;         
+ --macro-color: #aa00ff;           
+ --num-color: #00bbbb;             
+ --snip-color: #999999;            
+ --str-color: #ff00ff;          
+ --type-color: #000099;            
+
+ --comment-text-color: #009900;      
+ --comment-bg-color: #c9ffc9; 
+ --error-comment-text-color: #ff0000;
+ --error-comment-bg-color: #ffcccc; 
+ --error-color: #ff0000;           
+
+ --examples-display: none;
+}
+
+
+:root:has(#theme-dark:checked) {
+ --bg-color: #101010;
+ --matte-color: #000000;
+ --example-matte-color: #222200;
+ --text-color: #ffffff;
+
+ --terminal-matte-color: #ffffff;
+ --terminal-text-color: #000000;
+
+ --border: 0.5px solid #ffffff;
+
+ --func-color: #cc99ff;
+ --global-color: #FD971F;            
+ --include-color: #888888;
+ --keyword-color: #6688ff;
+ --macro-color: #dd77ff;
+ --num-color: #44cccc;
+ --snip-color: #888888;
+ --str-color: #ff66dd;
+ --type-color: #7799ff;
+
+ --comment-text-color: #00ff00;
+ --comment-bg-color: #153d15;
+ --error-comment-text-color: #ff4444;
+ --error-comment-bg-color: #4d1515;
+ --error-color: #ff4444;
+}
+
+:root:has(#show-examples:checked) {
+ --examples-display: block;
+}
+
+
+body {
+ white-space: pre-wrap;
+ background: var(--bg-color);
+ color: var(--text-color);
+ font-family: sans-serif;
+ line-height: 1.15;
+ width: min(720px, calc(100% - 4rem));
+ margin: 0 auto;
+}
+
+a {
+ // color: #ABFFCF;
+ color: #763DFF;
+ text-decoration: none;
+}
+a:hover { filter: brightness(1.2); }
+a:active { filter: brightness(0.8); }
+
+h1, h2, h3 {
+ margin: 0;
+ // line-height: 0;
+ // text-wrap: balance;
+}
+
+h1 {
+ font-size: 2.0rem;
+ font-weight: bold;
+}
+
+h2 {
+ font-size: 1.5em;
+ line-height: 1.15;
+ font-weight: bold;
+}
+
+h3 {
+ line-height: 1.15;
+ font-size: 1.125em;
+ font-weight: normal;
+ // font-style: italic;
+}
+
+code {
+ -webkit-user-select: text;
+ -ms-user-select: text;
+ user-select: text;
+
+ margin: -0.5em 0em 0.5em 0em;
+ padding: 0.5rem;
+ font-size: 0.85em;
+ color: var(--text-color);
+ background: var(--matte-color);
+ font-family: ui-monospace;
+ border: var(--border);
+ line-height: 1.5;
+ display: block;
+ border-radius: 0.7em;
+}
+
+.example {
+ background: var(--example-matte-color);
+
+ display: var(--examples-display);
+}
+
+.terminal {
+ border-radius: 0em;
+
+ --matte-color: var(--terminal-matte-color);
+ --text-color: var(--terminal-text-color);
+
+ display: var(--examples-display);
+}
+
+// .inline {
+//  display: TODO not block;
+//  line-height: 1.15;
+// }
+
+.global        { color: var(--global-color); }
+.type          { color: var(--type-color); }
+.snip          { color: var(--snip-color); }
+.func          { color: var(--func-color); }
+.num           { color: var(--num-color); }
+.str        { color: var(--str-color); }
+.comment       { color: var(--comment-text-color); background: var(--comment-bg-color); }
+.include       { color: var(--include-color); }
+.macro         { color: var(--macro-color); font-weight: bold; }
+.keyword       { color: var(--keyword-color); }
+.error         { color: var(--error-color); font-weight: bold; text-decoration; line-through; }
+.error_comment { color: var(--error-comment-text-color); background: var(--error-comment-bg-color); }
+
+
+// code mark {
+//  background-color: #23342B;
+//  color: #FFF9AB;
+// }
+
+hr {
+ border: none;
+ height: 2px;
+ background-color: black;
+}
+
+img {
+ max-width: 100%;
+ border: 1px solid #666;
+}
+
+.center {
+ display: block;
+ margin-left: auto;
+ margin-right: auto;
+}
+
+.no-border {
+ border: 0px;
+}
+
+
+.radio-parent {
+ display: flex;
+ justify-content: flex-end;
+ gap: 1em;
+
+
+ margin: 0em 1em -2.33em 0em;
+}
+
+label {
+ gap: 0.2em;
+ display: inline-flex;
+ align-items: center;
+}
