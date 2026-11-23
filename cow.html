@@ -27,9 +27,9 @@ unoptimized build and run: ./woo.sh hwXX.c
 <code class="terminal">>./woo.sh example.c
 [woo.sh] building example.c with no compiler optimization
 In file included from example.c:41:
-./test_cow.c:10:7: error: unused variable 'local' [-Werror,-Wunused-variable]
-./test_cow.c:9:15: error: unused parameter 'arg1' [-Werror,-Wunused-parameter]
-./test_cow.c:9:27: error: unused parameter 'arg2' [-Werror,-Wunused-parameter]
+./example.c:10:7: error: unused variable 'local' [-Werror,-Wunused-variable]
+./example.c:9:15: error: unused parameter 'arg1' [-Werror,-Wunused-parameter]
+./example.c:9:27: error: unused parameter 'arg2' [-Werror,-Wunused-parameter]
 clang: error: no such file or directory: 'tmp.o'</code>
 <code class="example"><span class="type">Void</span> <span class="func">foo</span>(<span class="type">Uint</span> arg1, <span class="type">Void *</span>arg2) {
  <span class="type">Real</span> local = <span class="num">42.0</span>;
@@ -55,7 +55,7 @@ clang: error: no such file or directory: 'tmp.o'</code>
 [woo.sh] running executable
 
 <span class="error">(╯°□°)╯︵ ┻━┻ </span>
-<span class="error">ASSERT(2 + 2 == 5); // <- Line 4 in ./test_cow.c</span>
+<span class="error">ASSERT(2 + 2 == 5); // <- Line 4 in ./example.c</span>
 <span class="error">- bar</span>
 <span class="error">- main</span>
 
